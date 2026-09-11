@@ -1,0 +1,13 @@
+# Konfigurasi lokal
+/wp-config.php
+
+# Database dan integrasi khusus WordPress Studio
+/wp-content/database/
+/wp-content/db.php
+/wp-content/mu-plugins/99-studio-loader.php
+/wp-content/mu-plugins/sqlite-database-integration/
+
+# Data runtime dan dependensi development
+/wp-content/uploads/
+/wp-content/debug.log
+/node_modules/
