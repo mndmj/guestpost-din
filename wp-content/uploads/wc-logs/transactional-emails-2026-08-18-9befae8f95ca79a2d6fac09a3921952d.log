@@ -1,0 +1,20 @@
+2026-08-18T01:23:07+00:00 WARNING Test email "new_order" for order #0 failed to send: SMTP Error: Could not authenticate. CONTEXT: {"email_type":"new_order","status":"failed","recipient":"guest","order":0,"is_test":true}
+2026-08-18T02:41:42+00:00 INFO Test email "new_order" for order #0 sent CONTEXT: {"email_type":"new_order","status":"sent","recipient":"guest","order":0,"is_test":true}
+2026-08-18T02:43:44+00:00 INFO Email "customer_completed_order" for order #61 sent CONTEXT: {"email_type":"customer_completed_order","status":"sent","recipient":"guest","order":61}
+2026-08-18T02:43:48+00:00 INFO Email "new_order" for order #61 sent CONTEXT: {"email_type":"new_order","status":"sent","recipient":"guest","order":61}
+2026-08-18T03:45:40+00:00 INFO Test email "new_order" for order #0 sent CONTEXT: {"email_type":"new_order","status":"sent","recipient":"guest","order":0,"is_test":true}
+2026-08-18T03:57:40+00:00 INFO Test email "cancelled_order" for order #0 sent CONTEXT: {"email_type":"cancelled_order","status":"sent","recipient":"guest","order":0,"is_test":true}
+2026-08-18T07:25:29+00:00 INFO Email "customer_completed_order" for order #63 sent CONTEXT: {"email_type":"customer_completed_order","status":"sent","recipient":"guest","order":63}
+2026-08-18T07:25:33+00:00 INFO Email "new_order" for order #63 sent CONTEXT: {"email_type":"new_order","status":"sent","recipient":"guest","order":63}
+2026-08-18T07:33:55+00:00 INFO Email "customer_completed_order" for order #64 sent CONTEXT: {"email_type":"customer_completed_order","status":"sent","recipient":"guest","order":64}
+2026-08-18T07:33:59+00:00 INFO Email "new_order" for order #64 sent CONTEXT: {"email_type":"new_order","status":"sent","recipient":"guest","order":64}
+2026-08-18T07:38:30+00:00 INFO Test email "new_order" for order #0 sent CONTEXT: {"email_type":"new_order","status":"sent","recipient":"guest","order":0,"is_test":true}
+2026-08-18T07:40:11+00:00 INFO Test email "customer_completed_order" for order #0 sent CONTEXT: {"email_type":"customer_completed_order","status":"sent","recipient":"guest","order":0,"is_test":true}
+2026-08-18T07:40:34+00:00 INFO Test email "customer_completed_order" for order #0 sent CONTEXT: {"email_type":"customer_completed_order","status":"sent","recipient":"guest","order":0,"is_test":true}
+2026-08-18T07:40:58+00:00 INFO Test email "customer_completed_order" for order #0 sent CONTEXT: {"email_type":"customer_completed_order","status":"sent","recipient":"guest","order":0,"is_test":true}
+2026-08-18T07:51:09+00:00 INFO Test email "customer_completed_order" for order #0 sent CONTEXT: {"email_type":"customer_completed_order","status":"sent","recipient":"guest","order":0,"is_test":true}
+2026-08-18T07:51:38+00:00 INFO Test email "customer_completed_order" for order #0 sent CONTEXT: {"email_type":"customer_completed_order","status":"sent","recipient":"guest","order":0,"is_test":true}
+2026-08-18T07:52:45+00:00 INFO Email "customer_completed_order" for order #65 sent CONTEXT: {"email_type":"customer_completed_order","status":"sent","recipient":"guest","order":65}
+2026-08-18T07:52:50+00:00 INFO Email "new_order" for order #65 sent CONTEXT: {"email_type":"new_order","status":"sent","recipient":"guest","order":65}
+2026-08-18T07:58:09+00:00 INFO Test email "failed_order" for order #0 sent CONTEXT: {"email_type":"failed_order","status":"sent","recipient":"guest","order":0,"is_test":true}
+2026-08-18T07:59:26+00:00 INFO Test email "new_order" for order #0 sent CONTEXT: {"email_type":"new_order","status":"sent","recipient":"guest","order":0,"is_test":true}

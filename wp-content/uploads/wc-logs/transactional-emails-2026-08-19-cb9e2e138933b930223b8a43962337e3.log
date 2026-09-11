@@ -1,0 +1,12 @@
+2026-08-19T04:13:56+00:00 INFO Email "customer_completed_order" for order #82 sent CONTEXT: {"email_type":"customer_completed_order","status":"sent","recipient":"guest","order":82}
+2026-08-19T04:14:02+00:00 INFO Email "new_order" for order #82 sent CONTEXT: {"email_type":"new_order","status":"sent","recipient":"guest","order":82}
+2026-08-19T06:34:28+00:00 INFO Email "cancelled_order" for order #82 sent CONTEXT: {"email_type":"cancelled_order","status":"sent","recipient":"guest","order":82}
+2026-08-19T06:47:51+00:00 INFO Email "customer_completed_order" for order #84 sent CONTEXT: {"email_type":"customer_completed_order","status":"sent","recipient":"guest","order":84}
+2026-08-19T06:47:56+00:00 INFO Email "new_order" for order #84 sent CONTEXT: {"email_type":"new_order","status":"sent","recipient":"guest","order":84}
+2026-08-19T06:52:38+00:00 INFO Email "new_order" for order #88 sent CONTEXT: {"email_type":"new_order","status":"sent","recipient":"guest","order":88}
+2026-08-19T06:52:43+00:00 INFO Email "customer_on_hold_order" for order #88 sent CONTEXT: {"email_type":"customer_on_hold_order","status":"sent","recipient":"guest","order":88}
+2026-08-19T06:59:25+00:00 INFO Email "new_order" for order #89 sent CONTEXT: {"email_type":"new_order","status":"sent","recipient":"guest","order":89}
+2026-08-19T06:59:29+00:00 INFO Email "customer_on_hold_order" for order #89 sent CONTEXT: {"email_type":"customer_on_hold_order","status":"sent","recipient":"guest","order":89}
+2026-08-19T07:16:51+00:00 INFO Email "new_order" for order #95 sent CONTEXT: {"email_type":"new_order","status":"sent","recipient":"guest","order":95}
+2026-08-19T07:16:56+00:00 INFO Email "customer_on_hold_order" for order #95 sent CONTEXT: {"email_type":"customer_on_hold_order","status":"sent","recipient":"guest","order":95}
+2026-08-19T08:35:49+00:00 INFO Email "cancelled_order" for order #82 sent CONTEXT: {"email_type":"cancelled_order","status":"sent","recipient":"guest","order":82}

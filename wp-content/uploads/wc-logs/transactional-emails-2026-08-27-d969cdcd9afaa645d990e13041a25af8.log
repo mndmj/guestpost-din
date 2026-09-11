@@ -1,0 +1,5 @@
+2026-08-27T06:22:23+00:00 INFO Email "cancelled_order" for order #63 sent CONTEXT: {"email_type":"cancelled_order","status":"sent","recipient":"guest","order":63}
+2026-08-27T08:17:30+00:00 INFO Email "customer_processing_order" for order #89 sent CONTEXT: {"email_type":"customer_processing_order","status":"sent","recipient":"arul","order":89}
+2026-08-27T08:19:11+00:00 INFO Email "customer_failed_order" for order #61 sent CONTEXT: {"email_type":"customer_failed_order","status":"sent","recipient":"arul","order":61}
+2026-08-27T08:40:44+00:00 INFO Email "customer_failed_order" for order #177 sent CONTEXT: {"email_type":"customer_failed_order","status":"sent","recipient":"arul","order":177}
+2026-08-27T08:40:48+00:00 INFO Email "failed_order" for order #177 sent CONTEXT: {"email_type":"failed_order","status":"sent","recipient":"guest","order":177}

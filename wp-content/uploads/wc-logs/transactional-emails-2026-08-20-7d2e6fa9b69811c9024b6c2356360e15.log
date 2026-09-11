@@ -1,0 +1,23 @@
+2026-08-20T02:54:14+00:00 INFO Email "new_order" for order #176 sent CONTEXT: {"email_type":"new_order","status":"sent","recipient":"guest","order":176}
+2026-08-20T02:54:20+00:00 INFO Email "customer_on_hold_order" for order #176 sent CONTEXT: {"email_type":"customer_on_hold_order","status":"sent","recipient":"arul","order":176}
+2026-08-20T03:38:57+00:00 INFO Email "new_order" for order #177 sent CONTEXT: {"email_type":"new_order","status":"sent","recipient":"guest","order":177}
+2026-08-20T03:39:02+00:00 INFO Email "customer_on_hold_order" for order #177 sent CONTEXT: {"email_type":"customer_on_hold_order","status":"sent","recipient":"arul","order":177}
+2026-08-20T06:47:28+00:00 INFO Email "new_order" for order #179 sent CONTEXT: {"email_type":"new_order","status":"sent","recipient":"guest","order":179}
+2026-08-20T06:47:33+00:00 INFO Email "customer_on_hold_order" for order #179 sent CONTEXT: {"email_type":"customer_on_hold_order","status":"sent","recipient":"guest","order":179}
+2026-08-20T06:57:57+00:00 INFO Email "customer_processing_order" for order #179 sent CONTEXT: {"email_type":"customer_processing_order","status":"sent","recipient":"guest","order":179}
+2026-08-20T07:02:03+00:00 INFO Email "new_order" for order #179 sent CONTEXT: {"email_type":"new_order","status":"sent","recipient":"guest","order":179}
+2026-08-20T07:03:15+00:00 INFO Email "customer_invoice" for order #179 sent CONTEXT: {"email_type":"customer_invoice","status":"sent","recipient":"guest","order":179}
+2026-08-20T07:03:22+00:00 INFO Email "customer_invoice" for order #179 sent CONTEXT: {"email_type":"customer_invoice","status":"sent","recipient":"guest","order":179}
+2026-08-20T07:03:29+00:00 INFO Email "customer_invoice" for order #179 sent CONTEXT: {"email_type":"customer_invoice","status":"sent","recipient":"guest","order":179}
+2026-08-20T07:06:37+00:00 INFO Email "customer_new_account" for user #3 sent CONTEXT: {"email_type":"customer_new_account","status":"sent","recipient":"david.manaman","user":3}
+2026-08-20T07:06:44+00:00 INFO Email "new_order" for order #180 sent CONTEXT: {"email_type":"new_order","status":"sent","recipient":"guest","order":180}
+2026-08-20T07:06:49+00:00 INFO Email "customer_on_hold_order" for order #180 sent CONTEXT: {"email_type":"customer_on_hold_order","status":"sent","recipient":"david.manaman","order":180}
+2026-08-20T07:08:19+00:00 INFO Email "customer_reset_password" for user #3 sent CONTEXT: {"email_type":"customer_reset_password","status":"sent","recipient":"david.manaman","user":3}
+2026-08-20T07:11:38+00:00 INFO Email "customer_reset_password" for user #3 sent CONTEXT: {"email_type":"customer_reset_password","status":"sent","recipient":"david.manaman","user":3}
+2026-08-20T07:15:45+00:00 INFO Email "customer_reset_password" for user #3 sent CONTEXT: {"email_type":"customer_reset_password","status":"sent","recipient":"david.manaman","user":3}
+2026-08-20T07:16:37+00:00 INFO Email "customer_reset_password" for user #3 sent CONTEXT: {"email_type":"customer_reset_password","status":"sent","recipient":"david.manaman","user":3}
+2026-08-20T07:19:29+00:00 INFO Test email "customer_reset_password" for user #0 sent CONTEXT: {"email_type":"customer_reset_password","status":"sent","recipient":"david.manaman","user":0,"is_test":true}
+2026-08-20T07:19:52+00:00 INFO Test email "customer_reset_password" for user #0 sent CONTEXT: {"email_type":"customer_reset_password","status":"sent","recipient":"guest","user":0,"is_test":true}
+2026-08-20T07:20:28+00:00 INFO Test email "customer_reset_password" for user #0 sent CONTEXT: {"email_type":"customer_reset_password","status":"sent","recipient":"guest","user":0,"is_test":true}
+2026-08-20T07:21:03+00:00 INFO Test email "customer_reset_password" for user #0 sent CONTEXT: {"email_type":"customer_reset_password","status":"sent","recipient":"guest","user":0,"is_test":true}
+2026-08-20T07:26:02+00:00 INFO Email "customer_reset_password" for user #3 sent CONTEXT: {"email_type":"customer_reset_password","status":"sent","recipient":"david.manaman","user":3}

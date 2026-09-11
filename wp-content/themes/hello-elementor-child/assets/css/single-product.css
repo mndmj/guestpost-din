@@ -1,0 +1,285 @@
+/* ========================================
+   SINGLE PRODUCT — Dashboard style
+   ======================================== */
+
+#site-header {
+  display: none;
+}
+
+/* Background dan lebar halaman */
+body.single-product {
+  background: var(--canvas-bg);
+  color: var(--base-dark);
+  font-family: var(--body-font), sans-serif;
+}
+
+body.single-product #main.site-main {
+  width: calc(100% - 48px);
+  max-width: 1280px;
+  margin: 40px auto 72px;
+  padding: 0 8px 8px 0;
+  box-sizing: border-box;
+}
+
+/* Breadcrumb */
+body.single-product .woocommerce-breadcrumb {
+  margin-bottom: 28px;
+  color: #4b5563;
+  font-size: 14px;
+}
+
+body.single-product .woocommerce-breadcrumb a {
+  color: var(--electric-blue);
+  text-decoration: none;
+}
+
+/* Kartu gambar, ringkasan, dan tab.
+   Layout responsif tetap mengikuti WooCommerce. */
+body.single-product
+  #main
+  > div.product
+  > :is(.woocommerce-product-gallery, .summary, .woocommerce-tabs) {
+  background: #fff;
+  border: 2px solid var(--base-dark);
+  border-radius: 12px;
+  box-shadow: 8px 8px 0 var(--base-dark);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+body.single-product #main > div.product > :is(.summary, .woocommerce-tabs) {
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+/* Nama produk */
+body.single-product #main .summary .product_title {
+  margin: 0 0 20px;
+  color: var(--electric-blue);
+  font-family: var(--heading-font), sans-serif;
+  font-size: clamp(26px, 3vw, 40px);
+  font-weight: 800;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+/* Harga */
+body.single-product #main .summary .price {
+  margin-bottom: 24px;
+  color: var(--base-dark);
+  font-family: var(--heading-font), sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+body.single-product #main .summary .price ins {
+  background: transparent;
+  text-decoration: none;
+}
+
+/* Deskripsi singkat */
+body.single-product #main .woocommerce-product-details__short-description {
+  margin-bottom: 24px;
+  color: #4b5563;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+/* Quantity: jangan mengenai input yang tersembunyi */
+body.single-product #main .quantity input.qty:not([type="hidden"]) {
+  min-height: 48px;
+  padding: 10px;
+  color: var(--base-dark);
+  background: #fff;
+  border: 2px solid var(--base-dark);
+  border-radius: 10px;
+  font-family: var(--body-font), sans-serif;
+}
+
+/* Tombol beli, related products, dan submit review */
+body.single-product #main :is(.button, #submit) {
+  min-height: 48px;
+  padding: 12px 20px;
+  color: #fff;
+  background: var(--electric-blue);
+  border: 2px solid var(--base-dark);
+  border-radius: 999px;
+  box-shadow: 4px 4px 0 var(--base-dark);
+
+  font-family: var(--heading-font), sans-serif;
+  font-size: 14px;
+  text-transform: uppercase;
+  font-weight: 700;
+  line-height: 1.5;
+  text-align: center;
+  text-decoration: none;
+}
+
+body.single-product
+  #main
+  :is(.button, #submit):hover:not(:disabled):not(.disabled) {
+  color: var(--base-dark);
+  background: var(--neon-mint);
+}
+
+body.single-product #main :is(.button, #submit):is(:disabled, .disabled) {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* SKU, kategori, dan tag */
+body.single-product #main .summary .product_meta {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #ddd;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+body.single-product #main .summary .product_meta > span {
+  display: block;
+}
+
+body.single-product #main .product_meta a {
+  color: var(--electric-blue);
+  text-decoration: none;
+}
+
+/* Navigasi tab Description / Reviews */
+body.single-product #main .woocommerce-tabs ul.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  overflow: visible;
+  margin: 0 0 28px;
+  padding: 0;
+}
+
+body.single-product #main .woocommerce-tabs ul.tabs::before,
+body.single-product #main .woocommerce-tabs ul.tabs li::before,
+body.single-product #main .woocommerce-tabs ul.tabs li::after {
+  content: none;
+}
+
+body.single-product #main .woocommerce-tabs ul.tabs li {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+body.single-product #main .woocommerce-tabs ul.tabs li a {
+  display: block;
+  padding: 10px 18px;
+  color: var(--base-dark);
+  background: var(--canvas-bg);
+  border: 2px solid var(--base-dark);
+  border-radius: 999px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+body.single-product #main .woocommerce-tabs ul.tabs li.active a {
+  color: #fff;
+  background: var(--electric-blue);
+}
+
+body.single-product #main .woocommerce-tabs ul.tabs li:not(.active) a:hover {
+  color: var(--base-dark);
+  background: var(--neon-mint);
+}
+
+/* Isi tab: jangan memaksa display agar pergantian tab tetap bekerja */
+body.single-product #main .woocommerce-tabs .panel {
+  margin: 0;
+  padding: 0;
+  line-height: 1.8;
+}
+
+body.single-product #main :is(.woocommerce-tabs, .related, .upsells) h2 {
+  color: var(--base-dark);
+  font-family: var(--heading-font), sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+/* Input review */
+body.single-product
+  #main
+  #review_form
+  :is(input[type="text"], input[type="email"], textarea, select) {
+  width: 100%;
+  padding: 12px 14px;
+  color: var(--base-dark);
+  background: #fff;
+  border: 2px solid var(--base-dark);
+  border-radius: 10px;
+  font-family: var(--body-font), sans-serif;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+/* Related products / Upsells: pertahankan isi kartu bawaan */
+body.single-product #main .related ul.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 24px;
+}
+
+body.single-product #main .related ul.products::before,
+body.single-product #main .related ul.products::after {
+  content: none;
+}
+
+body.single-product #main .related ul.products > li.product {
+  float: none;
+  width: auto;
+  min-width: 0;
+  margin: 0;
+}
+
+body.single-product #main :is(.related, .upsells) ul.products li.product {
+  padding: 20px;
+  background: #fff;
+  border: 2px solid var(--base-dark);
+  border-radius: 12px;
+  box-shadow: 6px 6px 0 var(--base-dark);
+  box-sizing: border-box;
+}
+
+body.single-product
+  #main
+  :is(.related, .upsells)
+  .woocommerce-loop-product__title {
+  font-size: 16px;
+  overflow-wrap: anywhere;
+}
+
+body.single-product #main :is(.related, .upsells) a {
+  text-decoration: none;
+}
+
+/* Fokus keyboard */
+body.single-product
+  #main
+  :is(a, button, input, select, textarea):focus-visible {
+  outline: 3px solid var(--electric-blue);
+  outline-offset: 3px;
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  body.single-product #main.site-main {
+    width: calc(100% - 32px);
+    margin: 24px auto 48px;
+  }
+
+  body.single-product #main > div.product > :is(.summary, .woocommerce-tabs) {
+    padding: 20px;
+  }
+
+  body.single-product #main :is(.related, .upsells) ul.products li.product {
+    padding: 14px;
+  }
+}

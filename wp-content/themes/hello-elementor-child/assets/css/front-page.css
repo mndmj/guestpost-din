@@ -1,0 +1,20 @@
+@media (max-width: 767px) {
+	.elementor-2 .elementor-element {
+		max-width: 100% !important;
+	}
+
+	.elementor-2 .e-con {
+		flex-direction: column !important;
+		grid-template-columns: minmax(0, 1fr) !important;
+		min-width: 0;
+	}
+
+	.elementor-2 .heading-section-title.display-inline {
+		display: block;
+	}
+
+	.elementor-2 .heading-title,
+	.elementor-2 .elementor-heading-title {
+		overflow-wrap: anywhere;
+	}
+}

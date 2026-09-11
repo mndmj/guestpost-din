@@ -1,0 +1,11 @@
+.din-chatbot-preview-wrap { display: flex; flex-wrap: wrap; gap: 24px; }
+.din-chatbot-preview { --din-chatbot-primary: #1d4ed8; --din-chatbot-primary-foreground: #fff; border: 1px solid #c3c4c7; overflow: hidden; position: relative; background: #f6f7f7; }
+.din-chatbot-preview--desktop { min-height: 330px; width: 440px; }
+.din-chatbot-preview--mobile { min-height: 500px; width: 280px; border-radius: 28px; }
+.din-chatbot-preview__fab { align-items: center; background: var(--din-chatbot-primary); border: 0; border-radius: 999px; bottom: var(--din-chatbot-bottom); color: var(--din-chatbot-primary-foreground); display: flex; height: 44px; justify-content: center; position: absolute; right: var(--din-chatbot-right); width: 44px; }
+.din-chatbot-preview__dialog { background: #fff; border: 1px solid #d1d5db; border-radius: 12px; color: #111827; left: 16px; padding: 12px; position: absolute; right: 16px; top: 16px; }
+.din-chatbot-preview__transcript { background: #f3f4f6; border-radius: 8px; margin-top: 10px; padding: 8px; }
+.din-chatbot-preview__suggestions { margin-top: 10px; }
+.din-chatbot-preview__suggestions button { border: 1px solid var(--din-chatbot-primary); color: var(--din-chatbot-primary); background: #fff; border-radius: 6px; padding: 6px; }
+.din-chatbot-preview__composer { border-top: 1px solid #e5e7eb; margin-top: 10px; padding-top: 8px; }
+.din-chatbot-preview__composer label, .din-chatbot-preview__composer input { display: block; width: 100%; }

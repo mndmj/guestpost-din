@@ -1,0 +1,924 @@
+- generic [ref=e2]:
+  - navigation "Main menu":
+    - link "Skip to main content" [ref=e3] [cursor=pointer]:
+      - /url: "#wpbody-content"
+    - link "Skip to toolbar" [ref=e4] [cursor=pointer]:
+      - /url: "#wp-toolbar"
+    - list [ref=e7]:
+      - listitem [ref=e8]:
+        - link "Dashboard" [ref=e9] [cursor=pointer]:
+          - /url: index.php
+          - generic [aria-hidden] [ref=e10]: 
+        - list [ref=e12]:
+          - listitem [ref=e13]:
+            - link "Home" [ref=e14] [cursor=pointer]:
+              - /url: index.php
+          - listitem [ref=e15]:
+            - link "Updates 9" [ref=e16] [cursor=pointer]:
+              - /url: update-core.php
+              - text: Updates
+              - generic [ref=e17]: "9"
+      - listitem [ref=e18]:
+        - link "Elementor" [ref=e19] [cursor=pointer]:
+          - /url: admin.php?page=elementor-home
+        - list [ref=e22]:
+          - listitem [ref=e23]:
+            - link "Home" [ref=e24] [cursor=pointer]:
+              - /url: admin.php?page=elementor-home
+          - listitem [ref=e25]:
+            - link "Editor" [ref=e26] [cursor=pointer]:
+              - /url: admin.php?page=elementor
+          - listitem [ref=e27]:
+            - link "Upgrade" [ref=e28] [cursor=pointer]:
+              - /url: admin.php?page=elementor-one-upgrade
+      - listitem [aria-hidden] [ref=e29]
+      - listitem [ref=e31]:
+        - link "Posts" [ref=e32] [cursor=pointer]:
+          - /url: edit.php
+          - generic [aria-hidden] [ref=e33]: 
+        - list [ref=e35]:
+          - listitem [ref=e36]:
+            - link "All Posts" [ref=e37] [cursor=pointer]:
+              - /url: edit.php
+          - listitem [ref=e38]:
+            - link "Add Post" [ref=e39] [cursor=pointer]:
+              - /url: post-new.php
+          - listitem [ref=e40]:
+            - link "Categories" [ref=e41] [cursor=pointer]:
+              - /url: edit-tags.php?taxonomy=category
+          - listitem [ref=e42]:
+            - link "Tags" [ref=e43] [cursor=pointer]:
+              - /url: edit-tags.php?taxonomy=post_tag
+      - listitem [ref=e44]:
+        - link "MetForm" [ref=e45] [cursor=pointer]:
+          - /url: edit.php?post_type=metform-form
+        - list [ref=e48]:
+          - listitem [ref=e49]:
+            - link "Forms" [ref=e50] [cursor=pointer]:
+              - /url: edit.php?post_type=metform-form
+          - listitem [ref=e51]:
+            - link "Entries" [ref=e52] [cursor=pointer]:
+              - /url: edit.php?post_type=metform-entry
+          - listitem [ref=e53]:
+            - link "Analytics" [ref=e54] [cursor=pointer]:
+              - /url: admin.php?page=metform-analytics
+          - listitem [ref=e55]:
+            - link "Settings" [ref=e56] [cursor=pointer]:
+              - /url: admin.php?page=metform-menu-settings
+          - listitem [ref=e57]:
+            - link "Our Plugins" [ref=e58] [cursor=pointer]:
+              - /url: admin.php?page=metform_wpmet_plugins
+          - listitem [ref=e59]:
+            - link "Get Help" [ref=e60] [cursor=pointer]:
+              - /url: admin.php?page=metform_get_help
+          - listitem [ref=e61]:
+            - link "Upgrade To Premium" [ref=e62] [cursor=pointer]:
+              - /url: https://wpmet.com/metform-pricing
+      - listitem [ref=e63]:
+        - link "Media" [ref=e64] [cursor=pointer]:
+          - /url: upload.php
+          - generic [aria-hidden] [ref=e65]: 
+        - list [ref=e67]:
+          - listitem [ref=e68]:
+            - link "Library" [ref=e69] [cursor=pointer]:
+              - /url: upload.php
+          - listitem [ref=e70]:
+            - link "Add Media File" [ref=e71] [cursor=pointer]:
+              - /url: media-new.php
+      - listitem [ref=e72]:
+        - link "Pages" [ref=e73] [cursor=pointer]:
+          - /url: edit.php?post_type=page
+          - generic [aria-hidden] [ref=e74]: 
+        - list [ref=e76]:
+          - listitem [ref=e77]:
+            - link "All Pages" [ref=e78] [cursor=pointer]:
+              - /url: edit.php?post_type=page
+          - listitem [ref=e79]:
+            - link "Add Page" [ref=e80] [cursor=pointer]:
+              - /url: post-new.php?post_type=page
+      - listitem [ref=e81]:
+        - link "Comments" [ref=e82] [cursor=pointer]:
+          - /url: edit-comments.php
+          - generic [aria-hidden] [ref=e83]: 
+      - text: 
+      - listitem [ref=e85]:
+        - link "Jeg Kit" [ref=e86] [cursor=pointer]:
+          - /url: admin.php?page=jkit
+        - list [ref=e89]:
+          - listitem [ref=e90]:
+            - link "Dashboard" [ref=e91] [cursor=pointer]:
+              - /url: admin.php?page=jkit
+          - listitem [ref=e92]:
+            - link "Demos" [ref=e93] [cursor=pointer]:
+              - /url: http://localhost:8883/wp-admin/admin.php?page=jkit&path=demos
+          - listitem [ref=e94]:
+            - link "Elements" [ref=e95] [cursor=pointer]:
+              - /url: http://localhost:8883/wp-admin/admin.php?page=jkit&path=elements
+          - listitem [ref=e96]:
+            - link "Theme Builder" [ref=e97] [cursor=pointer]:
+              - /url: http://localhost:8883/wp-admin/admin.php?page=jkit&path=theme-builder
+          - listitem [ref=e98]:
+            - link "System Status" [ref=e99] [cursor=pointer]:
+              - /url: http://localhost:8883/wp-admin/admin.php?page=jkit&path=system-status
+          - listitem [ref=e100]:
+            - link [ref=e101] [cursor=pointer]:
+              - /url: http://localhost:8883/wp-admin/admin.php?page=jkit&path=&utm_source=jeg-elementor-kit&utm_medium=nav-menu
+              - text: Upgrade to Pro
+              - img "Jeg Kit Pro" [ref=e102]
+      - listitem [aria-hidden] [ref=e103]
+      - listitem [ref=e105]:
+        - link "WooCommerce" [ref=e106] [cursor=pointer]:
+          - /url: admin.php?page=wc-admin
+        - list [ref=e109]:
+          - listitem [ref=e110]:
+            - link "Home 2" [ref=e111] [cursor=pointer]:
+              - /url: admin.php?page=wc-admin
+              - text: Home
+              - generic [ref=e112]: "2"
+          - listitem [ref=e113]:
+            - link "Orders 2" [ref=e114] [cursor=pointer]:
+              - /url: admin.php?page=wc-orders
+              - text: Orders
+              - generic [ref=e115]: "2"
+          - listitem [ref=e116]:
+            - link "Customers" [ref=e117] [cursor=pointer]:
+              - /url: admin.php?page=wc-admin&path=/customers
+          - listitem [ref=e118]:
+            - link "Coupons" [ref=e119] [cursor=pointer]:
+              - /url: admin.php?page=coupons-moved
+          - listitem [ref=e120]:
+            - link "Reports" [ref=e121] [cursor=pointer]:
+              - /url: admin.php?page=wc-reports
+          - listitem [ref=e122]:
+            - link "Settings" [ref=e123] [cursor=pointer]:
+              - /url: admin.php?page=wc-settings
+          - listitem [ref=e124]:
+            - link "Status" [ref=e125] [cursor=pointer]:
+              - /url: admin.php?page=wc-status
+          - listitem [ref=e126]:
+            - link "Extensions" [ref=e127] [cursor=pointer]:
+              - /url: admin.php?page=wc-admin&path=/extensions
+      - listitem [ref=e128]:
+        - link "Products" [ref=e129] [cursor=pointer]:
+          - /url: edit.php?post_type=product
+          - generic [aria-hidden] [ref=e130]: 
+        - list [ref=e132]:
+          - listitem [ref=e133]:
+            - link "All Products" [ref=e134] [cursor=pointer]:
+              - /url: edit.php?post_type=product
+          - listitem [ref=e135]:
+            - link "Add new product" [ref=e136] [cursor=pointer]:
+              - /url: post-new.php?post_type=product
+          - listitem [ref=e137]:
+            - link "Brands" [ref=e138] [cursor=pointer]:
+              - /url: edit-tags.php?taxonomy=product_brand&post_type=product
+          - listitem [ref=e139]:
+            - link "Categories" [ref=e140] [cursor=pointer]:
+              - /url: edit-tags.php?taxonomy=product_cat&post_type=product
+          - listitem [ref=e141]:
+            - link "Tags" [ref=e142] [cursor=pointer]:
+              - /url: edit-tags.php?taxonomy=product_tag&post_type=product
+          - listitem [ref=e143]:
+            - link "Attributes" [ref=e144] [cursor=pointer]:
+              - /url: edit.php?post_type=product&page=product_attributes
+          - listitem [ref=e145]:
+            - link "Reviews" [ref=e146] [cursor=pointer]:
+              - /url: edit.php?post_type=product&page=product-reviews
+      - listitem [ref=e147]:
+        - link "Payments" [ref=e148] [cursor=pointer]:
+          - /url: admin.php?page=wc-settings&tab=checkout&from=PAYMENTS_MENU_ITEM
+      - listitem [ref=e151]:
+        - link "Analytics" [ref=e152] [cursor=pointer]:
+          - /url: admin.php?page=wc-admin&path=/analytics/overview
+          - generic [aria-hidden] [ref=e153]: 
+        - list [ref=e155]:
+          - listitem [ref=e156]:
+            - link "Overview" [ref=e157] [cursor=pointer]:
+              - /url: admin.php?page=wc-admin&path=/analytics/overview
+          - listitem [ref=e158]:
+            - link "Products" [ref=e159] [cursor=pointer]:
+              - /url: admin.php?page=wc-admin&path=/analytics/products
+          - listitem [ref=e160]:
+            - link "Revenue" [ref=e161] [cursor=pointer]:
+              - /url: admin.php?page=wc-admin&path=/analytics/revenue
+          - listitem [ref=e162]:
+            - link "Orders" [ref=e163] [cursor=pointer]:
+              - /url: admin.php?page=wc-admin&path=/analytics/orders
+          - listitem [ref=e164]:
+            - link "Variations" [ref=e165] [cursor=pointer]:
+              - /url: admin.php?page=wc-admin&path=/analytics/variations
+          - listitem [ref=e166]:
+            - link "Categories" [ref=e167] [cursor=pointer]:
+              - /url: admin.php?page=wc-admin&path=/analytics/categories
+          - listitem [ref=e168]:
+            - link "Coupons" [ref=e169] [cursor=pointer]:
+              - /url: admin.php?page=wc-admin&path=/analytics/coupons
+          - listitem [ref=e170]:
+            - link "Taxes" [ref=e171] [cursor=pointer]:
+              - /url: admin.php?page=wc-admin&path=/analytics/taxes
+          - listitem [ref=e172]:
+            - link "Downloads" [ref=e173] [cursor=pointer]:
+              - /url: admin.php?page=wc-admin&path=/analytics/downloads
+          - listitem [ref=e174]:
+            - link "Stock" [ref=e175] [cursor=pointer]:
+              - /url: admin.php?page=wc-admin&path=/analytics/stock
+          - listitem [ref=e176]:
+            - link "Settings" [ref=e177] [cursor=pointer]:
+              - /url: admin.php?page=wc-admin&path=/analytics/settings
+      - listitem [ref=e178]:
+        - link "Marketing" [ref=e179] [cursor=pointer]:
+          - /url: admin.php?page=wc-admin&path=/marketing
+          - generic [aria-hidden] [ref=e180]: 
+        - list [ref=e182]:
+          - listitem [ref=e183]:
+            - link "Overview" [ref=e184] [cursor=pointer]:
+              - /url: admin.php?page=wc-admin&path=/marketing
+          - listitem [ref=e185]:
+            - link "Coupons" [ref=e186] [cursor=pointer]:
+              - /url: edit.php?post_type=shop_coupon
+      - text: 
+      - listitem [aria-hidden] [ref=e187]
+      - listitem [ref=e189]:
+        - link "UAE" [ref=e190] [cursor=pointer]:
+          - /url: admin.php?page=hfe
+        - list [ref=e193]:
+          - listitem [ref=e194]:
+            - link "Dashboard" [ref=e195] [cursor=pointer]:
+              - /url: admin.php?page=hfe
+          - listitem
+          - listitem [ref=e196]:
+            - link "Header & Footer" [ref=e197] [cursor=pointer]:
+              - /url: edit.php?post_type=elementor-hf
+          - listitem [ref=e198]:
+            - link "Widgets" [ref=e199] [cursor=pointer]:
+              - /url: admin.php?page=hfe#widgets
+          - listitem [ref=e200]:
+            - link "Settings" [ref=e201] [cursor=pointer]:
+              - /url: admin.php?page=hfe#settings
+          - listitem
+          - listitem
+          - listitem [ref=e202]:
+            - link "Get Help" [ref=e203] [cursor=pointer]:
+              - /url: https://ultimateelementor.com/docs
+          - listitem [ref=e204]:
+            - link "Upgrade to Pro" [ref=e205] [cursor=pointer]:
+              - /url: https://ultimateelementor.com/pricing/?utm_source=wp-admin&utm_medium=menu&utm_campaign=uae-upgrade
+      - listitem [ref=e206]:
+        - link "Hello" [ref=e207] [cursor=pointer]:
+          - /url: admin.php?page=hello-elementor
+          - generic [aria-hidden] [ref=e208]: 
+      - listitem [ref=e210]:
+        - link "Appearance" [ref=e211] [cursor=pointer]:
+          - /url: themes.php
+          - generic [aria-hidden] [ref=e212]: 
+        - list [ref=e214]:
+          - listitem [ref=e215]:
+            - link "Themes 1" [ref=e216] [cursor=pointer]:
+              - /url: themes.php
+              - text: Themes
+              - generic [ref=e217]: "1"
+          - listitem [ref=e218]:
+            - link "Design" [ref=e219] [cursor=pointer]:
+              - /url: site-editor.php
+          - listitem [ref=e220]:
+            - link "Customize" [ref=e221] [cursor=pointer]:
+              - /url: customize.php?return=%2Fwp-admin%2Fadmin.php%3Fpage%3Dwc-orders%26action%3Dedit%26id%3D790
+          - listitem [ref=e222]:
+            - link "Fonts" [ref=e223] [cursor=pointer]:
+              - /url: font-library.php
+          - listitem [ref=e224]:
+            - link "Menus" [ref=e225] [cursor=pointer]:
+              - /url: nav-menus.php
+          - listitem [ref=e226]:
+            - link "Theme File Editor" [ref=e227] [cursor=pointer]:
+              - /url: theme-editor.php
+      - listitem [ref=e228]:
+        - link "Plugins 8" [ref=e229] [cursor=pointer]:
+          - /url: plugins.php
+          - generic [aria-hidden] [ref=e230]: 
+          - generic [ref=e231]:
+            - text: Plugins
+            - generic [ref=e232]: "8"
+        - list [ref=e233]:
+          - listitem [ref=e234]:
+            - link "Installed Plugins" [ref=e235] [cursor=pointer]:
+              - /url: plugins.php
+          - listitem [ref=e236]:
+            - link "Add Plugin" [ref=e237] [cursor=pointer]:
+              - /url: plugin-install.php
+          - listitem [ref=e238]:
+            - link "Plugin File Editor" [ref=e239] [cursor=pointer]:
+              - /url: plugin-editor.php
+      - listitem [ref=e240]:
+        - link "Snippets" [ref=e241] [cursor=pointer]:
+          - /url: admin.php?page=snippets
+        - list [ref=e244]:
+          - listitem [ref=e245]:
+            - link "All Snippets" [ref=e246] [cursor=pointer]:
+              - /url: admin.php?page=snippets
+          - listitem [ref=e247]:
+            - link "Add New" [ref=e248] [cursor=pointer]:
+              - /url: admin.php?page=add-snippet
+          - listitem [ref=e249]:
+            - link "Import" [ref=e250] [cursor=pointer]:
+              - /url: admin.php?page=import-code-snippets
+          - listitem [ref=e251]:
+            - link "Settings" [ref=e252] [cursor=pointer]:
+              - /url: admin.php?page=snippets-settings
+          - listitem [ref=e253]:
+            - link "What’s New" [ref=e254] [cursor=pointer]:
+              - /url: admin.php?page=code-snippets-welcome
+          - listitem [ref=e255]:
+            - link "Go Pro " [ref=e256] [cursor=pointer]:
+              - /url: admin.php?page=code_snippets_upgrade
+              - generic [ref=e257]:
+                - text: Go Pro
+                - generic [ref=e258]: 
+      - listitem [ref=e259]:
+        - link "Users" [ref=e260] [cursor=pointer]:
+          - /url: users.php
+          - generic [aria-hidden] [ref=e261]: 
+        - list [ref=e263]:
+          - listitem [ref=e264]:
+            - link "All Users" [ref=e265] [cursor=pointer]:
+              - /url: users.php
+          - listitem [ref=e266]:
+            - link "Add User" [ref=e267] [cursor=pointer]:
+              - /url: user-new.php
+          - listitem [ref=e268]:
+            - link "Profile" [ref=e269] [cursor=pointer]:
+              - /url: profile.php
+      - listitem [ref=e270]:
+        - link "Tools" [ref=e271] [cursor=pointer]:
+          - /url: tools.php
+          - generic [aria-hidden] [ref=e272]: 
+        - list [ref=e274]:
+          - listitem [ref=e275]:
+            - link "Available Tools" [ref=e276] [cursor=pointer]:
+              - /url: tools.php
+          - listitem [ref=e277]:
+            - link "Import" [ref=e278] [cursor=pointer]:
+              - /url: import.php
+          - listitem [ref=e279]:
+            - link "Export" [ref=e280] [cursor=pointer]:
+              - /url: export.php
+          - listitem [ref=e281]:
+            - link "Site Health 1" [ref=e282] [cursor=pointer]:
+              - /url: site-health.php
+              - text: Site Health
+              - generic [ref=e283]: "1"
+          - listitem [ref=e284]:
+            - link "Export Personal Data" [ref=e285] [cursor=pointer]:
+              - /url: export-personal-data.php
+          - listitem [ref=e286]:
+            - link "Erase Personal Data" [ref=e287] [cursor=pointer]:
+              - /url: erase-personal-data.php
+          - listitem [ref=e288]:
+            - link "Scheduled Actions" [ref=e289] [cursor=pointer]:
+              - /url: tools.php?page=action-scheduler
+      - listitem [ref=e290]:
+        - link "Settings" [ref=e291] [cursor=pointer]:
+          - /url: options-general.php
+          - generic [aria-hidden] [ref=e292]: 
+        - list [ref=e294]:
+          - listitem [ref=e295]:
+            - link "General" [ref=e296] [cursor=pointer]:
+              - /url: options-general.php
+          - listitem [ref=e297]:
+            - link "Connectors" [ref=e298] [cursor=pointer]:
+              - /url: options-connectors.php
+          - listitem [ref=e299]:
+            - link "Writing" [ref=e300] [cursor=pointer]:
+              - /url: options-writing.php
+          - listitem [ref=e301]:
+            - link "Reading" [ref=e302] [cursor=pointer]:
+              - /url: options-reading.php
+          - listitem [ref=e303]:
+            - link "Discussion" [ref=e304] [cursor=pointer]:
+              - /url: options-discussion.php
+          - listitem [ref=e305]:
+            - link "Media" [ref=e306] [cursor=pointer]:
+              - /url: options-media.php
+          - listitem [ref=e307]:
+            - link "Permalinks" [ref=e308] [cursor=pointer]:
+              - /url: options-permalink.php
+          - listitem [ref=e309]:
+            - link "Privacy" [ref=e310] [cursor=pointer]:
+              - /url: options-privacy.php
+      - listitem [ref=e311]:
+        - link "WP Mail SMTP" [ref=e312] [cursor=pointer]:
+          - /url: admin.php?page=wp-mail-smtp
+        - list [ref=e315]:
+          - listitem [ref=e316]:
+            - link "Settings" [ref=e317] [cursor=pointer]:
+              - /url: admin.php?page=wp-mail-smtp
+          - listitem [ref=e318]:
+            - link "Email Log" [ref=e319] [cursor=pointer]:
+              - /url: admin.php?page=wp-mail-smtp-logs
+          - listitem [ref=e320]:
+            - link "Email Reports" [ref=e321] [cursor=pointer]:
+              - /url: admin.php?page=wp-mail-smtp-reports
+          - listitem [ref=e322]:
+            - link "Tools" [ref=e323] [cursor=pointer]:
+              - /url: admin.php?page=wp-mail-smtp-tools
+          - listitem [ref=e324]:
+            - link "Privacy Compliance" [ref=e325] [cursor=pointer]:
+              - /url: admin.php?page=wp-mail-smtp-recommended-wpconsent
+          - listitem [ref=e326]:
+            - link "About Us" [ref=e327] [cursor=pointer]:
+              - /url: admin.php?page=wp-mail-smtp-about
+          - listitem [ref=e328]:
+            - link "Upgrade to Pro" [ref=e329] [cursor=pointer]:
+              - /url: https://wpmailsmtp.com/lite-upgrade/?utm_source=WordPress&utm_medium=admin-menu&utm_campaign=liteplugin&utm_locale=en_us&utm_content=Upgrade%20to%20Pro%20-%20woocommerce_page_wc-orders
+      - listitem [ref=e330]:
+        - button "Collapse Main menu" [expanded] [ref=e331] [cursor=pointer]:
+          - generic [ref=e333]: Collapse Menu
+  - generic [ref=e334]:
+    - generic [ref=e335]:
+      - navigation "Toolbar":
+        - menu:
+          - group [ref=e336]:
+            - menuitem "About WordPress" [ref=e337] [cursor=pointer]
+          - group [ref=e340]:
+            - menuitem "Guest Post Monitoring" [ref=e341] [cursor=pointer]
+          - group [ref=e342]:
+            - menuitem "Live" [ref=e343] [cursor=pointer]
+          - group [ref=e344]:
+            - menuitem "9 updates available" [ref=e345] [cursor=pointer]:
+              - generic [aria-hidden] [ref=e347]: "9"
+          - group [ref=e349]:
+            - menuitem "Ctrl+K Open command palette" [ref=e350] [cursor=pointer]:
+              - generic [ref=e352]:
+                - text: Ctrl+K
+                - generic [ref=e353]: Open command palette
+          - group [ref=e354]:
+            - menuitem "0 Comments in moderation" [ref=e355] [cursor=pointer]:
+              - generic [aria-hidden] [ref=e357]: "0"
+          - group [ref=e359]:
+            - menuitem "New" [ref=e360] [cursor=pointer]
+          - group [ref=e363]:
+            - menuitem "Jeg Kit" [ref=e364] [cursor=pointer]
+          - group [ref=e368]:
+            - menuitem [ref=e369] [cursor=pointer]:
+              - generic [ref=e370]:
+                - text: Upgrade to Pro
+                - img "Jeg Kit Pro" [ref=e371]
+        - menu [ref=e372]:
+          - group [ref=e373]:
+            - menuitem "Howdy, admin" [ref=e374] [cursor=pointer]
+    - generic [ref=e376]:
+      - generic [ref=e377]:
+        - heading "Store Activity" [level=2] [ref=e378]
+        - complementary "Store Activity" [ref=e379]:
+          - tablist [ref=e380]:
+            - tab "Activity" [ref=e381] [cursor=pointer]:
+              - generic [ref=e385]: unread activity
+            - tab "Finish setup" [ref=e386] [cursor=pointer]
+      - button "Screen options" [ref=e390] [cursor=pointer]
+      - button "Help" [ref=e393] [cursor=pointer]
+    - main [ref=e397]:
+      - generic [ref=e398]:
+        - text: 
+        - generic:
+          - button "Screen Options" [ref=e400] [cursor=pointer]
+          - button "Help" [ref=e402] [cursor=pointer]
+        - generic [ref=e404]:
+          - heading "Edit order" [level=1] [ref=e405]
+          - link "Add order" [ref=e406] [cursor=pointer]:
+            - /url: http://localhost:8883/wp-admin/admin.php?page=wc-orders&action=new
+          - generic [ref=e407]:
+            - button "✕" [ref=e408] [cursor=pointer]
+            - generic [ref=e409]:
+              - heading "Unlock More With JEG KIT PRO!" [level=1] [ref=e410]
+              - paragraph [ref=e411]: Empowering you to build a website that truly stands out with advanced features and seamless integration
+              - link "Upgrade to PRO" [ref=e413] [cursor=pointer]:
+                - /url: http://localhost:8883/wp-admin/admin.php?page=jkit&utm_source=jeg-elementor-kit&utm_medium=adminbanner
+            - img "Arrow" [ref=e416]
+            - img "Arrow" [ref=e417]
+          - generic [ref=e418]:
+            - generic [ref=e419]:
+              - paragraph [ref=e420]: Are you enjoying WP Mail SMTP?
+              - paragraph [ref=e421]:
+                - link "Yes" [ref=e422] [cursor=pointer]:
+                  - /url: "#"
+                - text: •
+                - link "No" [ref=e423] [cursor=pointer]:
+                  - /url: "#"
+            - button "Dismiss this notice." [ref=e424] [cursor=pointer]
+          - region "Elementor notice" [ref=e426]:
+            - generic [aria-hidden] [ref=e429]: 
+            - generic [ref=e430]:
+              - heading "Want to shape the future of web creation?" [level=3] [ref=e431]
+              - paragraph [ref=e432]:
+                - text: Become a super contributor by helping us understand how you use our service to enhance your experience and improve our product.
+                - link "Learn more." [ref=e433] [cursor=pointer]:
+                  - /url: https://go.elementor.com/usage-data-tracking/
+              - generic [ref=e434]:
+                - link "Sure! I'd love to help" [ref=e435] [cursor=pointer]:
+                  - /url: /wp-admin/admin.php?page=wc-orders&action=edit&id=790&elementor_tracker=opt_into&_wpnonce=5db191ed67
+                - link "No thanks" [ref=e436] [cursor=pointer]:
+                  - /url: /wp-admin/admin.php?page=wc-orders&action=edit&id=790&elementor_tracker=opt_out&_wpnonce=d0d489568d
+          - generic [ref=e437]:
+            - generic [ref=e439]:
+              - generic [ref=e440]:
+                - strong [ref=e441]: Help shape the future of Ultimate Addons for Elementor.
+                - text: Share how you use the plugin so we can build features that matter, fix issues faster, and make smarter decisions.
+                - link "Learn more." [ref=e443] [cursor=pointer]:
+                  - /url: https://store.brainstormforce.com/usage-tracking/?utm_source=uae&utm_medium=notice&utm_campaign=usage_tracking
+              - generic [ref=e444]:
+                - link "Happy to help!" [ref=e445] [cursor=pointer]:
+                  - /url: /wp-admin/admin.php?page=wc-orders&action=edit&id=790&uae_analytics_optin=yes&uae_analytics_nonce=e17c8b4a1c&bsf_analytics_source=uae
+                - link "Skip" [ref=e446] [cursor=pointer]:
+                  - /url: /wp-admin/admin.php?page=wc-orders&action=edit&id=790&uae_analytics_optin=no&uae_analytics_nonce=e17c8b4a1c&bsf_analytics_source=uae
+            - button "Dismiss this notice." [ref=e447] [cursor=pointer]
+          - generic [ref=e450]:
+            - generic:
+              - generic [ref=e452]:
+                - region "Order actions" [ref=e453]:
+                  - generic [ref=e454]:
+                    - heading "Order actions" [level=2] [ref=e455]
+                    - generic [ref=e456]:
+                      - button "Move up" [disabled] [ref=e458]
+                      - button "Move down" [ref=e462] [cursor=pointer]
+                      - button "Show or hide panel" [expanded] [ref=e466] [cursor=pointer]
+                  - list [ref=e470]:
+                    - listitem [ref=e471]:
+                      - combobox [ref=e472] [cursor=pointer]:
+                        - option "Choose an action..." [selected]
+                        - option "Send order details to customer"
+                        - option "Resend new order notification"
+                        - option "Regenerate download permissions"
+                      - button "Apply " [ref=e473] [cursor=pointer]
+                    - listitem [ref=e474]:
+                      - link "Move to trash" [ref=e476] [cursor=pointer]:
+                        - /url: http://localhost:8883/wp-admin/admin.php?page=wc-orders&action=trash&id%5B0%5D=790&_wp_http_referer=http%3A%2F%2Flocalhost%3A8883%2Fwp-admin%2Fadmin.php%3Fpage%3Dwc-orders&_wpnonce=028808a421
+                      - button "Update" [ref=e477] [cursor=pointer]
+                - region "Order attribution" [ref=e478]:
+                  - generic [ref=e479]:
+                    - heading "Order attribution" [level=2] [ref=e480]
+                    - generic [ref=e481]:
+                      - button "Move up" [ref=e483] [cursor=pointer]
+                      - button "Move down" [ref=e487] [cursor=pointer]
+                      - button "Show or hide panel" [expanded] [ref=e491] [cursor=pointer]
+                  - generic [ref=e495]:
+                    - heading "Origin" [level=4] [ref=e496]
+                    - generic [ref=e497]: Direct
+                    - heading "Device type" [level=4] [ref=e499]
+                    - text: Desktop
+                    - heading "Session page views The number of unique pages viewed by the customer prior to this order." [level=4] [ref=e500]:
+                      - text: Session page views
+                      - generic "The number of unique pages viewed by the customer prior to this order." [ref=e501]: 
+                    - text: "69"
+                - region "Customer history" [ref=e502]:
+                  - generic [ref=e503]:
+                    - heading "Customer history" [level=2] [ref=e504]
+                    - generic [ref=e505]:
+                      - button "Move up" [ref=e507] [cursor=pointer]
+                      - button "Move down" [ref=e511] [cursor=pointer]
+                      - button "Show or hide panel" [expanded] [ref=e515] [cursor=pointer]
+                  - generic [ref=e519]:
+                    - heading "Total orders Total number of orders for this customer, excluding pending payment, failed, and cancelled orders, including the current one." [level=4] [ref=e520]:
+                      - text: Total orders
+                      - generic "Total number of orders for this customer, excluding pending payment, failed, and cancelled orders, including the current one." [ref=e521]: 
+                    - text: "11"
+                    - heading "Total revenue This is the Customer Lifetime Value, or the total amount you have earned from this customer's orders." [level=4] [ref=e522]:
+                      - text: Total revenue
+                      - generic "This is the Customer Lifetime Value, or the total amount you have earned from this customer's orders." [ref=e523]: 
+                    - generic [ref=e524]: $818
+                    - heading "Average order value" [level=4] [ref=e527]
+                    - generic [ref=e528]: $74
+                - region "Order notes" [ref=e531]:
+                  - generic [ref=e532]:
+                    - heading "Order notes" [level=2] [ref=e533]
+                    - generic [ref=e534]:
+                      - button "Move up" [ref=e536] [cursor=pointer]
+                      - button "Move down" [ref=e540] [cursor=pointer]
+                      - button "Show or hide panel" [expanded] [ref=e544] [cursor=pointer]
+                  - generic [ref=e547]:
+                    - generic [ref=e548]:
+                      - paragraph [ref=e549]:
+                        - generic [ref=e550]: Add note
+                        - textbox "Add note" [ref=e551]
+                      - generic [ref=e552]:
+                        - generic [ref=e553]: Visibility
+                        - combobox "Visibility" [ref=e554] [cursor=pointer]:
+                          - option "Private note" [selected]
+                          - option "Public note to customer"
+                      - paragraph [ref=e555]:
+                        - button "Add private note" [ref=e556] [cursor=pointer]
+                    - list [ref=e557]:
+                      - listitem [ref=e558]:
+                        - paragraph [ref=e561]: Email “Customer note” sent.
+                        - paragraph [ref=e562]:
+                          - text: September 7, 2026 at 9:09 am
+                          - button "Delete system note from September 7, 2026" [ref=e563] [cursor=pointer]: Delete
+                      - listitem [ref=e564]:
+                        - generic [ref=e565]:
+                          - generic [ref=e566]: Sent to customer
+                          - paragraph [ref=e568]: Guest Post files for your order have been updated.
+                        - paragraph [ref=e569]:
+                          - text: September 7, 2026 at 9:09 am by admin
+                          - button "Delete note from admin on September 7, 2026" [ref=e570] [cursor=pointer]: Delete
+                      - listitem [ref=e571]:
+                        - paragraph [ref=e574]: Order status changed from Processing to Completed.
+                        - paragraph [ref=e575]:
+                          - text: September 7, 2026 at 8:48 am by admin
+                          - button "Delete note from admin on September 7, 2026" [ref=e576] [cursor=pointer]: Delete
+                      - listitem [ref=e577]:
+                        - paragraph [ref=e580]: Email “Completed order” sent.
+                        - paragraph [ref=e581]:
+                          - text: September 7, 2026 at 8:48 am
+                          - button "Delete system note from September 7, 2026" [ref=e582] [cursor=pointer]: Delete
+                      - listitem [ref=e583]:
+                        - paragraph [ref=e586]: Email “Processing order” sent.
+                        - paragraph [ref=e587]:
+                          - text: September 7, 2026 at 8:35 am
+                          - button "Delete system note from September 7, 2026" [ref=e588] [cursor=pointer]: Delete
+                      - listitem [ref=e589]:
+                        - paragraph [ref=e592]: Email “New order” sent.
+                        - paragraph [ref=e593]:
+                          - text: September 7, 2026 at 8:35 am
+                          - button "Delete system note from September 7, 2026" [ref=e594] [cursor=pointer]: Delete
+                      - listitem [ref=e595]:
+                        - paragraph [ref=e598]: Payment complete.
+                        - paragraph [ref=e599]:
+                          - text: September 7, 2026 at 8:35 am
+                          - button "Delete system note from September 7, 2026" [ref=e600] [cursor=pointer]: Delete
+              - generic [ref=e602]:
+                - region "Order data" [ref=e603]:
+                  - generic [ref=e606]:
+                    - generic [ref=e608]:
+                      - 'heading "Order #790" [level=2] [ref=e609]'
+                      - paragraph [ref=e610]: "Paid on September 7, 2026 at 8:35 am. Customer IP: 127.0.0.1"
+                    - generic:
+                      - generic [ref=e611]:
+                        - heading "General" [level=3] [ref=e612]
+                        - paragraph [ref=e613]:
+                          - generic [ref=e614]: Date created
+                          - textbox [ref=e615]: 2026-09-07
+                          - text: ‎
+                          - spinbutton "h" [ref=e616]: "08"
+                          - text: ":"
+                          - spinbutton "m" [ref=e617]: "35"
+                        - paragraph [ref=e618]:
+                          - generic [ref=e619]: Status
+                          - combobox [aria-hidden] [ref=e620] [cursor=pointer]
+                          - combobox [ref=e623] [cursor=pointer]:
+                            - textbox "Completed" [ref=e624]
+                        - paragraph [ref=e625]:
+                          - generic [ref=e626]:
+                            - text: Customer
+                            - link "View other orders →" [ref=e627] [cursor=pointer]:
+                              - /url: http://localhost:8883/wp-admin/edit.php?post_status=all&post_type=shop_order&_customer_user=1
+                            - link "Profile →" [ref=e628] [cursor=pointer]:
+                              - /url: http://localhost:8883/wp-admin/user-edit.php?user_id=1
+                          - combobox [aria-hidden] [ref=e629] [cursor=pointer]
+                          - combobox [ref=e632] [cursor=pointer]:
+                            - textbox "Admin Keren (#1 &ndash; admin@localhost.com)" [ref=e633]:
+                              - generic [ref=e634]: ×
+                        - generic [ref=e635]:
+                          - heading "Guest Post Result" [level=4] [ref=e636]
+                          - paragraph [ref=e637]:
+                            - generic [ref=e638]: Published URL
+                            - textbox "Published URL" [ref=e639]:
+                              - /placeholder: https://publisher.com/article
+                          - paragraph [ref=e640]:
+                            - generic [ref=e641]: Anchor Text
+                            - textbox "Anchor Text" [ref=e642]:
+                              - /placeholder: ""
+                          - paragraph [ref=e643]:
+                            - generic [ref=e644]: Publication Date
+                            - textbox "Publication Date" [ref=e645]:
+                              - /placeholder: ""
+                              - text: 2026-09-07
+                          - paragraph [ref=e646]:
+                            - generic [ref=e647]: Link Status
+                            - combobox "Link Status" [ref=e648] [cursor=pointer]:
+                              - option "Live" [selected]
+                              - option "Removed"
+                      - generic [ref=e649]:
+                        - heading [level=3] [ref=e650]:
+                          - text: Billing
+                          - link "Edit " [ref=e651] [cursor=pointer]:
+                            - /url: "#"
+                        - generic [ref=e652]:
+                          - paragraph [ref=e653]: China 12345Beijing / 北京, China, , DINAdmin Keren
+                          - paragraph [ref=e654]:
+                            - strong [ref=e655]: "Email address:"
+                            - link "nasrullah.03.arul@gmail.com" [ref=e656] [cursor=pointer]:
+                              - /url: mailto:nasrullah.03.arul@gmail.com
+                      - generic [ref=e657]:
+                        - heading [level=3] [ref=e658]:
+                          - text: Shipping
+                          - link "Edit " [ref=e659] [cursor=pointer]:
+                            - /url: "#"
+                        - generic [ref=e660]:
+                          - paragraph [ref=e661]: No shipping address set.
+                          - paragraph [ref=e662]:
+                            - strong [ref=e663]: "Heading Post:"
+                            - text: Kehidupan jadi WNI
+                - region "Items" [ref=e664]:
+                  - generic [ref=e665]:
+                    - table [ref=e667]:
+                      - rowgroup [ref=e668]:
+                        - row [ref=e669]:
+                          - columnheader "Item" [ref=e670] [cursor=pointer]
+                          - columnheader "Price" [ref=e671] [cursor=pointer]
+                          - columnheader "Qty" [ref=e672] [cursor=pointer]
+                          - columnheader "Total" [ref=e673] [cursor=pointer]
+                          - columnheader [ref=e674]
+                      - rowgroup [ref=e675]:
+                        - row [ref=e676]:
+                          - cell "" [ref=e677]
+                          - cell [ref=e679]:
+                            - link "Guestpost Annual" [ref=e680] [cursor=pointer]:
+                              - /url: http://localhost:8883/wp-admin/post.php?post=91&action=edit
+                            - generic [ref=e681]:
+                              - strong [ref=e682]: "SKU:"
+                              - text: guestpost-annual
+                          - cell "$35" [ref=e683]
+                          - cell "× 1" [ref=e687]
+                          - cell "$0 $35 discount" [ref=e689]:
+                            - generic [ref=e690]:
+                              - generic [ref=e691]: $0
+                              - generic [ref=e693]:
+                                - generic [ref=e694]: $35
+                                - text: discount
+                          - cell [ref=e696]
+                      - rowgroup
+                      - rowgroup
+                      - rowgroup
+                    - generic [ref=e697]:
+                      - list [ref=e699]:
+                        - listitem [ref=e700]:
+                          - strong [ref=e701]: Coupon(s)
+                        - listitem [ref=e702]:
+                          - link "free-cuy" [ref=e703] [cursor=pointer]:
+                            - /url: http://localhost:8883/wp-admin/post.php?post=52&action=edit
+                      - table [ref=e704]:
+                        - rowgroup [ref=e705]:
+                          - row [ref=e706]:
+                            - cell "Items Subtotal:" [ref=e707]
+                            - cell [ref=e708]
+                            - cell "$35" [ref=e709]
+                          - row [ref=e712]:
+                            - cell "Discount:" [ref=e713]
+                            - cell [ref=e714]
+                            - cell "- $35" [ref=e715]:
+                              - text: "-"
+                              - generic [ref=e716]: $35
+                          - row [ref=e718]:
+                            - cell "Order Total:" [ref=e719]
+                            - cell [ref=e720]
+                            - cell "$0" [ref=e721]
+                      - table [ref=e724]:
+                        - rowgroup [ref=e725]:
+                          - row [ref=e726]:
+                            - cell "Paid:" [ref=e727]
+                            - cell [ref=e728]
+                            - cell "$0" [ref=e729]
+                          - row [ref=e732]:
+                            - cell "September 7, 2026" [ref=e733]
+                            - cell [ref=e734]
+                      - table
+                    - paragraph [ref=e736]:
+                      - generic [ref=e737]:
+                        - generic "To edit this order change the status back to \"Pending payment\"" [ref=e738]: 
+                        - text: This order is no longer editable.
+                      - button "Refund" [ref=e739] [cursor=pointer]
+                    - text:  
+                - region "DIN Order Attach" [ref=e740]:
+                  - generic [ref=e741]:
+                    - heading "DIN Order Attach" [level=2] [ref=e742]
+                    - generic [ref=e743]:
+                      - button "Move up" [ref=e745] [cursor=pointer]
+                      - button "Move down" [ref=e749] [cursor=pointer]
+                      - button "Show or hide panel" [expanded] [ref=e753] [cursor=pointer]
+                  - generic [ref=e756]:
+                    - paragraph [ref=e757]:
+                      - strong [ref=e759]: Add attachments
+                      - button "Add attachments" [ref=e760] [cursor=pointer]
+                    - paragraph [ref=e761]: Maximum 10 MB per file. Files are sent as one batch when the order is updated.
+                    - table [ref=e762]:
+                      - rowgroup [ref=e763]:
+                        - row [ref=e764]:
+                          - columnheader "File" [ref=e765]
+                          - columnheader "Type" [ref=e766]
+                          - columnheader "Size" [ref=e767]
+                          - columnheader "Uploaded by" [ref=e768]
+                          - columnheader "Uploaded at" [ref=e769]
+                          - columnheader "Action" [ref=e770]
+                      - rowgroup [ref=e771]:
+                        - row [ref=e772]:
+                          - cell "Image.png" [ref=e773]
+                          - cell "image/png" [ref=e774]
+                          - cell "607 KB" [ref=e775]
+                          - cell "admin" [ref=e776]
+                          - cell "September 7, 2026 9:09 am" [ref=e777]
+                          - cell [ref=e778]:
+                            - link "View / Download" [ref=e779] [cursor=pointer]:
+                              - /url: http://localhost:8883/wp-admin/admin-post.php?action=din_order_attach_download&order_id=790&attachment_id=5c1a5352-ac07-417d-a5e6-9d1bdfdc845f
+                            - link "Delete" [ref=e780] [cursor=pointer]:
+                              - /url: http://localhost:8883/wp-admin/admin-post.php?action=din_order_attach_delete&order_id=790&attachment_id=5c1a5352-ac07-417d-a5e6-9d1bdfdc845f&_wpnonce=887a1ba0e0
+                - region "Package Validity Period" [ref=e781]:
+                  - generic [ref=e782]:
+                    - heading "Package Validity Period" [level=2] [ref=e783]
+                    - generic [ref=e784]:
+                      - button "Move up" [ref=e786] [cursor=pointer]
+                      - button "Move down" [ref=e790] [cursor=pointer]
+                      - button "Show or hide panel" [expanded] [ref=e794] [cursor=pointer]
+                  - generic [ref=e797]:
+                    - paragraph [ref=e798]: "Initial activation: upload valid proof via DIN Order Attach, select \"Completed,\" then save the order. Without valid proof, the package will remain in \"Pending activation\" status. Re-saving the order does not reset the start date."
+                    - table [ref=e799]:
+                      - rowgroup [ref=e800]:
+                        - row [ref=e801]:
+                          - columnheader "Package / Heading Post" [ref=e802]
+                          - columnheader "Status" [ref=e803]
+                          - columnheader "Initial Activation" [ref=e804]
+                          - columnheader "Expires / Stopped" [ref=e805]
+                          - columnheader "Action" [ref=e806]
+                      - rowgroup [ref=e807]:
+                        - row [ref=e808]:
+                          - cell [ref=e809]:
+                            - strong [ref=e810]: Guestpost Annual
+                            - text: 1Kehidupan jadi WNI
+                          - cell "Pending Review Order status changed to failed; requires admin review." [ref=e811]: Pending ReviewOrder status changed to failed; requires admin review.
+                          - cell "September 7, 2026 9:09 am" [ref=e812]
+                          - cell "Lifetime" [ref=e813]
+                          - cell [ref=e814]:
+                            - link "Hentikan Paket" [ref=e815] [cursor=pointer]:
+                              - /url: http://localhost:8883/wp-admin/admin.php?page=din-stop-package&package_id=1
+                - region "Downloadable product permissions" [ref=e817]:
+                  - generic [ref=e818]:
+                    - 'heading "Downloadable product permissions Note: Permissions for order items will automatically be granted when the order status changes to processing/completed." [level=2] [ref=e819]':
+                      - text: Downloadable product permissions
+                      - 'generic "Note: Permissions for order items will automatically be granted when the order status changes to processing/completed." [ref=e820]': 
+                    - generic [ref=e821]:
+                      - button "Move up" [ref=e823] [cursor=pointer]
+                      - button "Move down" [ref=e827] [cursor=pointer]
+                      - button "Show or hide panel" [expanded] [ref=e831] [cursor=pointer]
+                  - paragraph [ref=e838]:
+                    - listbox [aria-hidden] [ref=e839] [cursor=pointer]
+                    - list [ref=e843]:
+                      - listitem [ref=e844]:
+                        - textbox "Search for a downloadable product…" [ref=e845]
+                    - button "Grant access" [ref=e846] [cursor=pointer]
+                - region "Custom Fields" [ref=e847]:
+                  - generic [ref=e848]:
+                    - heading "Custom Fields" [level=2] [ref=e849]
+                    - generic [ref=e850]:
+                      - button "Move up" [ref=e852] [cursor=pointer]
+                      - button "Move down" [ref=e856] [cursor=pointer]
+                      - button "Show or hide panel" [expanded] [ref=e860] [cursor=pointer]
+                  - generic [ref=e863]:
+                    - generic [ref=e864]:
+                      - table [ref=e865]:
+                        - rowgroup [ref=e866]:
+                          - row [ref=e867]:
+                            - columnheader "Name" [ref=e868]
+                            - columnheader "Value" [ref=e869]
+                        - rowgroup [ref=e870]:
+                          - row [ref=e871]:
+                            - cell [ref=e872]:
+                              - generic [ref=e873]: Key
+                              - textbox "Key" [ref=e874]: is_vat_exempt
+                              - generic [ref=e875]:
+                                - button "Delete" [ref=e876] [cursor=pointer]
+                                - button "Update" [ref=e877] [cursor=pointer]
+                            - cell [ref=e878]:
+                              - generic [ref=e879]: Value
+                              - textbox "Value" [ref=e880]: "no"
+                      - paragraph [ref=e881]:
+                        - strong [ref=e882]: "Add New Custom Field:"
+                      - table [ref=e883]:
+                        - rowgroup [ref=e884]:
+                          - row [ref=e885]:
+                            - columnheader "Name" [ref=e886]
+                            - columnheader "Value" [ref=e887]
+                        - rowgroup [ref=e888]:
+                          - row [ref=e889]:
+                            - cell [ref=e890]:
+                              - generic [ref=e891]:
+                                - combobox [aria-hidden] [ref=e892] [cursor=pointer]
+                                - combobox [ref=e895] [cursor=pointer]:
+                                  - textbox [ref=e896]
+                              - button "Enter new" [ref=e897] [cursor=pointer]
+                            - cell [ref=e898]:
+                              - textbox "Value" [ref=e899]
+                      - button "Add Custom Field" [ref=e901] [cursor=pointer]
+                    - paragraph [ref=e902]:
+                      - text: Custom fields can be used to add extra metadata to an order that you can
+                      - link "use in your theme" [ref=e903] [cursor=pointer]:
+                        - /url: https://wordpress.org/support/article/custom-fields/
+                      - text: .
+  - contentinfo [ref=e905]:
+    - paragraph [ref=e906]:
+      - generic [ref=e907]:
+        - text: If you like
+        - strong [ref=e908]: WooCommerce
+        - text: please leave us a
+        - link "five star" [ref=e909] [cursor=pointer]:
+          - /url: https://wordpress.org/support/plugin/woocommerce/reviews?rate=5#new-post
+          - text: ★★★★★
+        - text: rating. A huge thanks in advance!
+    - paragraph [ref=e910]: Version 11.1.0

@@ -1,0 +1,391 @@
+/* ========================================
+   SHOP — dashboard
+   ======================================== */
+
+body.woocommerce-shop .site-branding,
+body.woocommerce-shop .page-header {
+  display: none;
+}
+
+body.woocommerce-shop #site-header {
+  display: none;
+}
+
+/* Background dan lebar halaman */
+body.woocommerce-shop {
+  background: var(--canvas-bg);
+}
+
+body.woocommerce-shop #main.site-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 320px);
+  gap: 24px;
+  width: calc(100% - 48px);
+  max-width: 1280px;
+  margin: 40px auto 72px;
+  padding: 0 8px 8px 0;
+  box-sizing: border-box;
+}
+
+body.woocommerce-shop #main.site-main > * {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+/* Breadcrumb */
+body.woocommerce-shop .woocommerce-breadcrumb {
+  margin: 0;
+  color: var(--body-text);
+  font-family: var(--body-font);
+  font-size: 14px;
+}
+
+body.woocommerce-shop .woocommerce-breadcrumb a {
+  color: var(--electric-blue);
+  text-decoration: none;
+}
+
+body.woocommerce-shop .woocommerce-breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+/* Header biru seperti welcome card dashboard */
+body.woocommerce-shop .woocommerce-products-header {
+  margin: 0;
+  padding: 28px 32px;
+  color: #fff;
+  background: var(--electric-blue);
+  border: 3px solid var(--base-dark);
+  border-radius: 12px;
+  box-shadow: 8px 8px 0 var(--base-dark);
+}
+
+body.woocommerce-shop .woocommerce-products-header__title {
+  margin: 0;
+  color: #fff;
+  font-family: var(--heading-font);
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 800;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+body.woocommerce-shop .woocommerce-products-header .term-description {
+  margin-top: 12px;
+  color: #fff;
+}
+
+body.woocommerce-shop .woocommerce-products-header .term-description p {
+  margin: 0;
+}
+
+/* Jumlah produk */
+body.woocommerce-shop #main.site-main > .woocommerce-result-count {
+  grid-column: 1;
+  align-self: center;
+  float: none;
+  width: fit-content;
+  margin: 0;
+  padding: 6px 16px;
+  background: var(--electric-blue);
+  color: #fff;
+  border: 2px solid var(--base-dark);
+  border-radius: 999px;
+  font-family: var(--tag-font);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: normal;
+}
+
+/* Dropdown sorting */
+body.woocommerce-shop #main.site-main > .woocommerce-ordering {
+  grid-column: 2;
+  align-self: center;
+  float: none;
+  width: 100%;
+  margin: 0;
+}
+
+body.woocommerce-shop .woocommerce-ordering select {
+  width: 100%;
+  padding: 12px 16px;
+  color: var(--base-dark);
+  background-color: #fff;
+  border: 2px solid var(--base-dark);
+  border-radius: 12px;
+  box-shadow: 4px 4px 0 var(--base-dark);
+  font-family: var(--body-font);
+  font-size: 14px;
+  cursor: pointer;
+  box-sizing: border-box;
+
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5l5-5' fill='none' stroke='%2312131a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 12px;
+}
+
+/* Daftar pilihan */
+body.woocommerce-shop .woocommerce-ordering select option {
+  background-color: #fff;
+  color: var(--base-dark);
+  font-family: var(--body-font), sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Pilihan yang sedang aktif */
+body.woocommerce-shop .woocommerce-ordering select option:checked {
+  background-color: var(--neon-mint);
+  color: var(--base-dark);
+}
+
+/* Pertahankan desain pricing card; rapikan margin grid saja. */
+body.woocommerce-shop #main.site-main > ul.products {
+  margin: 8px 0 16px;
+}
+
+/* Notifikasi */
+body.woocommerce-shop .woocommerce-notices-wrapper:empty {
+  display: none;
+}
+
+body.woocommerce-shop
+  :is(.woocommerce-info, .woocommerce-message, .woocommerce-error) {
+  margin: 0 0 16px;
+  padding: 20px 20px 20px 52px;
+  color: var(--base-dark);
+  background: #fff;
+  border: 2px solid var(--base-dark);
+  border-top: 6px solid var(--electric-blue);
+  border-radius: 12px;
+  box-shadow: 6px 6px 0 var(--base-dark);
+  font-family: var(--body-font);
+  line-height: 1.6;
+}
+
+body.woocommerce-shop
+  :is(.woocommerce-info, .woocommerce-message, .woocommerce-error)::before {
+  top: 20px;
+  left: 20px;
+  color: var(--electric-blue);
+}
+
+body.woocommerce-shop .woocommerce-message {
+  border-top-color: var(--neon-mint);
+}
+
+body.woocommerce-shop .woocommerce-error {
+  border-top-color: #b42318;
+}
+
+body.woocommerce-shop .woocommerce-error::before {
+  color: #b42318;
+}
+
+/* Tombol pada notifikasi */
+body.woocommerce-shop
+  :is(.woocommerce-info, .woocommerce-message, .woocommerce-error)
+  a.button {
+  padding: 12px 16px;
+  color: #fff;
+  background: var(--electric-blue);
+  border: 2px solid var(--base-dark);
+  border-radius: 999px;
+  box-shadow: 4px 4px 0 var(--base-dark);
+  font-family: var(--heading-font);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-decoration: none;
+}
+
+/* Pagination */
+body.woocommerce-shop nav.woocommerce-pagination {
+  margin: 8px 0 0;
+}
+
+body.woocommerce-shop nav.woocommerce-pagination ul.page-numbers {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  list-style: none;
+}
+
+body.woocommerce-shop nav.woocommerce-pagination ul.page-numbers li {
+  float: none;
+  margin: 0;
+  border: 0;
+  overflow: visible;
+}
+
+body.woocommerce-shop nav.woocommerce-pagination li :is(a, span) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 10px 14px;
+  color: #fff;
+  background: var(--electric-blue);
+  border: 2px solid var(--base-dark);
+  border-radius: 999px;
+  box-shadow: 4px 4px 0 var(--base-dark);
+  font-family: var(--heading-font);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+body.woocommerce-shop nav.woocommerce-pagination span.current {
+  color: var(--neon-mint);
+  background: var(--base-dark);
+}
+
+body.woocommerce-shop nav.woocommerce-pagination span.dots {
+  color: var(--base-dark);
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+/* Hover dan fokus keyboard */
+body.woocommerce-shop nav.woocommerce-pagination a:hover,
+body.woocommerce-shop
+  :is(.woocommerce-info, .woocommerce-message, .woocommerce-error)
+  a.button:hover {
+  color: var(--base-dark);
+  background: var(--neon-mint);
+}
+
+body.woocommerce-shop .woocommerce-ordering select:focus-visible,
+body.woocommerce-shop nav.woocommerce-pagination a:focus-visible,
+body.woocommerce-shop .woocommerce-notices-wrapper a:focus-visible {
+  outline: 3px solid var(--electric-blue);
+  outline-offset: 4px;
+}
+
+.gpm-shop-cart-modal {
+  box-sizing: border-box;
+  width: min(520px, calc(100% - 40px));
+  max-height: calc(100dvh - 48px);
+  margin: auto;
+  padding: 28px;
+  color: var(--base-dark);
+  background: #fff;
+  border: 3px solid var(--base-dark);
+  border-radius: 16px;
+  box-shadow: 8px 8px 0 var(--electric-blue);
+  font-family: var(--body-font), sans-serif;
+}
+
+.gpm-shop-cart-modal::backdrop {
+  background: rgb(18 19 26 / 65%);
+}
+
+.gpm-shop-cart-modal__close-form {
+  display: flex;
+  justify-content: flex-end;
+  margin: -12px -12px 4px 0;
+}
+
+.gpm-shop-cart-modal .gpm-shop-cart-modal__close {
+  width: 44px;
+  height: 44px;
+  padding: 8px;
+  border: 0;
+  border-radius: 8px;
+  color: #fff;
+  background: var(--red);
+  opacity: 50%;
+  font-size: 32px;
+  cursor: pointer;
+}
+
+.gpm-shop-cart-modal .gpm-shop-cart-modal__close:hover {
+  background: var(--red);
+  color: #fff;
+  opacity: 100%;
+}
+
+.gpm-shop-cart-modal h2 {
+  margin: 0 0 16px;
+  font-family: var(--heading-font), sans-serif;
+  font-size: clamp(20px, 5vw, 28px);
+  line-height: 1.4;
+}
+
+.gpm-shop-cart-modal p {
+  margin: 0 0 24px;
+  line-height: 1.6;
+}
+
+.gpm-shop-cart-modal__link {
+  display: block;
+  text-decoration: none;
+}
+
+.gpm-shop-cart-modal__button {
+  padding: 14px 20px;
+  color: #fff;
+  background: var(--electric-blue);
+  border: 2px solid var(--base-dark);
+  border-radius: 999px;
+  box-shadow: 4px 4px 0 var(--base-dark);
+  font-family: var(--heading-font), sans-serif;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 14px;
+  text-align: center;
+}
+
+.gpm-shop-cart-modal__link:hover .gpm-shop-cart-modal__button {
+  color: var(--base-dark);
+  background: var(--neon-mint);
+}
+
+.gpm-shop-cart-modal :is(a, button):focus-visible {
+  outline: 3px solid var(--electric-blue);
+  outline-offset: 4px;
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  body.woocommerce-shop #main.site-main {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    width: calc(100% - 32px);
+    margin: 24px auto 48px;
+  }
+
+  body.woocommerce-shop #main.site-main > .woocommerce-result-count,
+  body.woocommerce-shop #main.site-main > .woocommerce-ordering {
+    grid-column: 1;
+  }
+
+  body.woocommerce-shop .woocommerce-products-header {
+    padding: 24px 20px;
+    box-shadow: 5px 5px 0 var(--base-dark);
+  }
+
+  body.woocommerce-shop
+    :is(.woocommerce-info, .woocommerce-message, .woocommerce-error)
+    a.button {
+    display: block;
+    float: none;
+    margin: 0 0 12px;
+    text-align: center;
+  }
+
+  body.woocommerce-shop nav.woocommerce-pagination ul.page-numbers {
+    justify-content: center;
+  }
+}

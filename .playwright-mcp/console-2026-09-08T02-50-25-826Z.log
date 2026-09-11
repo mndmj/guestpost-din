@@ -1,0 +1,25 @@
+[    1141ms] [LOG] JQMIGRATE: Migrate is installed, version 3.4.1 @ http://localhost:8883/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1:1
+[    1449ms] ReferenceError: elementorFrontendConfig is not defined
+    at 8309 (http://localhost:8883/wp-content/plugins/elementor/assets/js/frontend.min.js?ver=4.2.2:1:26061)
+    at __webpack_require__ (http://localhost:8883/wp-content/plugins/elementor/assets/js/webpack.runtime.min.js?ver=4.2.2:1:169)
+    at 7603 (http://localhost:8883/wp-content/plugins/elementor/assets/js/frontend.min.js?ver=4.2.2:1:20016)
+    at __webpack_require__ (http://localhost:8883/wp-content/plugins/elementor/assets/js/webpack.runtime.min.js?ver=4.2.2:1:169)
+    at http://localhost:8883/wp-content/plugins/elementor/assets/js/frontend.min.js?ver=4.2.2:1:32073
+    at __webpack_require__.O (http://localhost:8883/wp-content/plugins/elementor/assets/js/webpack.runtime.min.js?ver=4.2.2:1:539)
+    at http://localhost:8883/wp-content/plugins/elementor/assets/js/frontend.min.js?ver=4.2.2:1:32092
+    at webpackJsonpCallback (http://localhost:8883/wp-content/plugins/elementor/assets/js/webpack.runtime.min.js?ver=4.2.2:1:5496)
+    at http://localhost:8883/wp-content/plugins/elementor/assets/js/frontend.min.js?ver=4.2.2:1:90
+[  249323ms] [LOG] JQMIGRATE: Migrate is installed, version 3.4.1 @ http://localhost:8883/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1:1
+[  249459ms] ReferenceError: elementorFrontendConfig is not defined
+    at 8309 (http://localhost:8883/wp-content/plugins/elementor/assets/js/frontend.min.js?ver=4.2.2:1:26061)
+    at __webpack_require__ (http://localhost:8883/wp-content/plugins/elementor/assets/js/webpack.runtime.min.js?ver=4.2.2:1:169)
+    at 7603 (http://localhost:8883/wp-content/plugins/elementor/assets/js/frontend.min.js?ver=4.2.2:1:20016)
+    at __webpack_require__ (http://localhost:8883/wp-content/plugins/elementor/assets/js/webpack.runtime.min.js?ver=4.2.2:1:169)
+    at http://localhost:8883/wp-content/plugins/elementor/assets/js/frontend.min.js?ver=4.2.2:1:32073
+    at __webpack_require__.O (http://localhost:8883/wp-content/plugins/elementor/assets/js/webpack.runtime.min.js?ver=4.2.2:1:539)
+    at http://localhost:8883/wp-content/plugins/elementor/assets/js/frontend.min.js?ver=4.2.2:1:32092
+    at webpackJsonpCallback (http://localhost:8883/wp-content/plugins/elementor/assets/js/webpack.runtime.min.js?ver=4.2.2:1:5496)
+    at http://localhost:8883/wp-content/plugins/elementor/assets/js/frontend.min.js?ver=4.2.2:1:90
+[  354038ms] [LOG] JQMIGRATE: Migrate is installed, version 3.4.1 @ http://localhost:8883/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1:1
+[  474129ms] [LOG] JQMIGRATE: Migrate is installed, version 3.4.1 @ http://localhost:8883/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1:1
+[  583037ms] [LOG] JQMIGRATE: Migrate is installed, version 3.4.1 @ http://localhost:8883/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1:1

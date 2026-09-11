@@ -1,0 +1,74 @@
+/* Kotak kedua panel */
+#din-order-attach,
+#din-packages {
+  border: 1px solid #dce2ec;
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgb(15 23 42 / 5%);
+}
+
+/* Header panel */
+:is(#din-order-attach, #din-packages) > .postbox-header {
+  background: #f5f7fc;
+  border-radius: 12px 12px 0 0;
+}
+
+:is(#din-order-attach, #din-packages) .hndle {
+  color: #172033;
+  font-size: 16px;
+}
+
+/* Area konten; tidak mengubah perilaku collapse */
+:is(#din-order-attach, #din-packages) > .inside {
+  margin: 0;
+  padding: 20px;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+/* Teks petunjuk lebih mudah dibaca */
+:is(#din-order-attach, #din-packages) .inside p {
+  max-width: 90ch;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* Tombol pilih file, tetap memakai input asli */
+#din-order-attach-files {
+  max-width: 100%;
+}
+
+#din-order-attach-files::file-selector-button {
+  padding: 10px 16px;
+  margin-right: 12px;
+  border: 1px solid #3858e9;
+  border-radius: 8px;
+  background: #3858e9;
+  color: #fff;
+  cursor: pointer;
+}
+
+#din-order-attach-files::file-selector-button:hover {
+  background: #2944bd;
+}
+
+#din-order-attach-files:focus-visible {
+  outline: 2px solid #3858e9;
+  outline-offset: 4px;
+}
+
+/* Thumbnail: selector mengatasi CSS preview yang sudah ada */
+#din-order-attach .din-order-attach-preview__item {
+  padding: 12px;
+  border-radius: 8px;
+}
+
+#din-order-attach .din-order-attach-preview__item img {
+  border-radius: 6px;
+}
+
+/* Tabel lampiran dan paket */
+:is(#din-order-attach, #din-packages) .widefat th,
+:is(#din-order-attach, #din-packages) .widefat td {
+  padding: 12px;
+  vertical-align: top;
+}

@@ -1,0 +1,109 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap" rel="stylesheet">
+<style>
+	.pro-banner {
+		position: relative;
+		width: 278px;
+		/* height: 100px; */
+		padding: 32px 14px;
+		background: #000E25;
+		border-radius: 7.86px;
+		text-align: center;
+		overflow: hidden;
+	}
+
+	.pro-banner * {
+		position: relative;
+	}
+
+	.image .features {
+		width: 100%;
+	}
+
+	.title,
+	.description {
+		margin: unset;
+	}
+
+	.title {
+		margin-top: 9px;
+		font-family: 'Sora', sans-serif;
+		font-size: 28px;
+		font-weight: bold;
+		text-align: center;
+		line-height: 120%;
+		background: linear-gradient(to right, #FFFFFF, #F1DEFF);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+	}
+
+	.title .gradient {
+		background: linear-gradient(to right, #D15DF7, #3B98FF);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+	}
+
+	.description {
+		margin-top: 8px;
+		font-family: 'Sora', sans-serif;
+		font-size: 14px;
+		text-align: center;
+		color: #999999;
+		line-height: 150%;
+	}
+
+	.upgrade {
+		margin-top: 15px;
+		padding: 14px 20px;
+		display: inline-flex;
+		gap: 12px;
+		align-items: center;
+		background: radial-gradient(circle at center -70px, #BA70FF 50%, #2F47FF);
+		border-radius: 10px;
+		font-family: 'Sora', sans-serif;
+		font-weight: 500;
+		color: #FFFFFF;
+		text-decoration: none;
+	}
+
+	.background,
+	.background>div {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+	}
+
+	.background .gradient {
+		width: 380px;
+		height: 380px;
+		background: linear-gradient(#3C008B, #D8AAFF 38%, #9F2FFF 61%, #3C008B);
+		transform: translate(calc(-25%/2), -40%)rotate(135deg);
+		filter: opacity(0.80) blur(100px);
+	}
+
+	.background .pattern img {
+		height: 150%;
+		top: -40%;
+	}
+</style>
+<div class="pro-banner">
+	<div class="background">
+		<div class="gradient"></div>
+		<div class="pattern">
+			<img src="background-pattern.svg" width="100%" height="100%" />
+		</div>
+	</div>
+	<div class="image">
+		<img src="features.png" class="features" />
+	</div>
+	<h2 class="title">Unlock More <br />With <span class="gradient">Jeg Kit PRO</span></h2>
+	<p class="description">Elevate your website with our <br />all-in-one widget collection.</p>
+	<a href="/upgrade" class="upgrade">Upgrade To PRO <svg width="15" height="13" viewBox="0 0 15 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+			<path d="M2.34752 9.50065L0.874512 1.3991L4.92529 5.08163L7.50305 0.662598L10.0808 5.08163L14.1316 1.3991L12.6586 9.50065H2.34752ZM12.6586 11.7102C12.6586 12.1521 12.364 12.4467 11.9221 12.4467H3.08403C2.64212 12.4467 2.34752 12.1521 2.34752 11.7102V10.9737H12.6586V11.7102Z" fill="white" />
+		</svg>
+	</a>
+</div>

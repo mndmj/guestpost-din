@@ -1,0 +1,41 @@
+<?php return array(
+    'root' => array(
+        'name' => 'jegstudio/jeg-elementor-kit',
+        'pretty_version' => 'dev-master',
+        'version' => 'dev-master',
+        'reference' => '12baf3e4b2ac5921fb557153ccfe17d53fa0bc7b',
+        'type' => 'library',
+        'install_path' => __DIR__ . '/../../',
+        'aliases' => array(),
+        'dev' => true,
+    ),
+    'versions' => array(
+        'enshrined/svg-sanitize' => array(
+            'pretty_version' => '0.22.0',
+            'version' => '0.22.0.0',
+            'reference' => '0afa95ea74be155a7bcd6c6fb60c276c39984500',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../enshrined/svg-sanitize',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'freemius/wordpress-sdk' => array(
+            'pretty_version' => '2.13.1',
+            'version' => '2.13.1.0',
+            'reference' => '7376c0eca1ae7f92aaba9d3b550bd10affe797ff',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../freemius/wordpress-sdk',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'jegstudio/jeg-elementor-kit' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '12baf3e4b2ac5921fb557153ccfe17d53fa0bc7b',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+    ),
+);

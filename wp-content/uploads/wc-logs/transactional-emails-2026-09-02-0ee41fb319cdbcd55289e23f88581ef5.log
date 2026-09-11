@@ -1,0 +1,1 @@
+2026-09-02T00:55:03+00:00 INFO Email "cancelled_order" for order #176 sent CONTEXT: {"email_type":"cancelled_order","status":"sent","recipient":"guest","order":176}

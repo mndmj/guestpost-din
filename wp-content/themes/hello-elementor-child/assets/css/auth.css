@@ -1,0 +1,328 @@
+/* Shared login and password recovery forms: WooCommerce + WordPress. */
+:root {
+  --gpm-auth-ink: var(--base-dark, #12131a);
+  --gpm-auth-blue: var(--electric-blue, #3d5cff);
+  --gpm-auth-mint: var(--neon-mint, #00e5a3);
+  --gpm-auth-canvas: var(--canvas-bg, #f4f6ff);
+  --gpm-auth-body: var(--body-font, "DM Sans"), sans-serif;
+  --gpm-auth-heading: var(--heading-font, "Unbounded"), sans-serif;
+}
+
+body
+  :is(
+    form.woocommerce-form-login,
+    form.woocommerce-form-register,
+    form.woocommerce-EditAccountForm,
+    form.woocommerce-EditAccountForm,
+    form.woocommerce-EditAccountForm,
+    form.woocommerce-ResetPassword,
+    form#loginform,
+    form#lostpasswordform
+  ) {
+  color: var(--gpm-auth-ink);
+  font-family: var(--gpm-auth-body);
+  box-sizing: border-box;
+}
+
+/* Fields stack without changing the surrounding checkout layout. */
+body
+  :is(
+    form.woocommerce-form-login,
+    form.woocommerce-form-register,
+    form.woocommerce-EditAccountForm,
+    form.woocommerce-EditAccountForm,
+    form.woocommerce-EditAccountForm,
+    form.woocommerce-ResetPassword
+  )
+  .form-row,
+body :is(#loginform, #lostpasswordform) > p,
+body #loginform .user-pass-wrap {
+  float: none;
+  width: 100%;
+  margin: 0 0 20px;
+  padding: 0;
+}
+
+body
+  :is(
+    form.woocommerce-form-login,
+    form.woocommerce-form-register,
+    form.woocommerce-EditAccountForm,
+    form.woocommerce-EditAccountForm,
+    form.woocommerce-EditAccountForm,
+    form.woocommerce-ResetPassword,
+    form#loginform,
+    form#lostpasswordform
+  )
+  label {
+  display: block;
+  margin: 0 0 8px;
+  color: var(--gpm-auth-ink);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+body
+  :is(
+    form.woocommerce-form-login,
+    form.woocommerce-form-register,
+    form.woocommerce-EditAccountForm,
+    form.woocommerce-EditAccountForm,
+    form.woocommerce-EditAccountForm,
+    form.woocommerce-ResetPassword,
+    form#loginform,
+    form#lostpasswordform
+  )
+  input:is([type="text"], [type="email"], [type="password"]) {
+  width: 100%;
+  min-height: 50px;
+  margin: 0;
+  padding: 12px 14px;
+  color: var(--gpm-auth-ink);
+  background: #fff;
+  border: 2px solid var(--gpm-auth-ink);
+  border-radius: 10px;
+  box-shadow: none;
+  font-family: var(--gpm-auth-body);
+  font-size: 16px;
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+
+body
+  :is(
+    form.woocommerce-form-login,
+    form.woocommerce-form-register,
+    form.woocommerce-EditAccountForm,
+    form.woocommerce-EditAccountForm,
+    form.woocommerce-EditAccountForm,
+    form.woocommerce-ResetPassword,
+    form#loginform,
+    form#lostpasswordform
+  )
+  .password-input
+  .input-text,
+body #loginform #user_pass {
+  padding-right: 48px;
+}
+
+body.login #loginform .wp-hide-pw {
+  width: 44px;
+  height: 50px;
+}
+
+body
+  :is(form.woocommerce-form-login, form#loginform)
+  .woocommerce-form-login__rememberme,
+body #loginform .forgetmenot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  float: none;
+  min-height: 44px;
+  margin: 0;
+  font-weight: 500;
+}
+
+body #loginform .forgetmenot label {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin: 0;
+  font-weight: 500;
+}
+
+body form.woocommerce-form-login #rememberme {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--gpm-auth-blue);
+}
+
+/* Submit buttons only; password visibility controls keep their native styling. */
+body
+  :is(
+    form.woocommerce-form-login,
+    form.woocommerce-form-register,
+    form.woocommerce-EditAccountForm,
+    form.woocommerce-EditAccountForm,
+    form.woocommerce-EditAccountForm,
+    form.woocommerce-ResetPassword,
+    form#loginform,
+    form#lostpasswordform
+  )
+  :is(button[type="submit"], input[type="submit"]) {
+  display: block;
+  float: none;
+  width: 100%;
+  min-height: 48px;
+  margin: 16px 0 8px;
+  padding: 14px 24px;
+  color: #fff;
+  background: var(--gpm-auth-blue);
+  border: 2px solid var(--gpm-auth-ink);
+  border-radius: 999px;
+  box-shadow: 4px 4px 0 var(--gpm-auth-ink);
+  font-family: var(--gpm-auth-heading);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow: none;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+body
+  :is(
+    form.woocommerce-form-login,
+    form.woocommerce-form-register,
+    form.woocommerce-EditAccountForm,
+    form.woocommerce-EditAccountForm,
+    form.woocommerce-EditAccountForm,
+    form.woocommerce-ResetPassword,
+    form#loginform,
+    form#lostpasswordform
+  )
+  :is(button[type="submit"], input[type="submit"]):hover:not(:disabled) {
+  color: var(--gpm-auth-ink);
+  background: var(--gpm-auth-mint);
+}
+
+body
+  :is(
+    form.woocommerce-form-login,
+    form.woocommerce-form-register,
+    form.woocommerce-EditAccountForm,
+    form.woocommerce-EditAccountForm,
+    form.woocommerce-EditAccountForm,
+    form.woocommerce-ResetPassword,
+    form#loginform,
+    form#lostpasswordform
+  )
+  :is(button[type="submit"], input[type="submit"]):disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+body
+  :is(
+    form.woocommerce-form-login,
+    form.woocommerce-form-register,
+    form.woocommerce-EditAccountForm,
+    form.woocommerce-EditAccountForm,
+    form.woocommerce-EditAccountForm,
+    form.woocommerce-ResetPassword,
+    form#loginform,
+    form#lostpasswordform
+  )
+  a,
+body.login #login :is(#nav, #backtoblog) a {
+  color: var(--gpm-auth-blue);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+body
+  :is(
+    form.woocommerce-form-login,
+    form.woocommerce-form-register,
+    form.woocommerce-EditAccountForm,
+    form.woocommerce-EditAccountForm,
+    form.woocommerce-EditAccountForm,
+    form.woocommerce-ResetPassword,
+    form#loginform,
+    form#lostpasswordform
+  )
+  :is(input, button, a):focus-visible,
+body.login #login :is(#nav, #backtoblog) a:focus-visible {
+  outline: 3px solid var(--gpm-auth-blue);
+  outline-offset: 3px;
+}
+
+body form.woocommerce-form-login .lost_password {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* ponytail: keep My Account's existing card; other login forms own their card. */
+body:not(.woocommerce-account) form.woocommerce-form-login,
+body.login :is(#loginform, #lostpasswordform),
+body.woocommerce-lost-password .woocommerce {
+  width: 100%;
+  max-width: 560px;
+  margin: 32px auto;
+  padding: clamp(20px, 4vw, 32px);
+  background: #fff;
+  border: 3px solid var(--gpm-auth-ink);
+  border-radius: 12px;
+  box-shadow: 8px 8px 0 var(--gpm-auth-ink);
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+/* ponytail: one recovery card also covers WooCommerce's form-free confirmation. */
+body.woocommerce-lost-password .woocommerce {
+  width: calc(100% - 32px);
+  margin: 40px auto 64px;
+  color: var(--gpm-auth-ink);
+  font-family: var(--gpm-auth-body);
+}
+
+body.woocommerce-lost-password .woocommerce > p,
+body form.woocommerce-ResetPassword > p:not(.form-row) {
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+body.woocommerce-lost-password .woocommerce > p:last-child,
+body form.woocommerce-ResetPassword .form-row:last-of-type {
+  margin-bottom: 0;
+}
+
+body.login {
+  background: var(--gpm-auth-canvas);
+  color: var(--gpm-auth-ink);
+  font-family: var(--gpm-auth-body);
+}
+
+body.login #login {
+  width: calc(100% - 40px);
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 40px 0;
+}
+
+/* Preserve the compact layout inside WordPress's session-expiry dialog. */
+body.login.interim-login #login {
+  margin: 5px auto 20px;
+  padding: 0;
+}
+
+body.login.interim-login #loginform {
+  margin: 0;
+  padding: 20px;
+}
+
+body
+  .woocommerce:has(form.woocommerce-form-login)
+  :is(.woocommerce-error, .woocommerce-info, .woocommerce-message),
+body.woocommerce-lost-password
+  .woocommerce
+  :is(.woocommerce-error, .woocommerce-info, .woocommerce-message),
+body.login #login :is(.message, .notice, #login_error) {
+  color: var(--gpm-auth-ink);
+  background: var(--gpm-auth-canvas);
+  border: 2px solid var(--gpm-auth-ink);
+  border-radius: 10px;
+  font-family: var(--gpm-auth-body);
+  font-size: 14px;
+}
+
+body .woocommerce:has(form.woocommerce-form-login) .woocommerce-error,
+body.woocommerce-lost-password .woocommerce .woocommerce-error,
+body.login #login :is(.notice-error, #login_error) {
+  border-left: 4px solid #b42318;
+}

@@ -1,0 +1,88 @@
+- generic [active] [ref=e1]:
+  - link "Skip to content" [ref=e2] [cursor=pointer]:
+    - /url: "#content"
+  - banner [ref=e3]:
+    - link "Guest Post Monitoring" [ref=e7] [cursor=pointer]:
+      - /url: http://localhost:8883/
+  - main [ref=e8]:
+    - heading "Cart" [level=1] [ref=e10]
+    - generic [ref=e13]:
+      - heading "Your cart is currently empty!" [level=2] [ref=e14]
+      - separator [ref=e15]: ···
+      - heading "New in store" [level=2] [ref=e16]
+      - list [ref=e18]:
+        - listitem [ref=e19]:
+          - article [ref=e21]:
+            - paragraph [ref=e22]: Guestpost Annual
+            - generic [ref=e23]:
+              - generic [ref=e24]: $35
+              - generic [ref=e26]: /year
+            - generic [ref=e27]:
+              - paragraph [ref=e28]: High-quality guest post placement for one year.
+              - list [ref=e29]:
+                - listitem [ref=e30]:
+                  - text: ✓
+                  - generic [ref=e31]: 1–3 year placement options
+                - listitem [ref=e32]:
+                  - text: ✓
+                  - generic [ref=e33]: Do-follow backlink
+                - listitem [ref=e34]:
+                  - text: ✓
+                  - generic [ref=e35]: Contextual placement
+                - listitem [ref=e36]:
+                  - text: ✓
+                  - generic [ref=e37]: Content published on a relevant website
+            - link "Get started with Guestpost Annual" [ref=e38] [cursor=pointer]:
+              - /url: /cart/?add-to-cart=91
+              - generic [ref=e39]: GET STARTED
+        - listitem [ref=e40]:
+          - article [ref=e42]:
+            - paragraph [ref=e43]: Guestpost Lifetime
+            - generic [ref=e44]:
+              - generic [ref=e45]: $250
+              - generic [ref=e47]: /lifetime
+            - generic [ref=e48]:
+              - paragraph [ref=e49]: Permanent guest post placement for endless SEO visibility.
+              - list [ref=e50]:
+                - listitem [ref=e51]:
+                  - text: ✓
+                  - generic [ref=e52]: Permanent placement
+                - listitem [ref=e53]:
+                  - text: ✓
+                  - generic [ref=e54]: Up to 3 do-follow links
+                - listitem [ref=e55]:
+                  - text: ✓
+                  - generic [ref=e56]: Contextual placement
+                - listitem [ref=e57]:
+                  - text: ✓
+                  - generic [ref=e58]: Content published on a relevant website
+            - link "Get started with Guestpost Lifetime" [ref=e59] [cursor=pointer]:
+              - /url: /cart/?add-to-cart=90
+              - generic [ref=e60]: GET STARTED
+        - listitem [ref=e61]:
+          - article [ref=e63]:
+            - paragraph [ref=e64]: Link Insertion Annual
+            - generic [ref=e65]:
+              - generic [ref=e66]: $35
+              - generic [ref=e68]: /year
+            - generic [ref=e69]:
+              - paragraph [ref=e70]: Drive traffic with a yearly strategic link placement.
+              - list [ref=e71]:
+                - listitem [ref=e72]:
+                  - text: ✓
+                  - generic [ref=e73]: 1–3 year placement options
+                - listitem [ref=e74]:
+                  - text: ✓
+                  - generic [ref=e75]: Do-follow backlink
+                - listitem [ref=e76]:
+                  - text: ✓
+                  - generic [ref=e77]: Relevant existing article
+                - listitem [ref=e78]:
+                  - text: ✓
+                  - generic [ref=e79]: Contextual link placement
+            - link "Get started with Link Insertion Annual" [ref=e80] [cursor=pointer]:
+              - /url: /cart/?add-to-cart=83
+              - generic [ref=e81]: GET STARTED
+  - contentinfo [ref=e82]:
+    - paragraph [ref=e85]: All rights reserved
+  - status [ref=e88]
