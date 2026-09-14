@@ -1659,44 +1659,17 @@ body:is(.woocommerce-edit-address, .woocommerce-edit-account)
    ================================================== */
 
 /* Area form */
-body.woocommerce-account:not(.logged-in) .woocommerce:has(form.login) {
+body.woocommerce-account:not(.logged-in) .woocommerce:has(.gpm-auth-card) {
   width: calc(100% - 32px);
-  max-width: 1100px;
-  margin: 40px auto 64px;
+  max-width: 560px;
+  margin: 64px auto;
   color: var(--base-dark);
   font-family: var(--body-font), sans-serif;
   box-sizing: border-box;
 }
 
-/* Login saja: kartu di tengah */
-body.woocommerce-account:not(.logged-in) .woocommerce:has(> form.login) {
-  max-width: 560px;
-}
-
-/* Login + Register: dua kolom */
-body.woocommerce-account:not(.logged-in) #customer_login {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  align-items: start;
-  gap: 32px;
-}
-
-body.woocommerce-account:not(.logged-in) #customer_login::before,
-body.woocommerce-account:not(.logged-in) #customer_login::after {
-  content: none;
-}
-
-body.woocommerce-account:not(.logged-in) #customer_login > .u-column1,
-body.woocommerce-account:not(.logged-in) #customer_login > .u-column2 {
-  float: none;
-  width: 100%;
-  min-width: 0;
-}
-
 /* Kartu */
-body.woocommerce-account:not(.logged-in) .woocommerce:has(> form.login),
-body.woocommerce-account:not(.logged-in) #customer_login > .u-column1,
-body.woocommerce-account:not(.logged-in) #customer_login > .u-column2 {
+body.woocommerce-account:not(.logged-in) .gpm-auth-card {
   padding: 32px;
   background: #fff;
   border: 3px solid var(--base-dark);
@@ -1706,7 +1679,7 @@ body.woocommerce-account:not(.logged-in) #customer_login > .u-column2 {
 }
 
 /* Heading Login / Register */
-body.woocommerce-account:not(.logged-in) h2:has(+ form:is(.login, .register)) {
+body.woocommerce-account:not(.logged-in) .gpm-auth-card > h2 {
   margin: 0 0 24px;
   color: var(--electric-blue);
   font-family: var(--heading-font), sans-serif;
@@ -1727,9 +1700,20 @@ body.woocommerce-account:not(.logged-in) form:is(.login, .register) {
 
 /* Shared field and button styles are in auth.css. */
 
+body.woocommerce-account:not(.logged-in) .gpm-auth-card .gpm-auth-home {
+  margin: 24px 0 0;
+  font-size: 14px;
+  text-align: center;
+}
+
+body.woocommerce-account:not(.logged-in) .gpm-auth-card .gpm-auth-switch {
+  margin: 16px 0 0;
+  font-size: 14px;
+}
+
 /* Pesan error, informasi, dan sukses */
 body.woocommerce-account:not(.logged-in)
-  .woocommerce:has(form.login)
+  .woocommerce:has(.gpm-auth-card)
   :is(.woocommerce-error, .woocommerce-info, .woocommerce-message) {
   margin: 0 0 24px;
   padding: 16px 18px 16px 46px;
@@ -1741,7 +1725,7 @@ body.woocommerce-account:not(.logged-in)
 }
 
 body.woocommerce-account:not(.logged-in)
-  .woocommerce:has(form.login)
+  .woocommerce:has(.gpm-auth-card)
   :is(.woocommerce-error, .woocommerce-info, .woocommerce-message)::before {
   top: 16px;
   left: 16px;
@@ -2205,14 +2189,7 @@ body.woocommerce-account .din-packages .din-packages__actions form {
     width: 100%;
   }
 
-  body.woocommerce-account:not(.logged-in) #customer_login {
-    grid-template-columns: 1fr;
-    gap: 24px;
-  }
-
-  body.woocommerce-account:not(.logged-in) .woocommerce:has(> form.login),
-  body.woocommerce-account:not(.logged-in) #customer_login > .u-column1,
-  body.woocommerce-account:not(.logged-in) #customer_login > .u-column2 {
+  body.woocommerce-account:not(.logged-in) .gpm-auth-card {
     padding: 24px 20px;
     box-shadow: 5px 5px 0 var(--base-dark);
   }

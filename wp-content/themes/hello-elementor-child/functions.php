@@ -133,6 +133,37 @@ add_action( 'wp_enqueue_scripts', 'gpm_enqueue_auth_styles', 30 );
 add_action( 'login_enqueue_scripts', 'gpm_enqueue_auth_styles', 30 );
 
 /**
+ * Use the buyer's password for My Account only; keep checkout settings unchanged.
+ */
+function gpm_registration_password_setting( $pre_option ) {
+	$nonce = $_POST['woocommerce-register-nonce'] ?? $_POST['_wpnonce'] ?? '';
+	$registration_post = isset( $_POST['register'], $_POST['email'] ) && is_string( $nonce ) && wp_verify_nonce( wp_unslash( $nonce ), 'woocommerce-register' );
+	// ponytail: POST is checked before wp_loaded; page conditionals are valid only after wp.
+	$account_page = did_action( 'wp' ) && function_exists( 'is_account_page' ) && is_account_page() && ! is_user_logged_in();
+	return $registration_post || $account_page ? 'no' : $pre_option;
+}
+add_filter( 'pre_option_woocommerce_registration_generate_password', 'gpm_registration_password_setting' );
+
+/**
+ * Validate the native account-registration form before any customer is created.
+ */
+function gpm_validate_registration_password( $errors, $username, $password ) {
+	$confirmation = $_POST['password_confirm'] ?? null;
+	if ( ! is_string( $password ) || empty( $password ) || '' === trim( $password ) ) {
+		$errors->add( 'gpm_password_required', __( 'Please enter a password.', 'guest-post-child' ) );
+	} elseif ( strlen( $password ) > 4096 ) {
+		$errors->add( 'gpm_password_too_long', __( 'Please use a shorter password.', 'guest-post-child' ) );
+	} elseif ( ! is_string( $confirmation ) || '' === $confirmation ) {
+		$errors->add( 'gpm_password_confirmation_required', __( 'Please confirm your password.', 'guest-post-child' ) );
+	} elseif ( $password !== $confirmation ) {
+		// Compare without altering either value: WooCommerce supplies the raw POST password.
+		$errors->add( 'gpm_password_mismatch', __( 'Passwords do not match. Please try again.', 'guest-post-child' ) );
+	}
+	return $errors;
+}
+add_filter( 'woocommerce_process_registration_errors', 'gpm_validate_registration_password', 10, 3 );
+
+/**
  * Render kartu harga dari produk WooCommerce yang dipilih.
  */
 function gpm_render_pricing_cards_shortcode( $attributes ) {

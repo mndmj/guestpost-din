@@ -11,6 +11,21 @@ async function main() {
   const browser = await chromium.launch({ channel: "chrome", headless: true });
   const errors = [];
 
+  async function assertCloseIconCentered(modal) {
+    await modal.evaluate(() => document.fonts.ready);
+    const offset = await modal.locator(".gpm-shop-cart-modal__close").evaluate((button) => {
+      const range = document.createRange();
+      range.selectNodeContents(button);
+      const icon = range.getBoundingClientRect();
+      const bounds = button.getBoundingClientRect();
+      return {
+        x: Math.abs(icon.x + icon.width / 2 - bounds.x - bounds.width / 2),
+        y: Math.abs(icon.y + icon.height / 2 - bounds.y - bounds.height / 2),
+      };
+    });
+    assert.ok(offset.x <= 2 && offset.y <= 2, `Close icon is off-center: ${JSON.stringify(offset)}`);
+  }
+
   async function cart(context) {
     const response = await context.request.get(cartApi);
     assert.ok(response.ok(), "Store API cart request failed.");
@@ -58,6 +73,11 @@ async function main() {
       "A stale tab added another product.",
     );
     assert.ok(await modal.evaluate((element) => element.matches(":modal")));
+    await assertCloseIconCentered(modal);
+    await modal.getByRole("button", { name: "Close reminder" }).click();
+    await modal.waitFor({ state: "hidden" });
+    await stalePage.locator(selector).first().click();
+    await modal.waitFor({ state: "visible" });
 
     await stalePage.keyboard.press("Escape");
     await modal.waitFor({ state: "hidden" });
@@ -70,6 +90,7 @@ async function main() {
     );
 
     await stalePage.setViewportSize({ width: 390, height: 844 });
+    await assertCloseIconCentered(modal);
     const bounds = await modal.boundingBox();
     assert.ok(bounds.x >= 0 && bounds.x + bounds.width <= 390);
     const screenshot = path.join(os.tmpdir(), "gpm-shop-cart-modal-mobile.png");
@@ -109,6 +130,8 @@ async function main() {
             "stale tab blocked",
             "repeat quantity blocked",
             "Escape closes",
+            "close button closes",
+            "close icon centered on desktop and mobile",
             "mobile modal fits",
             "Cart CTA",
             "no-JS fallback",

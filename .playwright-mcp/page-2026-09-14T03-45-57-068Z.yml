@@ -1,0 +1,43 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e7]:
+    - generic [ref=e8]:
+      - heading "Login" [level=2] [ref=e9]
+      - generic [ref=e10]:
+        - paragraph [ref=e11]:
+          - generic [ref=e12]:
+            - text: Username or email address *
+            - generic [ref=e13]: Required
+          - textbox "Username or email address Required" [ref=e14]
+        - paragraph [ref=e15]:
+          - generic [ref=e16]:
+            - text: Password *
+            - generic [ref=e17]: Required
+          - generic [ref=e18]:
+            - textbox "Password Required" [ref=e19]
+            - button "Show password" [ref=e20] [cursor=pointer]
+        - paragraph [ref=e21]:
+          - generic [ref=e22]:
+            - checkbox "Remember me" [ref=e23]
+            - generic [ref=e24]: Remember me
+          - button "Log in" [ref=e25] [cursor=pointer]
+        - paragraph [ref=e26]:
+          - link "Lost your password?" [ref=e27] [cursor=pointer]:
+            - /url: http://localhost:8883/my-account/lost-password/
+    - generic [ref=e28]:
+      - heading "Register" [level=2] [ref=e29]
+      - generic [ref=e30]:
+        - paragraph [ref=e31]:
+          - generic [ref=e32]:
+            - text: Email address *
+            - generic [ref=e33]: Required
+          - textbox "Email address Required" [ref=e34]
+        - paragraph [ref=e35]: A link to set a new password will be sent to your email address.
+        - paragraph [ref=e37]:
+          - text: Your personal data will be used to support your experience throughout this website, to manage access to your account, and for other purposes described in our
+          - link "privacy policy" [ref=e38] [cursor=pointer]:
+            - /url: http://localhost:8883/?page_id=3
+          - text: .
+        - paragraph [ref=e39]:
+          - button "Register" [ref=e40] [cursor=pointer]
+  - generic [ref=e41]: tablet
+  - status [ref=e42]

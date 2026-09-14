@@ -140,7 +140,8 @@ body form.woocommerce-form-login #rememberme {
   accent-color: var(--gpm-auth-blue);
 }
 
-/* Submit buttons only; password visibility controls keep their native styling. */
+/* Submit and account-choice buttons; keep native password visibility controls. */
+body.woocommerce-account:not(.logged-in) .gpm-auth-choices .button,
 body
   :is(
     form.woocommerce-form-login,
@@ -175,6 +176,7 @@ body
   box-sizing: border-box;
 }
 
+body.woocommerce-account:not(.logged-in) .gpm-auth-choices .button:hover,
 body
   :is(
     form.woocommerce-form-login,
@@ -207,6 +209,7 @@ body
   cursor: not-allowed;
 }
 
+body.woocommerce-account:not(.logged-in) .gpm-auth-home a,
 body
   :is(
     form.woocommerce-form-login,
@@ -225,6 +228,8 @@ body.login #login :is(#nav, #backtoblog) a {
   text-underline-offset: 3px;
 }
 
+body.woocommerce-account:not(.logged-in) .gpm-auth-choices .button:focus-visible,
+body.woocommerce-account:not(.logged-in) .gpm-auth-home a:focus-visible,
 body
   :is(
     form.woocommerce-form-login,
@@ -253,7 +258,7 @@ body.login :is(#loginform, #lostpasswordform),
 body.woocommerce-lost-password .woocommerce {
   width: 100%;
   max-width: 560px;
-  margin: 32px auto;
+  margin: auto;
   padding: clamp(20px, 4vw, 32px);
   background: #fff;
   border: 3px solid var(--gpm-auth-ink);
