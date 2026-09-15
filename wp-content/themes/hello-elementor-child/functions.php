@@ -17,6 +17,22 @@ function gpm_enqueue_child_styles() {
 		filemtime( $global_path )
 	);
 
+	if ( is_404() ) {
+		wp_enqueue_style(
+			'gpm-404-style',
+			$theme_uri . '/assets/css/404.css',
+			array( 'gpm-child-style' ),
+			filemtime( $theme_dir . '/assets/css/404.css' )
+		);
+		wp_enqueue_script(
+			'gpm-404-motion',
+			$theme_uri . '/assets/js/404.js',
+			array(),
+			filemtime( $theme_dir . '/assets/js/404.js' ),
+			true
+		);
+	}
+
 	if ( function_exists( 'is_account_page' ) && is_account_page() ) {
 		$file = $theme_dir . '/assets/css/my-account.css';
 
