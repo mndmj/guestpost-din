@@ -1,0 +1,122 @@
+[15-Sep-2026 02:18:03 UTC] Automatic updates starting...
+[15-Sep-2026 02:18:03 UTC]   Automatic plugin updates starting...
+[15-Sep-2026 02:18:03 UTC]   Automatic plugin updates complete.
+[15-Sep-2026 02:18:03 UTC]   Automatic theme updates starting...
+[15-Sep-2026 02:18:03 UTC]   Automatic theme updates complete.
+[15-Sep-2026 02:18:03 UTC] Automatic updates complete.
+[15-Sep-2026 03:07:45 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1539
+[15-Sep-2026 03:07:45 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1542
+[15-Sep-2026 03:07:45 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\rest-api\class-wp-rest-server.php on line 1930
+[15-Sep-2026 03:07:45 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\rest-api\class-wp-rest-server.php on line 1930
+[15-Sep-2026 03:07:45 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\rest-api\class-wp-rest-server.php on line 1930
+[15-Sep-2026 03:07:45 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\rest-api\class-wp-rest-server.php on line 1930
+[15-Sep-2026 03:07:45 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\rest-api\class-wp-rest-server.php on line 1930
+[15-Sep-2026 03:07:45 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\rest-api\class-wp-rest-server.php on line 1930
+[15-Sep-2026 03:07:45 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\rest-api\class-wp-rest-server.php on line 1930
+[15-Sep-2026 03:07:45 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\rest-api\class-wp-rest-server.php on line 1930
+[15-Sep-2026 03:07:45 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\rest-api\class-wp-rest-server.php on line 1930
+[15-Sep-2026 03:07:45 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\rest-api\class-wp-rest-server.php on line 1930
+[15-Sep-2026 03:07:45 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\rest-api\class-wp-rest-server.php on line 1930
+[15-Sep-2026 03:07:45 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\rest-api\class-wp-rest-server.php on line 1930
+[15-Sep-2026 03:07:45 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\rest-api\class-wp-rest-server.php on line 1930
+[15-Sep-2026 03:07:45 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\rest-api\class-wp-rest-server.php on line 1930
+[15-Sep-2026 03:07:45 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\rest-api\class-wp-rest-server.php on line 1930
+[15-Sep-2026 03:07:45 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\rest-api\class-wp-rest-server.php on line 1930
+[15-Sep-2026 03:07:49 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\rest-api\class-wp-rest-server.php on line 1930
+[15-Sep-2026 03:07:49 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\rest-api\class-wp-rest-server.php on line 1930
+[15-Sep-2026 03:07:49 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\rest-api\class-wp-rest-server.php on line 1930
+[15-Sep-2026 03:07:49 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\rest-api\class-wp-rest-server.php on line 1930
+[15-Sep-2026 03:07:49 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\rest-api\class-wp-rest-server.php on line 1930
+[15-Sep-2026 03:07:49 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\rest-api\class-wp-rest-server.php on line 1930
+[15-Sep-2026 03:07:49 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\rest-api\class-wp-rest-server.php on line 1930
+[15-Sep-2026 03:07:49 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\rest-api\class-wp-rest-server.php on line 1930
+[15-Sep-2026 03:07:49 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\rest-api\class-wp-rest-server.php on line 1930
+[15-Sep-2026 03:07:49 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\rest-api\class-wp-rest-server.php on line 1930
+[15-Sep-2026 03:07:49 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\rest-api\class-wp-rest-server.php on line 1930
+[15-Sep-2026 03:07:49 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\rest-api\class-wp-rest-server.php on line 1930
+[15-Sep-2026 03:07:49 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\rest-api\class-wp-rest-server.php on line 1930
+[15-Sep-2026 03:07:50 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1539
+[15-Sep-2026 03:07:50 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1542
+[15-Sep-2026 03:08:44 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1539
+[15-Sep-2026 03:08:44 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1542
+[15-Sep-2026 03:09:28 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1539
+[15-Sep-2026 03:09:28 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1542
+[15-Sep-2026 03:17:59 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1539
+[15-Sep-2026 03:17:59 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1542
+[15-Sep-2026 03:18:03 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1539
+[15-Sep-2026 03:18:03 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1542
+[15-Sep-2026 03:18:04 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1539
+[15-Sep-2026 03:18:04 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1542
+[15-Sep-2026 03:18:05 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1539
+[15-Sep-2026 03:18:05 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1542
+[15-Sep-2026 03:18:05 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1539
+[15-Sep-2026 03:18:05 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1542
+[15-Sep-2026 03:18:06 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1539
+[15-Sep-2026 03:18:06 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1542
+[15-Sep-2026 03:18:06 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1539
+[15-Sep-2026 03:18:06 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1542
+[15-Sep-2026 03:18:12 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1539
+[15-Sep-2026 03:18:12 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1542
+[15-Sep-2026 03:18:14 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1539
+[15-Sep-2026 03:18:14 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1542
+[15-Sep-2026 03:18:16 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1539
+[15-Sep-2026 03:18:16 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1542
+[15-Sep-2026 03:18:20 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1539
+[15-Sep-2026 03:18:20 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1542
+[15-Sep-2026 03:18:21 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1539
+[15-Sep-2026 03:18:21 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1542
+[15-Sep-2026 03:18:26 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1539
+[15-Sep-2026 03:18:26 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1542
+[15-Sep-2026 03:18:26 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1539
+[15-Sep-2026 03:18:26 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at D:\WP-Studio\guest-post-monitoring\wp-config.php:97) in D:\WP-Studio\guest-post-monitoring\wp-includes\pluggable.php on line 1542
+[15-Sep-2026 03:19:18 UTC] PHP Warning:  array_flip(): Can only flip string and integer values, entry skipped in D:\WP-Studio\guest-post-monitoring\wp-content\plugins\woocommerce\src\Admin\API\Reports\DataStore.php on line 527
+[15-Sep-2026 03:19:18 UTC] PHP Warning:  array_flip(): Can only flip string and integer values, entry skipped in D:\WP-Studio\guest-post-monitoring\wp-content\plugins\woocommerce\src\Admin\API\Reports\DataStore.php on line 528
+[15-Sep-2026 03:19:18 UTC] PHP Warning:  array_flip(): Can only flip string and integer values, entry skipped in D:\WP-Studio\guest-post-monitoring\wp-content\plugins\woocommerce\src\Admin\API\Reports\DataStore.php on line 527
+[15-Sep-2026 03:19:18 UTC] PHP Warning:  array_flip(): Can only flip string and integer values, entry skipped in D:\WP-Studio\guest-post-monitoring\wp-content\plugins\woocommerce\src\Admin\API\Reports\DataStore.php on line 528
+[15-Sep-2026 03:19:31 UTC] WordPress database error <div style="clear:both">&nbsp;</div>
+<div class="queries" style="clear:both;margin-bottom:2px;border:red dotted thin;">
+<p>MySQL query:</p>
+<p>SELECT MIN(date_created_gmt) as min_date_gmt, MAX(date_created_gmt) as max_date_gmt
+				 FROM (
+					( SELECT date_created_gmt FROM `wp_wc_orders` WHERE type = 'shop_order' AND status != 'trash' ORDER BY date_created_gmt DESC LIMIT 1 )
+					UNION ALL
+					( SELECT date_created_gmt FROM `wp_wc_orders` WHERE type = 'shop_order' AND status != 'trash' ORDER BY date_created_gmt ASC LIMIT 1 )
+				 ) d</p>
+<p>Queries made or created this session were:</p>
+<ol>
+<li>Executing: SELECT MIN ( `date_created_gmt` ) as `min_date_gmt` , MAX ( `date_created_gmt` ) as `max_date_gmt` FROM ( ( SELECT `date_created_gmt` FROM `wp_wc_orders` WHERE `type` = &#039;shop_order&#039; AND `status` != &#039;trash&#039; ORDER BY `date_created_gmt` DESC LIMIT 1 ) UNION ALL ( SELECT `date_created_gmt` FROM `wp_wc_orders` WHERE `type` = &#039;shop_order&#039; AND `status` != &#039;trash&#039; ORDER BY `date_created_gmt` ASC LIMIT 1 ) ) `d` | (no parameters)</li>
+</ol>
+</div>
+<div style="clear:both;margin-bottom:2px;border:red dotted thin;" class="error_message" style="border-bottom:dotted blue thin;">
+SQLSTATE[HY000]: General error: 1 near "UNION": syntax error
+</div>
+<p>Backtrace:</p>
+<pre>#0 D:\WP-Studio\guest-post-monitoring\wp-content\mu-plugins\sqlite-database-integration\wp-includes\database\sqlite\class-wp-mysql-on-sqlite.php(992): WP_MySQL_On_SQLite->new_driver_exception('SQLSTATE[HY000]...', 'HY000', Object(PDOException))
+#1 D:\WP-Studio\guest-post-monitoring\wp-content\mu-plugins\sqlite-database-integration\wp-includes\sqlite\class-wp-sqlite-db.php(671): WP_MySQL_On_SQLite->query('SELECT MIN(date...', 5)
+#2 D:\WP-Studio\guest-post-monitoring\wp-content\mu-plugins\sqlite-database-integration\wp-includes\sqlite\class-wp-sqlite-db.php(591): WP_SQLite_DB->_do_query('SELECT MIN(date...')
+#3 D:\WP-Studio\guest-post-monitoring\wp-includes\class-wpdb.php(3101): WP_SQLite_DB->query('SELECT MIN(date...')
+#4 D:\WP-Studio\guest-post-monitoring\wp-content\plugins\woocommerce\src\Internal\Admin\Orders\ListTable.php(880): wpdb->get_row('SELECT MIN(date...')
+#5 D:\WP-Studio\guest-post-monitoring\wp-content\plugins\woocommerce\src\Internal\Admin\Orders\ListTable.php(846): Automattic\WooCommerce\Internal\Admin\Orders\ListTable->get_months_filter_options()
+#6 D:\WP-Studio\guest-post-monitoring\wp-content\plugins\woocommerce\src\Internal\Admin\Orders\ListTable.php(785): Automattic\WooCommerce\Internal\Admin\Orders\ListTable->months_filter()
+#7 D:\WP-Studio\guest-post-monitoring\wp-admin\includes\class-wp-list-table.php(1700): Automattic\WooCommerce\Internal\Admin\Orders\ListTable->extra_tablenav('top')
+#8 D:\WP-Studio\guest-post-monitoring\wp-admin\includes\class-wp-list-table.php(1625): WP_List_Table->display_tablenav('top')
+#9 D:\WP-Studio\guest-post-monitoring\wp-content\plugins\woocommerce\src\Internal\Admin\Orders\ListTable.php(284): WP_List_Table->display()
+#10 D:\WP-Studio\guest-post-monitoring\wp-content\plugins\woocommerce\src\Internal\Admin\Orders\PageController.php(300): Automattic\WooCommerce\Internal\Admin\Orders\ListTable->display()
+#11 D:\WP-Studio\guest-post-monitoring\wp-includes\class-wp-hook.php(353): Automattic\WooCommerce\Internal\Admin\Orders\PageController->output('')
+#12 D:\WP-Studio\guest-post-monitoring\wp-includes\class-wp-hook.php(377): WP_Hook->apply_filters('', Array)
+#13 D:\WP-Studio\guest-post-monitoring\wp-includes\plugin.php(523): WP_Hook->do_action(Array)
+#14 D:\WP-Studio\guest-post-monitoring\wp-admin\admin.php(264): do_action('woocommerce_pag...')
+#15 C:\Users\donis\AppData\Local\studio_app\app-1.21.0\resources\cli\php\router.php(122): require('D:\\WP-Studio\\gu...')
+#16 {main}</pre>
+ for query SELECT MIN(date_created_gmt) as min_date_gmt, MAX(date_created_gmt) as max_date_gmt
+				 FROM (
+					( SELECT date_created_gmt FROM `wp_wc_orders` WHERE type = 'shop_order' AND status != 'trash' ORDER BY date_created_gmt DESC LIMIT 1 )
+					UNION ALL
+					( SELECT date_created_gmt FROM `wp_wc_orders` WHERE type = 'shop_order' AND status != 'trash' ORDER BY date_created_gmt ASC LIMIT 1 )
+				 ) d made by require('wp-admin/admin.php'), do_action('woocommerce_page_wc-orders'), WP_Hook->do_action, WP_Hook->apply_filters, Automattic\WooCommerce\Internal\Admin\Orders\PageController->output, Automattic\WooCommerce\Internal\Admin\Orders\ListTable->display, WP_List_Table->display, WP_List_Table->display_tablenav, Automattic\WooCommerce\Internal\Admin\Orders\ListTable->extra_tablenav, Automattic\WooCommerce\Internal\Admin\Orders\ListTable->months_filter, Automattic\WooCommerce\Internal\Admin\Orders\ListTable->get_months_filter_options, WP_SQLite_DB->query, WP_SQLite_DB->print_error
+[15-Sep-2026 03:43:23 UTC] Automatic updates starting...
+[15-Sep-2026 03:43:23 UTC]   Automatic plugin updates starting...
+[15-Sep-2026 03:43:23 UTC]   Automatic plugin updates complete.
+[15-Sep-2026 03:43:23 UTC]   Automatic theme updates starting...
+[15-Sep-2026 03:43:23 UTC]   Automatic theme updates complete.
+[15-Sep-2026 03:43:23 UTC] Automatic updates complete.
