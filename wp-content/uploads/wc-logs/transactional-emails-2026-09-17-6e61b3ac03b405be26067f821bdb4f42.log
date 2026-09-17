@@ -1,0 +1,10 @@
+2026-09-17T01:29:57+00:00 INFO Email "customer_completed_order" for order #95 sent CONTEXT: {"email_type":"customer_completed_order","status":"sent","recipient":"guest","order":95}
+2026-09-17T01:31:40+00:00 INFO Email "customer_refunded_order" for order #95 sent CONTEXT: {"email_type":"customer_refunded_order","status":"sent","recipient":"guest","order":95}
+2026-09-17T01:33:48+00:00 INFO Email "new_order" for order #803 sent CONTEXT: {"email_type":"new_order","status":"sent","recipient":"guest","order":803}
+2026-09-17T01:33:54+00:00 INFO Email "customer_processing_order" for order #803 sent CONTEXT: {"email_type":"customer_processing_order","status":"sent","recipient":"arul","order":803}
+2026-09-17T01:46:11+00:00 INFO Email "customer_completed_order" for order #803 sent CONTEXT: {"email_type":"customer_completed_order","status":"sent","recipient":"arul","order":803}
+2026-09-17T01:54:18+00:00 INFO Email "customer_note" for order #803 sent CONTEXT: {"email_type":"customer_note","status":"sent","recipient":"arul","order":803}
+2026-09-17T01:55:00+00:00 INFO Email "" sent CONTEXT: {"email_type":"","status":"sent","recipient":"guest"}
+2026-09-17T02:02:56+00:00 INFO Email "" sent CONTEXT: {"email_type":"","status":"sent","recipient":"guest"}
+2026-09-17T02:39:59+00:00 INFO Email "" sent CONTEXT: {"email_type":"","status":"sent","recipient":"guest"}
+2026-09-17T02:52:00+00:00 INFO Email "" sent CONTEXT: {"email_type":"","status":"sent","recipient":"guest"}

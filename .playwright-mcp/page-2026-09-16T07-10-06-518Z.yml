@@ -1,0 +1,23 @@
+- main [ref=f1e2]:
+  - paragraph [ref=f1e3]: Isolated preview · sample order data · no save or approval actions
+  - generic [ref=f1e4]:
+    - heading "Package Validity Period" [level=2] [ref=f1e6]
+    - generic [ref=f1e7]:
+      - generic [ref=f1e8]:
+        - heading "Initial activation" [level=3] [ref=f1e9]
+        - list [ref=f1e10]:
+          - listitem [ref=f1e11]: Enter Publication Date in Guest Post Result.
+          - listitem [ref=f1e12]: Upload valid proof via DIN Order Attach.
+          - listitem [ref=f1e13]: Select "Completed," then save the order using Update.
+        - paragraph [ref=f1e14]: The service starts at midnight on Publication Date in the site timezone. Missing, invalid or future dates prevent activation. Re-saving an active package does not change its dates.
+      - region [ref=f1e15]:
+        - heading "Renewal / upgrade request" [level=3] [ref=f1e16]
+        - generic [ref=f1e17]:
+          - strong [ref=f1e18]: "Package #1"
+          - generic [ref=f1e19]: Upgrade to Lifetime
+        - generic [ref=f1e20]:
+          - generic [ref=f1e21] [cursor=pointer]:
+            - checkbox "I have verified the renewal/upgrade payment." [ref=f1e22]
+            - generic [ref=f1e23]: I have verified the renewal/upgrade payment.
+          - paragraph [ref=f1e24]: Select this only after payment is confirmed, then save as "Completed." Proof of the original package may be used. This checkbox is not saved for future approvals.
+      - paragraph [ref=f1e26]: There are no active packages for this order yet. Eligible packages will be recorded following admin approval.

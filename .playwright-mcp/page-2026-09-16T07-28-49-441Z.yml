@@ -1,0 +1,29 @@
+- generic [active] [ref=f16e1]:
+  - generic [ref=f16e7]:
+    - heading "Login" [level=2] [ref=f16e8]
+    - generic [ref=f16e9]:
+      - paragraph [ref=f16e10]:
+        - generic [ref=f16e11]:
+          - text: Username or email address *
+          - generic [ref=f16e12]: Required
+        - textbox "Username or email address Required" [ref=f16e13]
+      - paragraph [ref=f16e14]:
+        - generic [ref=f16e15]:
+          - text: Password *
+          - generic [ref=f16e16]: Required
+        - generic [ref=f16e17]:
+          - textbox "Password Required" [ref=f16e18]
+          - button "Show password" [ref=f16e19] [cursor=pointer]
+      - paragraph [ref=f16e20]:
+        - generic [ref=f16e21]:
+          - checkbox "Remember me" [ref=f16e22]
+          - generic [ref=f16e23]: Remember me
+        - button "Log in" [ref=f16e24] [cursor=pointer]
+      - paragraph [ref=f16e25]:
+        - link "Lost your password?" [ref=f16e26] [cursor=pointer]:
+          - /url: http://localhost:8883/my-account/lost-password/
+      - paragraph [ref=f16e27]:
+        - link "Do not have an Account ?" [ref=f16e28] [cursor=pointer]:
+          - /url: http://localhost:8883/my-account/?gpm_auth=register
+  - generic [ref=f16e29]: mobile
+  - status [ref=f16e30]

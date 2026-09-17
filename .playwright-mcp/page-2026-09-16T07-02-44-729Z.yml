@@ -1,0 +1,27 @@
+- generic [active] [ref=e1]:
+  - link "Skip to content" [ref=e2] [cursor=pointer]:
+    - /url: "#content"
+  - main [ref=e3]:
+    - generic [ref=e6]:
+      - generic [ref=e7]: "4"
+      - generic [ref=e8]: "0"
+      - generic [ref=e9]: "4"
+    - generic [ref=e20]:
+      - heading "404 — Oops! This link went off the grid." [level=1] [ref=e21]:
+        - generic [ref=e22]: 404 —
+        - text: Oops! This link went off the grid.
+      - paragraph [ref=e23]: The page you are looking for may have moved or no longer exists. Let’s get you back on track.
+    - generic [ref=e24]:
+      - link "Back to Home" [ref=e25] [cursor=pointer]:
+        - /url: http://localhost:8883/
+      - link "My Account" [ref=e28] [cursor=pointer]:
+        - /url: http://localhost:8883/my-account/
+    - search [ref=e31]:
+      - generic [ref=e32]: Search the site
+      - generic [ref=e33]:
+        - searchbox "Search the site" [ref=e34]
+        - button "Search" [ref=e35] [cursor=pointer]
+    - button "Pause animation" [ref=e39] [cursor=pointer]
+  - contentinfo [ref=e43]:
+    - paragraph [ref=e46]: All rights reserved
+  - status [ref=e47]
