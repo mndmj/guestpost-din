@@ -49,9 +49,11 @@ class Orders_Test_Item {
 	public function get_quantity() { return $this->quantity; }
 }
 class WC_Order {
+	public $note = '';
 	public function __construct( public $id, public $items = array(), public $status = 'completed', public $customer = 7 ) {}
 	public function get_id() { return $this->id; }
 	public function get_customer_id() { return $this->customer; }
+	public function get_customer_note() { return $this->note; }
 	public function get_items() { return $this->items; }
 	public function get_order_number() { return $this->id; }
 	public function get_status() { return $this->status; }
@@ -70,8 +72,10 @@ class WC_Order {
 class DIN_Packages {
 	public static function for_customer( $buyer, $page, $limit ) { return array_slice( array_values( array_filter( $GLOBALS['packages'], static fn( $package ) => $package['customer_id'] === $buyer ) ), ( $page - 1 ) * $limit, $limit ); }
 	public static function status( $package ) { return ! empty( $package['stopped_at'] ) ? 'stopped' : $package['period']; }
-	public static function purchase_option( $id, $action, $buyer, $check_window = true ) {
+	public static function custom_years( $value ) { return ( is_int( $value ) || is_string( $value ) ) && preg_match( '/^[1-9][0-9]{0,3}$/D', (string) $value ) ? (int) $value : 0; }
+	public static function purchase_option( $id, $action, $buyer, $check_window = true, $years = 0 ) {
 		$package = $GLOBALS['packages'][ $id ] ?? null;
+		if ( 'renew_custom' === $action && 3 !== $years ) { return new WP_Error(); }
 		return ! $package || $package['customer_id'] !== $buyer || ! empty( $package['stopped_at'] ) || 'annual' !== $package['period'] ? new WP_Error() : array( 'product_id' => 'lifetime' === $action ? 200 : 100 );
 	}
 }
@@ -91,7 +95,10 @@ $orders[30] = new WC_Order( 30, array( new Orders_Test_Item( 301 ) ) );
 $packages[1] = orders_package( 1, 10, 'lifetime' );
 $packages[1]['stopped_at'] = 1800000001;
 $packages[1]['history'] = array( array( 'action' => 'lifetime', 'order_id' => 11, 'item_id' => 111, 'at' => 1704067211 ), array( 'action' => 'stopped', 'at' => 1800000001, 'reason' => '<Buyer request>' ) );
+$packages[1]['history'][0] += array( 'old_expires_at' => 1798761600, 'expires_at' => 0, 'reason' => '<Paid lifetime>', 'requested_by' => 9 );
 $packages[2] = orders_package( 2, 10 );
+$packages[2]['history'][] = array( 'action' => 'expiry_adjusted', 'at' => 1767225600, 'by' => 9, 'old_expires_at' => 1798761600, 'expires_at' => 1830297600, 'reason' => "<Manual extension> & approved\nNo additional charge", 'extension' => '1' );
+$packages[2]['history'][] = array( 'action' => 'renew_2', 'at' => 1770000000, 'by' => 9, 'old_expires_at' => 1798761600, 'expires_at' => 1830297600, 'reason' => '<Paid renewal> & agreed date', 'requested_by' => 9 );
 $packages[3] = orders_package( 3, 20 );
 $packages[4] = orders_package( 4, 30, 'lifetime' );
 $packages[5] = orders_package( 5, 666 );
@@ -112,6 +119,15 @@ $orders[25] = new WC_Order( 25, array( orders_purchase( 251, '2invalid' ) ), 'pe
 $orders[26] = new WC_Order( 26, array( orders_purchase( 261, 2, 'invalid' ) ), 'pending' );
 $orders[27] = new WC_Order( 27, array( new Orders_Test_Item( 271, array( 'package_id' => 2, 'action' => 'lifetime' ), 200, 2 ) ), 'pending' );
 $orders[28] = new WC_Order( 28, array( orders_purchase( 281, '2' ) ), 'pending' );
+$custom_quote = array( 'package_id' => 2, 'action' => 'renew_custom', 'admin_request' => array( 'years' => 3, 'expires_at' => 1956528000, 'reason' => 'Agreed custom term', 'requested_by' => 9, 'generation' => 1 ) );
+$orders[31] = new WC_Order( 31, array( new Orders_Test_Item( 311, $custom_quote, 100 ) ), 'pending' );
+$applied_quote = $custom_quote; $applied_quote['admin_request']['years'] = 4;
+$orders[32] = new WC_Order( 32, array( new Orders_Test_Item( 321, $applied_quote, 100 ) ) );
+$packages[2]['history'][] = array( 'action' => 'renew_custom', 'years' => 4, 'order_id' => 32, 'item_id' => 321, 'at' => 1771000000, 'old_expires_at' => 1830297600, 'expires_at' => 1956528000, 'reason' => '<Custom paid term>', 'requested_by' => 9 );
+$invalid_quote = $custom_quote; $invalid_quote['admin_request']['years'] = '3.5';
+$orders[33] = new WC_Order( 33, array( new Orders_Test_Item( 331, $invalid_quote, 100 ) ), 'pending' );
+$invalid_quote['admin_request'] = (object) array( 'years' => 3 );
+$orders[34] = new WC_Order( 34, array( new Orders_Test_Item( 341, $invalid_quote, 100 ) ), 'pending' );
 $orders[777] = new WC_Order( 777, array(), 'completed', 8 );
 for ( $order_id = 1000; $order_id < 1103; ++$order_id ) { $orders[ $order_id ] = new WC_Order( $order_id, array( new Orders_Test_Item( $order_id ) ) ); }
 $source = dirname( __DIR__ ) . '/includes/class-din-packages-orders.php';
@@ -121,8 +137,8 @@ DIN_Packages_Orders::boot();
 orders_expect( isset( $hooks['woocommerce_my_account_my_orders_query'], $hooks['woocommerce_view_order'] ), 'Unified order hooks must be registered.' );
 $snapshot = serialize( array( $orders, $packages ) );
 $query = DIN_Packages_Orders::orders_query( array( 'customer' => 7, 'page' => 1, 'limit' => 10, 'paginate' => true, 'exclude' => array( 9000 ) ) );
-foreach ( array( 11, 12, 15, 16, 17, 23, 24, 28, 9000 ) as $hidden ) { orders_expect( in_array( $hidden, $query['exclude'], true ), 'Pure linked purchase must be excluded before pagination: ' . $hidden ); }
-foreach ( array( 10, 20, 30, 14, 18, 19, 21, 22, 25, 26, 27, 1000 ) as $visible ) { orders_expect( ! in_array( $visible, $query['exclude'], true ), 'Root, mixed, invalid or unrelated order must remain visible: ' . $visible ); }
+foreach ( array( 11, 12, 15, 16, 17, 23, 24, 28, 31, 32, 9000 ) as $hidden ) { orders_expect( in_array( $hidden, $query['exclude'], true ), 'Pure linked purchase must be excluded before pagination: ' . $hidden ); }
+foreach ( array( 10, 20, 30, 14, 18, 19, 21, 22, 25, 26, 27, 33, 34, 1000 ) as $visible ) { orders_expect( ! in_array( $visible, $query['exclude'], true ), 'Root, mixed, invalid or unrelated order must remain visible: ' . $visible ); }
 $page = wc_get_orders( $query );
 orders_expect( count( $page->orders ) === 10 && $page->max_num_pages === (int) ceil( $page->total / 10 ), 'Pagination counts root/standalone orders rather than filtering rows afterwards.' );
 $read_count = count( $queries );
@@ -137,7 +153,14 @@ $endpoint = 'view-order';
 ob_start(); DIN_Packages_Orders::detail( 10 ); $html = ob_get_clean();
 orders_expect( str_contains( $html, 'Guestpost Lifetime' ) && str_contains( $html, '&lt;Post&gt;' ) && str_contains( $html, '&lt;Buyer request&gt;' ), 'Current package names and public service history are escaped.' );
 orders_expect( str_contains( $html, 'order-pay/12/' ) && ! str_contains( $html, 'order-pay/24/' ), 'Pay Upgrade is available for valid pending packages, not stopped packages.' );
+orders_expect( str_contains( $html, 'order-pay/31/' ) && str_contains( $html, 'Renewal: 3 years' ), 'Custom pending renewal must show its real term and retain native payment access.' );
+orders_expect( str_contains( $html, 'Renewed for 4 years' ) && str_contains( $html, '&lt;Custom paid term&gt;' ), 'Custom renewal history must show the stored number of years and escaped buyer reason.' );
 orders_expect( str_contains( $html, 'view-order/11/' ) && str_contains( $html, 'Transaction history' ) && str_contains( $html, 'Service history' ), 'Native transaction details and lifecycle timeline remain available.' );
+orders_expect( (bool) preg_match( '~<li><strong>Package #2[^<]*manually[^<]*</strong>.*?Expires: 2027-01-01 00:00 → 2028-01-01 00:00.*?</li>~s', $html ), 'Manual expiry changes must show the package and old-to-new expiry dates in service history.' );
+orders_expect( str_contains( $html, '&lt;Manual extension&gt; &amp; approved<br />' ) && str_contains( $html, 'No additional charge' ) && ! str_contains( $html, '<Manual extension>' ), 'Manual expiry reasons are public, escaped, and preserve line breaks.' );
+orders_expect( strpos( $html, '&lt;Manual extension&gt;' ) < strpos( $html, '&lt;Buyer request&gt;' ), 'Manual expiry adjustments retain chronological service history ordering.' );
+orders_expect( (bool) preg_match( '~<li><strong>Package #2[^<]*Renewed for 2 years</strong>.*?Expires: 2027-01-01 00:00 → 2028-01-01 00:00.*?&lt;Paid renewal&gt; &amp; agreed date.*?</li>~s', $html ), 'Paid admin renewal history must display the agreed expiry and escaped public reason.' );
+orders_expect( (bool) preg_match( '~<li><strong>Package #1[^<]*Lifetime</strong>.*?Expires: 2027-01-01 00:00 → No expiration date.*?&lt;Paid lifetime&gt;.*?</li>~s', $html ), 'Paid Lifetime history must display no expiration date and its public reason.' );
 orders_expect( ! str_contains( $html, '/777/' ) && ! str_contains( $html, 'private' ), 'Only the buyer-owned group is visible.' );
 ob_start(); DIN_Packages_Orders::detail( 11 ); $child_html = ob_get_clean();
 orders_expect( str_contains( $child_html, 'view-order/10/' ) && ! str_contains( $child_html, 'Transaction history' ), 'Existing child links remain transaction details with a link back to the main order.' );
@@ -150,4 +173,38 @@ $buyer = 0;
 orders_expect( null === DIN_Packages_Orders::group( 10 ), 'Guests cannot reuse a cached buyer group.' );
 $buyer = 8;
 orders_expect( null === DIN_Packages_Orders::group( 10 ), 'Changing buyers cannot reuse another buyer cache.' );
-echo "PASS: Unified order grouping, pagination, badge states, source ownership, mixed carts, payment links and unchanged data.\n";
+$buyer = 7;
+$endpoint = 'orders';
+orders_expect( isset( $hooks['woocommerce_account_orders_columns'], $hooks['woocommerce_my_account_my_orders_column_heading-post'] ), 'Account Orders must register a Heading Post column and renderer.' );
+$columns = array( 'order-number' => 'Order', 'order-date' => 'Date', 'order-status' => 'Status', 'order-total' => 'Total', 'order-actions' => 'Actions' );
+$expected_columns = array( 'order-number' => 'Order', 'heading-post' => 'Heading Post', 'order-date' => 'Date', 'order-status' => 'Status', 'order-total' => 'Total', 'order-actions' => 'Actions' );
+orders_expect( call_user_func( $hooks['woocommerce_account_orders_columns'], $columns ) === $expected_columns, 'Heading Post belongs after Order and must preserve native columns.' );
+orders_expect( call_user_func( $hooks['woocommerce_account_orders_columns'], $expected_columns ) === $expected_columns, 'Column registration must not duplicate Heading Post.' );
+orders_expect( call_user_func( $hooks['woocommerce_account_orders_columns'], array( 'order-date' => 'Date' ) ) === array( 'order-date' => 'Date', 'heading-post' => 'Heading Post' ), 'Heading Post remains available if another extension removes Order.' );
+$render_heading = static function ( $order ) {
+	ob_start(); call_user_func( $GLOBALS['hooks']['woocommerce_my_account_my_orders_column_heading-post'], $order ); return ob_get_clean();
+};
+$heading_query_count = count( $queries );
+foreach ( array( '<Post> & "original"', "#1: First heading\n#2: Second heading", '0', str_repeat( 'LongHeading', 40 ) ) as $heading ) {
+	$orders[10]->note = "  $heading  ";
+	$before_heading = serialize( array( $orders, $packages ) );
+	$heading_html = $render_heading( $orders[10] );
+	orders_expect( str_contains( $heading_html, esc_html( $heading ) ) && ! str_contains( $heading_html, '<Post>' ), 'Heading Post must be escaped, complete, and preserve multiple lines.' );
+	orders_expect( $before_heading === serialize( array( $orders, $packages ) ), 'Heading display must not write orders or packages.' );
+}
+$orders[1000]->note = 'Standalone order heading';
+orders_expect( str_contains( $render_heading( $orders[1000] ), 'Standalone order heading' ), 'Orders without package records must still display their saved Heading Post.' );
+$orders[1000]->note = " \n ";
+orders_expect( '—' === html_entity_decode( strip_tags( $render_heading( $orders[1000] ) ) ), 'An empty heading must show a dash.' );
+orders_expect( '' === $render_heading( $orders[777] ), 'Do not expose another customer order heading.' );
+$buyer = 0;
+orders_expect( '' === $render_heading( $orders[10] ), 'Guests must not see order headings.' );
+$buyer = 7;
+$admin = true;
+orders_expect( '' === $render_heading( $orders[10] ), 'The account renderer must not run on admin pages.' );
+$admin = false;
+$account = false;
+orders_expect( '' === $render_heading( $orders[10] ), 'The account renderer must not expose headings outside My Account.' );
+$account = true;
+orders_expect( count( $queries ) === $heading_query_count, 'Heading Post must reuse the loaded order without scanning buyer history again.' );
+echo "PASS: Unified orders, Heading Post, pagination, badges, ownership, mixed carts, payment links and unchanged data.\n";

@@ -23,6 +23,11 @@ do_action( 'woocommerce_before_account_navigation' );
 ?>
 
 <nav class="woocommerce-MyAccount-navigation" aria-label="<?php esc_html_e( 'Account pages', 'woocommerce' ); ?>">
+	<a href="<?php echo esc_url( home_url( '/' ) ); ?>">
+		<div class="woocommerce-MyAccount-navigation-link woocommerce-MyAccount-navigation-link--home">
+			<?php esc_html_e( 'Home', 'guest-post-child' ); ?>
+		</div>
+	</a>
 	<?php foreach ( wc_get_account_menu_items() as $endpoint => $label ) : ?>
 		<a href="<?php echo esc_url( wc_get_account_endpoint_url( $endpoint ) ); ?>" <?php echo wc_is_current_account_menu_item( $endpoint ) ? 'aria-current="page"' : ''; ?>>
 			<div class="<?php echo wc_get_account_menu_item_classes( $endpoint ); ?>">

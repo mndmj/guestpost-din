@@ -20,13 +20,13 @@
 
 // ** Database settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define( 'DB_NAME','wordpress');
+define( 'DB_NAME', 'qwgrhxkr_wp331' );
 
 /** Database username */
-define( 'DB_USER', 'username_here' );
+define( 'DB_USER', 'qwgrhxkr_wp331' );
 
 /** Database password */
-define( 'DB_PASSWORD', 'password_here' );
+define( 'DB_PASSWORD', 'U@hop4S1(7' );
 
 /** Database hostname */
 define( 'DB_HOST', 'localhost' );
@@ -48,14 +48,14 @@ define( 'DB_COLLATE', '' );
  *
  * @since 2.6.0
  */
-define( 'AUTH_KEY',         'put your unique phrase here' );
-define( 'SECURE_AUTH_KEY',  'put your unique phrase here' );
-define( 'LOGGED_IN_KEY',    'put your unique phrase here' );
-define( 'NONCE_KEY',        'put your unique phrase here' );
-define( 'AUTH_SALT',        'put your unique phrase here' );
-define( 'SECURE_AUTH_SALT', 'put your unique phrase here' );
-define( 'LOGGED_IN_SALT',   'put your unique phrase here' );
-define( 'NONCE_SALT',       'put your unique phrase here' );
+define( 'AUTH_KEY', '-*[9RXT)g=6GSUh|9E^WL}[+t+V343+TnWnx?6NNR_E-o8^tE8HKL=SCoW$;z*Lp' );
+define( 'SECURE_AUTH_KEY', '0bl30G-L2s<AfNWnl&7aQN 4#~~,t>5e`~,Nh-R{.!AqVe#zk-@8<z{/GL}J%j-t' );
+define( 'LOGGED_IN_KEY', '9U*g`E[$gRNay{dS`+(h4!l]iMFF)pT.-{,t-:rYj+}VP*++.I.g?_DkYDZq  Y+' );
+define( 'NONCE_KEY', 'H,MIC*wRi=pW/ZJ;LVtq:!}mz~mDa%0-$YBG4&fRUZ_[1quqzN!*W~Z74mVk+:Rf' );
+define( 'AUTH_SALT', ',1}IJ~$j9=[jt/LGvGT=z&S$08r0{|=w|sy#-.E 8oNIh,B4!ZO5;}]Z, %liW9j' );
+define( 'SECURE_AUTH_SALT', '_smrNh~FOehy0]L&+54il+c]xZQWkzZaVhO|H+ex wv|lt+y=sfpG|_f&AQG!(&3' );
+define( 'LOGGED_IN_SALT', 'c;FX;K&kI0[tH:$l+83sj86:~(jLj8_Ak-euguN;-B[2}kqZ+Kqmmrr+btDJJ61&' );
+define( 'NONCE_SALT', '+ydo-WAP^@,/4vEJ7lXF9lwD 3.wcp;L `QdG{ePE1Q,7S/y@V+_-11Bkn<|?pp2' );
 
 /**#@-*/
 
@@ -85,19 +85,22 @@ $table_prefix = 'wp_';
  *
  * @link https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/
  */
-define( 'WP_DEBUG',false);
+define( 'WP_DEBUG', true );
 
 /* Add any custom values between this line and the "stop editing" line. */
 
 
 
-define( 'WP_DEBUG_LOG',false);
-define( 'WP_DEBUG_DISPLAY',false);
+define( 'WP_DEBUG_LOG', true );
+define( 'WP_DEBUG_DISPLAY', true );
+
+// define( 'WP_HOME', 'https://guestpost.nextdin.com' );
+// define( 'WP_SITEURL', 'https://guestpost.nextdin.com' );
 /* That's all, stop editing! Happy publishing. */
 
 /** Absolute path to the WordPress directory. */
 if ( ! defined( 'ABSPATH' ) ) {
-	define( 'ABSPATH', __DIR__ . '/' );
+    define( 'ABSPATH', __DIR__ . '/' );
 }
 
 /** Sets up WordPress vars and included files. */

@@ -235,7 +235,7 @@ function gpm_is_order_admin_screen() {
 function gpm_rename_customer_note_admin_label(
     $translated_text,
     $original_text,
-    $domain,
+    $domain
 ) {
     if ( "woocommerce" !== $domain || ! gpm_is_order_admin_screen() ) {
         return $translated_text;

@@ -3,7 +3,7 @@ param([Parameter(Mandatory = $true)][uri]$BaseUrl)
 
 $ErrorActionPreference = 'Stop'
 $taskCases = @(
-    @{ Path = '/my-account/'; Form = 'woocommerce-form-login' },
+    @{ Path = '/my-account/?gpm_auth=login'; Form = 'woocommerce-form-login' },
     @{ Path = '/wp-login.php'; Form = 'id="loginform"' }
 )
 

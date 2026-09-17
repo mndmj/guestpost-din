@@ -298,15 +298,19 @@ body.woocommerce-shop .woocommerce-notices-wrapper a:focus-visible {
 }
 
 .gpm-shop-cart-modal .gpm-shop-cart-modal__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 44px;
   height: 44px;
-  padding: 8px;
+  padding: 0;
   border: 0;
   border-radius: 8px;
   color: #fff;
   background: var(--red);
   opacity: 50%;
   font-size: 32px;
+  line-height: 1;
   cursor: pointer;
 }
 

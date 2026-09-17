@@ -7,6 +7,8 @@ final class DIN_Packages_Mail {
 	const GROUP = 'din-package-lifecycle';
 	const MAX_ATTEMPTS = 3;
 	const LEASE_SECONDS = 900;
+	// Keep the existing H-14 key so old queued jobs and delivery records still match.
+	private const EVENT_DAYS = array( 'reminder' => 14, 'reminder_7' => 7, 'expired' => 0 );
 
 	public static function boot() {
 		add_action( 'init', array( __CLASS__, 'ensure_reconcile' ), 20 );
@@ -69,8 +71,10 @@ final class DIN_Packages_Mail {
 			return;
 		}
 		$now = time();
-		foreach ( array( 'reminder', 'expired' ) as $event ) {
-			if ( 'reminder' === $event && $now >= (int) $p['expires_at'] ) {
+		$expires = (int) $p['expires_at'];
+		foreach ( self::EVENT_DAYS as $event => $days ) {
+			$window_end = $expires - ( 'reminder' === $event ? 7 * DAY_IN_SECONDS : 0 );
+			if ( $days && $now >= $window_end ) {
 				continue;
 			}
 			$email = $p['emails'][ $generation . ':' . $event ] ?? array();
@@ -81,7 +85,7 @@ final class DIN_Packages_Mail {
 			if ( $attempt > self::MAX_ATTEMPTS ) {
 				continue;
 			}
-			$due = (int) $p['expires_at'] - ( 'reminder' === $event ? 14 * DAY_IN_SECONDS : 0 );
+			$due = $expires - $days * DAY_IN_SECONDS;
 			self::queue( $p['id'], $generation, $event, $attempt, max( $now + 1, $due, (int) ( $email['retry_at'] ?? 0 ) ) );
 		}
 	}
@@ -100,7 +104,7 @@ final class DIN_Packages_Mail {
 		$id = (int) $id;
 		$generation = (int) $generation;
 		$attempt = (int) $attempt;
-		if ( $id < 1 || $generation < 1 || $attempt < 1 || $attempt > self::MAX_ATTEMPTS || ! in_array( $event, array( 'reminder', 'expired' ), true ) ) {
+		if ( $id < 1 || $generation < 1 || $attempt < 1 || $attempt > self::MAX_ATTEMPTS || ! is_string( $event ) || ! isset( self::EVENT_DAYS[ $event ] ) ) {
 			return;
 		}
 		$key = $generation . ':' . $event;
@@ -125,9 +129,9 @@ final class DIN_Packages_Mail {
 		try {
 			$user = get_userdata( (int) $p['customer_id'] );
 			if ( $user && is_email( $user->user_email ) ) {
-				$subject = 'reminder' === $event ? __( 'Your package will expire.', 'din-package-lifecycle' ) : __( 'Your package has expired.', 'din-package-lifecycle' );
+				$subject = 'expired' === $event ? __( 'Your package has expired.', 'din-package-lifecycle' ) : sprintf( __( 'Your package expires within %d days.', 'din-package-lifecycle' ), self::EVENT_DAYS[ $event ] );
 				$date = wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), (int) $p['expires_at'], wp_timezone() );
-				$body = '<p>' . esc_html( $subject ) . '.</p><p>' . esc_html( $p['product_name'] ) . '<br>' . esc_html( $p['heading'] ) . '<br>' . esc_html( sprintf( __( 'Haphazard order #%d', 'din-package-lifecycle' ), $p['order_id'] ) ) . '</p>';
+				$body = '<p>' . esc_html( $subject ) . '</p><p>' . esc_html( $p['product_name'] ) . '<br>' . esc_html( $p['heading'] ) . '<br>' . esc_html( sprintf( __( 'Order #%d', 'din-package-lifecycle' ), $p['order_id'] ) ) . '</p>';
 				$body .= '<p>' . esc_html( sprintf( __( 'End date: %s (site time zone).', 'din-package-lifecycle' ), $date ) ) . '</p>';
 				$body .= '<p><a href="' . esc_url( wp_login_url( wc_get_account_endpoint_url( 'din-packages' ) ) ) . '">' . esc_html__( 'Log in to your account to renew or upgrade your plan.', 'din-package-lifecycle' ) . '</a></p>';
 				$mailer = WC()->mailer();
@@ -171,7 +175,11 @@ final class DIN_Packages_Mail {
 			return false;
 		}
 		$expires = (int) $p['expires_at'];
-		return 'reminder' === $event ? $now >= $expires - 14 * DAY_IN_SECONDS && $now < $expires : $now >= $expires;
+		if ( 'expired' === $event ) {
+			return $now >= $expires;
+		}
+		$window_end = $expires - ( 'reminder' === $event ? 7 * DAY_IN_SECONDS : 0 );
+		return $now >= $expires - self::EVENT_DAYS[ $event ] * DAY_IN_SECONDS && $now < $window_end;
 	}
 
 	private static function finish( $id, $key, $token, $state, $attempt ) {

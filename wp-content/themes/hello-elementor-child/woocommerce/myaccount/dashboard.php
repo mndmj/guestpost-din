@@ -250,59 +250,59 @@ do_action( 'woocommerce_account_dashboard' );
 <?php if ( $running_packages ) : ?>
 	<?php DIN_Packages_Customer::dashboard( $running_packages ); ?>
 <?php else : ?>
-<section class="gpm-order-progress" aria-labelledby="gpm-progress-title">
-	<header class="gpm-panel-header">
-		<div>
-			<span class="gpm-panel-header__eyebrow">
-				Latest Order
-			</span>
+	<section class="gpm-order-progress" aria-labelledby="gpm-progress-title">
+		<header class="gpm-panel-header">
+			<div>
+				<span class="gpm-panel-header__eyebrow">
+					Latest Order
+				</span>
 
-			<h2 id="gpm-progress-title">
-				Order Progress
-			</h2>
-		</div>
+				<h2 id="gpm-progress-title">
+					Order Progress
+				</h2>
+			</div>
+
+			<?php if ( $progress_order ) : ?>
+				<a class="gpm-panel-header__link" href="<?php echo esc_url( $progress_order->get_view_order_url() ); ?>">
+					Order #<?php echo esc_html( $progress_order->get_order_number() ); ?>
+				</a>
+			<?php endif; ?>
+		</header>
 
 		<?php if ( $progress_order ) : ?>
-			<a class="gpm-panel-header__link" href="<?php echo esc_url( $progress_order->get_view_order_url() ); ?>">
-				Order #<?php echo esc_html( $progress_order->get_order_number() ); ?>
-			</a>
+			<ol class="gpm-stepper">
+				<?php foreach ( $progress_steps as $step_index => $step_label ) : ?>
+					<?php
+					if ( 'completed' === $current_status || $step_index < $current_step ) {
+						$step_state = 'completed';
+					} elseif ( $step_index === $current_step ) {
+						$step_state = 'current';
+					} else {
+						$step_state = 'upcoming';
+					}
+					?>
+
+					<li class="gpm-stepper__step gpm-stepper__step--<?php echo esc_attr( $step_state ); ?>" <?php echo 'current' === $step_state ? 'aria-current="step"' : ''; ?>>
+						<span class="gpm-stepper__marker">
+							<?php
+							echo 'completed' === $step_state
+								? '✓'
+								: esc_html( $step_index + 1 );
+							?>
+						</span>
+
+						<span class="gpm-stepper__label">
+							<?php echo esc_html( $step_label ); ?>
+						</span>
+					</li>
+				<?php endforeach; ?>
+			</ol>
+		<?php else : ?>
+			<p class="gpm-panel-empty">
+				No active orders yet.
+			</p>
 		<?php endif; ?>
-	</header>
-
-	<?php if ( $progress_order ) : ?>
-		<ol class="gpm-stepper">
-			<?php foreach ( $progress_steps as $step_index => $step_label ) : ?>
-				<?php
-				if ( 'completed' === $current_status || $step_index < $current_step ) {
-					$step_state = 'completed';
-				} elseif ( $step_index === $current_step ) {
-					$step_state = 'current';
-				} else {
-					$step_state = 'upcoming';
-				}
-				?>
-
-				<li class="gpm-stepper__step gpm-stepper__step--<?php echo esc_attr( $step_state ); ?>" <?php echo 'current' === $step_state ? 'aria-current="step"' : ''; ?>>
-					<span class="gpm-stepper__marker">
-						<?php
-						echo 'completed' === $step_state
-							? '✓'
-							: esc_html( $step_index + 1 );
-						?>
-					</span>
-
-					<span class="gpm-stepper__label">
-						<?php echo esc_html( $step_label ); ?>
-					</span>
-				</li>
-			<?php endforeach; ?>
-		</ol>
-	<?php else : ?>
-		<p class="gpm-panel-empty">
-			No active orders yet.
-		</p>
-	<?php endif; ?>
-</section>
+	</section>
 <?php endif; ?>
 
 <section class="gpm-order-history" aria-labelledby="gpm-history-title">
@@ -614,7 +614,7 @@ if (
 			</span>
 
 			<h2 id="gpm-download-report-title">
-				Download dan Report
+				Download and Report
 			</h2>
 		</div>
 	</header>

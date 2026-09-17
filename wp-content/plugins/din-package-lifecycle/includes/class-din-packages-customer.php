@@ -102,7 +102,7 @@ final class DIN_Packages_Customer {
 	}
 
 	public static function account() {
-		$page = isset( $_GET['paket-page'] ) && is_scalar( $_GET['paket-page'] ) ? max( 1, absint( $_GET['paket-page'] ) ) : 1; // Read-only pagination.
+		$page = isset( $_GET['package-page'] ) && is_scalar( $_GET['package-page'] ) ? max( 1, absint( $_GET['package-page'] ) ) : 1; // Read-only pagination.
 		self::render_packages( $page, 20, false );
 	}
 
@@ -186,7 +186,8 @@ final class DIN_Packages_Customer {
 						<?php endif; ?>
 						<?php if ( 'review' === $status ) : ?>
 							<p>The package requires admin review. Contact the store using the original order details.</p><?php endif; ?>
-						<a class="din-packages__order" href="<?php echo esc_url( $package['evidence_url'] ?? $order->get_view_order_url() ); ?>">View Order
+						<a class="din-packages__order"
+							href="<?php echo esc_url( $package['evidence_url'] ?? $order->get_view_order_url() ); ?>">View Order
 							#<?php echo esc_html( $order->get_order_number() ); ?> and evidence</a>
 						<div class="din-packages__actions">
 							<?php foreach ( array( 'renew_1', 'renew_2', 'lifetime' ) as $action ) : ?>
@@ -207,11 +208,12 @@ final class DIN_Packages_Customer {
 			</div>
 			<?php if ( ! $summary && ( $page > 1 || count( $packages ) === $limit ) ) : ?>
 				<nav class="din-packages__pagination" aria-label="My Package Page">
-					<?php if ( $page > 1 ) : ?><a href="<?php echo esc_url( add_query_arg( 'paket-page', $page - 1, $url ) ); ?>">←
+					<?php if ( $page > 1 ) : ?><a
+							href="<?php echo esc_url( add_query_arg( 'package-page', $page - 1, $url ) ); ?>">←
 							Previous</a><?php endif; ?>
 					<span aria-current="page">Page <?php echo esc_html( $page ); ?></span>
 					<?php if ( count( $packages ) === $limit ) : ?><a
-							href="<?php echo esc_url( add_query_arg( 'paket-page', $page + 1, $url ) ); ?>">Next
+							href="<?php echo esc_url( add_query_arg( 'package-page', $page + 1, $url ) ); ?>">Next
 							→</a><?php endif; ?>
 				</nav>
 			<?php endif; ?>

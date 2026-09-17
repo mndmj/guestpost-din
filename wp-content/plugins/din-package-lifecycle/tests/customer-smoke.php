@@ -132,15 +132,15 @@ customer_expect( false !== strpos( $html, '&lt;script&gt;alert(&quot;name&quot;)
 customer_expect( false !== strpos( $html, '&lt;img src=x onerror=alert(1)&gt; &amp; &quot;origin&quot;' ) && false === strpos( $html, '<img' ), 'Heading Post is rendered as escaped text.' );
 customer_expect( false !== strpos( $html, '<time datetime="2024-01-01T00:00:00+00:00">2024-01-01 07:00</time>' ), 'Start time retains UTC machine value and uses site-local display time.' );
 customer_expect( false !== strpos( $html, '<time datetime="2025-01-01T00:00:00+00:00">2025-01-01 07:00</time>' ), 'Expiry is displayed with the same site timezone.' );
-customer_expect( false !== strpos( $html, 'href="https://example.test/my-account/view-order/55/?ref=source&amp;proof=1"' ) && false !== strpos( $html, 'Lihat order #INV&lt;&amp;55 dan bukti' ), 'The source order and proof link preserves escaped URL and order number.' );
+customer_expect( false !== strpos( $html, 'href="https://example.test/my-account/view-order/55/?ref=source&amp;proof=1"' ) && false !== strpos( $html, 'View Order #INV&lt;&amp;55 and evidence' ), 'The source order and proof link preserves escaped URL and order number.' );
 customer_expect( 3 === substr_count( $html, '<form method="post" action="/my-account/din-packages/">' ), 'Each eligible action has its own POST form.' );
 customer_expect( 3 === substr_count( $html, 'name="din_package_id" value="10"' ) && 3 === substr_count( $html, 'name="_din_package_nonce"' ), 'All action forms bind the target package and include a nonce.' );
 customer_expect( array( array( 'din_package_purchase_10', '_din_package_nonce' ), array( 'din_package_purchase_10', '_din_package_nonce' ), array( 'din_package_purchase_10', '_din_package_nonce' ) ) === $GLOBALS['nonce_calls'], 'Nonce action is scoped to the rendered package, not a global purchase nonce.' );
 foreach ( array( 'renew_1', 'renew_2', 'lifetime' ) as $action ) {
 	customer_expect( false !== strpos( $html, 'name="din_package_action" value="' . $action . '"' ), 'Eligible action button is submitted explicitly: ' . $action );
 }
-customer_expect( false !== strpos( $html, 'aria-labelledby="din-package-10"' ) && false !== strpos( $html, 'aria-label="Renewal — Paket #10"' ), 'Cards and action buttons retain accessible package identity.' );
-customer_expect( false !== strpos( $html, '>Aktif</span>' ) && preg_match( '/<dd>\s*0 hari\s*<\/dd>/', $html ), 'Status has readable text and past expiry never shows negative remaining days.' );
+customer_expect( false !== strpos( $html, 'aria-labelledby="din-package-10"' ) && false !== strpos( $html, 'aria-label="Renewal — Package #10"' ), 'Cards and action buttons retain accessible package identity.' );
+customer_expect( false !== strpos( $html, '>Active</span>' ) && preg_match( '/<dd>\s*0 day\s*<\/dd>/', $html ), 'Status has readable text and past expiry never shows negative remaining days.' );
 
 // Dashboard selection scans past non-running packages, while the dedicated endpoint remains unfiltered.
 $sample = $GLOBALS['packages'][0];

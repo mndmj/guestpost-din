@@ -2,7 +2,7 @@
 /**
  * Plugin Name: DIN Package Lifecycle
  * Description: Masa aktif, perpanjangan, dan upgrade paket guest post WooCommerce.
- * Version: 1.0.3
+ * Version: 1.0.5
  * Requires at least: 6.8
  * Requires PHP: 7.4
  * Requires Plugins: woocommerce, din-order-attach
@@ -11,9 +11,10 @@
  */
 
 defined( 'ABSPATH' ) || exit;
-define( 'DIN_PACKAGES_VERSION', '1.0.3' );
+define( 'DIN_PACKAGES_VERSION', '1.0.5' );
 define( 'DIN_PACKAGES_FILE', __FILE__ );
 require_once __DIR__ . '/includes/class-din-packages.php';
+require_once __DIR__ . '/includes/class-din-packages-requests.php';
 require_once __DIR__ . '/includes/class-din-packages-admin.php';
 require_once __DIR__ . '/includes/class-din-packages-customer.php';
 require_once __DIR__ . '/includes/class-din-packages-mail.php';

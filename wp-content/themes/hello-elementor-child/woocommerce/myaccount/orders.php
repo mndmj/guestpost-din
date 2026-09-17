@@ -115,17 +115,35 @@ do_action( 'woocommerce_before_account_orders', $has_orders ); ?>
 	<?php do_action( 'woocommerce_before_account_orders_pagination' ); ?>
 
 	<?php if ( 1 < $customer_orders->max_num_pages ) : ?>
-		<div class="woocommerce-pagination woocommerce-pagination--without-numbers woocommerce-Pagination">
+		<nav class="woocommerce-pagination woocommerce-Pagination gpm-orders-pagination"
+			aria-label="<?php esc_attr_e( 'Order pages', 'guest-post-child' ); ?>">
 			<?php if ( 1 !== $current_page ) : ?>
 				<a class="woocommerce-button woocommerce-button--previous woocommerce-Button woocommerce-Button--previous button<?php echo esc_attr( $wp_button_class ); ?>"
-					href="<?php echo esc_url( wc_get_endpoint_url( 'orders', $current_page - 1 ) ); ?>"><?php esc_html_e( 'Previous', 'woocommerce' ); ?></a>
+					href="<?php echo esc_url( wc_get_endpoint_url( 'orders', $current_page - 1, wc_get_page_permalink( 'myaccount' ) ) ); ?>"><?php esc_html_e( 'Previous', 'woocommerce' ); ?></a>
 			<?php endif; ?>
+
+			<?php
+			echo wp_kses_post(
+				paginate_links(
+					array(
+						'base' => str_replace( '999999999', '%#%', wc_get_endpoint_url( 'orders', 999999999, wc_get_page_permalink( 'myaccount' ) ) ),
+						'format' => '',
+						'current' => $current_page,
+						'total' => $customer_orders->max_num_pages,
+						'type' => 'list',
+						'prev_next' => false,
+						'end_size' => 1,
+						'mid_size' => 1,
+					)
+				)
+			);
+			?>
 
 			<?php if ( intval( $customer_orders->max_num_pages ) !== $current_page ) : ?>
 				<a class="woocommerce-button woocommerce-button--next woocommerce-Button woocommerce-Button--next button<?php echo esc_attr( $wp_button_class ); ?>"
-					href="<?php echo esc_url( wc_get_endpoint_url( 'orders', $current_page + 1 ) ); ?>"><?php esc_html_e( 'Next', 'woocommerce' ); ?></a>
+					href="<?php echo esc_url( wc_get_endpoint_url( 'orders', $current_page + 1, wc_get_page_permalink( 'myaccount' ) ) ); ?>"><?php esc_html_e( 'Next', 'woocommerce' ); ?></a>
 			<?php endif; ?>
-		</div>
+		</nav>
 	<?php endif; ?>
 
 <?php else : ?>
