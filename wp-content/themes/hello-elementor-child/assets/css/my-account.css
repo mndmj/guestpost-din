@@ -1150,6 +1150,73 @@ body:is(.woocommerce-edit-address, .woocommerce-edit-account)
   outline-offset: 3px;
 }
 
+.woocommerce-account .woocommerce-MyAccount-content .gpm-orders-pagination {
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.woocommerce-account .gpm-orders-pagination ul.page-numbers {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  list-style: none;
+}
+
+.woocommerce-account .gpm-orders-pagination ul.page-numbers li {
+  float: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: visible;
+}
+
+.woocommerce-account .gpm-orders-pagination li .page-numbers {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 2px solid var(--base-dark);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--base-dark);
+  font-family: var(--heading-font);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.woocommerce-account .woocommerce-MyAccount-content .gpm-orders-pagination li .current {
+  background: var(--electric-blue);
+  color: #fff;
+  box-shadow: 3px 3px 0 var(--base-dark);
+}
+
+.woocommerce-account .gpm-orders-pagination li .dots {
+  min-width: 24px;
+  padding-inline: 2px;
+  border-color: transparent;
+  background: transparent;
+}
+
+.woocommerce-account .woocommerce-MyAccount-content .gpm-orders-pagination li a:hover,
+.woocommerce-account .woocommerce-MyAccount-content .gpm-orders-pagination li a:focus-visible {
+  background: var(--neon-mint);
+  color: var(--base-dark);
+}
+
+.woocommerce-account .gpm-orders-pagination li a:focus-visible {
+  outline: 3px solid var(--base-dark);
+  outline-offset: 3px;
+}
+
 /* ==================================================
    My Account — View Order
    ================================================== */

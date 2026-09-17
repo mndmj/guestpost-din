@@ -11,14 +11,15 @@ async function main() {
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
   const cartUrl = new URL("cart/", site).href;
+  const homeUrl = site.href;
   const accountUrl = new URL("my-account/", site).href;
 
   async function checkHeader() {
     const header = page.locator("#site-header");
     assert.equal(await header.count(), 1, "Cart must have exactly one header.");
-    const link = header.getByRole("link", { name: "Back to Dashboard" });
-    assert.ok(await link.isVisible(), "Dashboard link must be visible.");
-    assert.equal(await link.getAttribute("href"), accountUrl);
+    const link = header.getByRole("link", { name: "Back to Home Page" });
+    assert.ok(await link.isVisible(), "Home link must be visible.");
+    assert.equal(await link.getAttribute("href"), homeUrl);
     const headerBox = await header.boundingBox();
     const cartBox = await page.locator(".wp-block-woocommerce-cart").boundingBox();
     assert.ok(headerBox.y + headerBox.height <= cartBox.y, "Header must precede Cart.");
@@ -46,9 +47,9 @@ async function main() {
     await checkHeader();
     const addUrl = await page.locator(".gpm-pricing-card__button-link[data-product_id]").first().getAttribute("href");
     await page.locator("#site-header a").click();
-    await page.waitForURL(accountUrl);
-    assert.ok(await page.locator("form.woocommerce-form-login").isVisible(),
-      "Guest should reach the existing account login form.");
+    await page.waitForURL(homeUrl);
+    assert.ok(await page.locator("body.home").isVisible(),
+      "Guest should reach the homepage, not the account login form.");
 
     await page.goto(new URL(addUrl, cartUrl).href);
     await page.locator(".wc-block-cart-items__row[data-cart-item-key]").waitFor();
@@ -63,6 +64,7 @@ async function main() {
     await page.locator("#site-header .gpm-checkout-back-link").waitFor();
     assert.equal(await page.locator("#site-header").count(), 1, "Checkout header must not duplicate.");
     assert.equal(await page.locator("#site-header a").getAttribute("href"), accountUrl);
+    assert.ok(await page.locator("#site-header").getByRole("link", { name: "Back to Dashboard" }).isVisible());
 
     for (const path of ["", "shop/"]) {
       await page.goto(new URL(path, site).href);

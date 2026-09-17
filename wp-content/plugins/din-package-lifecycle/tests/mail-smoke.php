@@ -122,12 +122,34 @@ check_mail( class_exists( 'DIN_Packages_Mail' ), 'The package email scheduler is
 DIN_Packages::$rows[1] = fixture_mail( time() + 20 * DAY_IN_SECONDS );
 DIN_Packages_Mail::boot();
 DIN_Packages_Mail::schedule( DIN_Packages::get( 1 ) );
-check_mail( count( $jobs ) === 2, 'Annual schedules reminder and expiry.' );
+check_mail( count( $jobs ) === 3, 'Annual schedules H-14, H-7, and expiry.' );
 check_mail( $jobs[0]->time === DIN_Packages::get( 1 )['expires_at'] - 14 * DAY_IN_SECONDS, 'Reminder scheduled H-14.' );
+check_mail( $jobs[1]->args === array( 1, 1, 'reminder_7', 1 ) && $jobs[1]->time === DIN_Packages::get( 1 )['expires_at'] - 7 * DAY_IN_SECONDS, 'Independent H-7 event uses its exact due date.' );
+check_mail( $jobs[2]->args === array( 1, 1, 'expired', 1 ) && $jobs[2]->time === DIN_Packages::get( 1 )['expires_at'], 'Expiry event uses the exact end date.' );
 DIN_Packages_Mail::schedule( DIN_Packages::get( 1 ) );
-check_mail( count( $jobs ) === 2, 'Repeated scheduling does not duplicate jobs.' );
+check_mail( count( $jobs ) === 3, 'Repeated scheduling does not duplicate jobs.' );
 
-DIN_Packages::$rows[1]['expires_at'] = time() + DAY_IN_SECONDS;
+$relevant = new ReflectionMethod( DIN_Packages_Mail::class, 'relevant' );
+$boundary_package = fixture_mail( 2000000000 );
+foreach ( array(
+	array( 'reminder', 1998790399, false ),
+	array( 'reminder', 1998790400, true ),
+	array( 'reminder', 1999395199, true ),
+	array( 'reminder', 1999395200, false ),
+	array( 'reminder', 1999999999, false ),
+	array( 'reminder', 2000000000, false ),
+	array( 'reminder_7', 1999395199, false ),
+	array( 'reminder_7', 1999395200, true ),
+	array( 'reminder_7', 1999999999, true ),
+	array( 'reminder_7', 2000000000, false ),
+	array( 'expired', 1999999999, false ),
+	array( 'expired', 2000000000, true ),
+	array( 'expired', 2000000001, true ),
+) as [ $event, $now, $expected ] ) {
+	check_mail( $relevant->invoke( null, $boundary_package, 1, $event, $now ) === $expected, "Exact event window: $event at $now." );
+}
+
+DIN_Packages::$rows[1]['expires_at'] = time() + 10 * DAY_IN_SECONDS;
 DIN_Packages_Mail::send( 1, 1, 'reminder', 1 );
 DIN_Packages_Mail::send( 1, 1, 'reminder', 1 );
 check_mail( count( $sent ) === 1, 'Duplicate callback sends only one reminder.' );
@@ -135,126 +157,198 @@ check_mail( $source_reads >= 2, 'Both claim and transport guards refresh the cac
 check_mail( str_contains( $sent[0][2], '&lt;Test&gt;' ) && str_contains( $sent[0][2], 'Heading &amp; Post' ), 'Email escapes product and heading.' );
 check_mail( str_contains( $sent[0][2], 'wp-login.php' ), 'Email links to account login.' );
 check_mail( DIN_Packages::get( 1 )['emails']['1:reminder']['state'] === 'sent', 'Successful transport is persisted.' );
-
-$sent = $logs = array();
-DIN_Packages::$rows[1] = fixture_mail( time() + DAY_IN_SECONDS );
-DIN_Packages::$next_error = new WP_Error( 'package_storage', 'Unavailable test storage' );
+check_mail( $sent[0][0] === 'test@example.invalid', 'Reminder recipient is the account owner.' );
+check_mail( str_contains( $sent[0][1], 'within 14 days' ) && str_contains( $sent[0][2], 'within 14 days' ), 'Late H-14 subject and content state the reminder window, not an exact countdown.' );
+$legacy_reminder = DIN_Packages::get( 1 )['emails']['1:reminder'];
+DIN_Packages::$rows[1]['expires_at'] = time() + 5 * DAY_IN_SECONDS;
 DIN_Packages_Mail::send( 1, 1, 'reminder', 1 );
-check_mail( ! $sent && count( $logs ) === 1, 'A failed claim never sends and logs the storage failure.' );
-
-$sent = array();
-DIN_Packages::$rows[1] = fixture_mail( time() - 1 );
-DIN_Packages_Mail::send( 1, 1, 'reminder', 1 );
-check_mail( ! $sent, 'Delayed H-14 reminder does not send after expiry.' );
+DIN_Packages_Mail::send( 1, 1, 'reminder_7', 1 );
+DIN_Packages_Mail::send( 1, 1, 'reminder_7', 1 );
+check_mail( count( $sent ) === 2, 'Previously sent H-14 is retained and independent H-7 sends exactly once.' );
+check_mail( DIN_Packages::get( 1 )['emails']['1:reminder'] === $legacy_reminder && DIN_Packages::get( 1 )['emails']['1:reminder_7']['state'] === 'sent', 'Generation-event keys preserve existing H-14 history alongside H-7.' );
+check_mail( $sent[1][0] === 'test@example.invalid' && str_contains( $sent[1][2], 'wp-login.php' ), 'H-7 uses the same account recipient and login route.' );
+check_mail( str_contains( $sent[1][1], 'within 7 days' ) && str_contains( $sent[1][2], 'within 7 days' ) && ! str_contains( $sent[1][2], 'within 14 days' ), 'Late H-7 content is distinct and does not claim an exact seven days remaining.' );
+$expected_date = ( new DateTimeImmutable( '@' . DIN_Packages::get( 1 )['expires_at'] ) )->setTimezone( new DateTimeZone( 'Asia/Jakarta' ) )->format( 'Y-m-d H:i' );
+check_mail( str_contains( $sent[1][2], $expected_date ), 'H-7 preserves the exact end date in the site time zone.' );
+DIN_Packages::$rows[1]['expires_at'] = time() - 1;
 DIN_Packages_Mail::send( 1, 1, 'expired', 1 );
 DIN_Packages_Mail::send( 1, 1, 'expired', 1 );
-check_mail( count( $sent ) === 1, 'Expired notice sends once.' );
+check_mail( count( $sent ) === 3 && DIN_Packages::get( 1 )['emails']['1:expired']['state'] === 'sent', 'Expiry sends once independently of both sent reminders.' );
+check_mail( str_contains( $sent[2][1], 'has expired' ) && str_contains( $sent[2][2], 'has expired' ) && ! str_contains( $sent[2][2], 'within' ), 'Expiry content uses the expired branch, not a reminder countdown.' );
 
-foreach ( array( 'owner', 'deleted', 'pending', 'on-hold', 'cancelled', 'refunded' ) as $case ) {
-	$sent = array();
-	$composed = 0;
-	$source_order = array( 'customer_id' => 'owner' === $case ? 99 : 7, 'status' => 'owner' === $case ? 'completed' : $case );
-	if ( 'deleted' === $case ) { $source_order = null; }
-	DIN_Packages::$rows[1] = fixture_mail( time() + DAY_IN_SECONDS );
-	DIN_Packages_Mail::send( 1, 1, 'reminder', 1 );
-	check_mail( ! $sent && 0 === $composed, "Invalid source order cannot compose or send an email: $case." );
-}
-$source_order = array( 'customer_id' => 7, 'status' => 'completed' );
+$jobs = $sent = array();
+DIN_Packages::$rows[1] = fixture_mail( time() + 5 * DAY_IN_SECONDS );
+$queue_started = time();
+DIN_Packages_Mail::schedule( DIN_Packages::get( 1 ) );
+DIN_Packages_Mail::schedule( DIN_Packages::get( 1 ) );
+check_mail( count( $jobs ) === 2 && $jobs[0]->args === array( 1, 1, 'reminder_7', 1 ) && $jobs[1]->args === array( 1, 1, 'expired', 1 ), 'Late scheduling queues only H-7 and expiry, without duplicate or obsolete H-14 jobs.' );
+check_mail( $jobs[0]->time >= $queue_started + 1 && $jobs[0]->time <= time() + 1, 'An overdue H-7 reminder is queued promptly.' );
+DIN_Packages_Mail::send( 1, 1, 'reminder', 1 );
+check_mail( ! $sent && ! DIN_Packages::get( 1 )['emails'], 'An already queued H-14 callback cannot claim or send in the H-7 window.' );
+DIN_Packages_Mail::send( ...$jobs[0]->args );
+check_mail( count( $sent ) === 1 && DIN_Packages::get( 1 )['emails']['1:reminder_7']['state'] === 'sent', 'Late queued H-7 sends normally.' );
 
 $sent = array();
-$composed = 0;
-$source_read_error = true;
-DIN_Packages::$rows[1] = fixture_mail( time() + DAY_IN_SECONDS );
-DIN_Packages_Mail::send( 1, 1, 'reminder', 1 );
-check_mail( ! $sent && 0 === $composed, 'A source data-store read failure blocks composition and transport.' );
-$source_read_error = false;
-
-foreach ( array( 'owner', 'deleted', 'pending' ) as $case ) {
-	$sent = array();
-	$source_order = array( 'customer_id' => 7, 'status' => 'completed' );
-	DIN_Packages::$rows[1] = fixture_mail( time() + DAY_IN_SECONDS );
-	$before_send = function () use ( $case ) {
-		$GLOBALS['source_order'] = 'deleted' === $case ? null : array( 'customer_id' => 'owner' === $case ? 99 : 7, 'status' => 'pending' === $case ? 'pending' : 'completed' );
-	};
-	DIN_Packages_Mail::send( 1, 1, 'reminder', 1 );
-	check_mail( ! $sent, "Immediate transport guard refreshes the source order: $case." );
+DIN_Packages::$rows[1] = fixture_mail( time() + 5 * DAY_IN_SECONDS );
+foreach ( array( 'unknown', null, array(), new stdClass() ) as $invalid_event ) {
+	DIN_Packages_Mail::send( 1, 1, $invalid_event );
 }
-$before_send = null;
-$source_order = array( 'customer_id' => 7, 'status' => 'completed' );
+check_mail( ! $sent && ! DIN_Packages::get( 1 )['emails'], 'Malformed or unknown events neither crash nor claim an email.' );
 
-foreach ( array( 'stale', 'lifetime', 'review', 'pending', 'early' ) as $case ) {
-	$sent = array();
-	DIN_Packages::$rows[1] = fixture_mail( time() + DAY_IN_SECONDS );
-	if ( $case === 'stale' ) { DIN_Packages::$rows[1]['generation'] = 2; }
-	if ( $case === 'lifetime' ) { DIN_Packages::$rows[1]['period'] = 'lifetime'; }
-	if ( $case === 'review' ) { DIN_Packages::$rows[1]['review'] = 'Refund'; }
-	if ( $case === 'pending' ) { DIN_Packages::$rows[1]['started_at'] = 0; }
-	if ( $case === 'early' ) { DIN_Packages::$rows[1]['expires_at'] = time() + 20 * DAY_IN_SECONDS; }
-	DIN_Packages_Mail::send( 1, 1, 'reminder', 1 );
-	check_mail( ! $sent, "No irrelevant email: $case." );
+foreach ( array( 'failed', 'uncertain' ) as $legacy_state ) {
+	$jobs = $sent = array();
+	DIN_Packages::$rows[1] = fixture_mail( time() + 5 * DAY_IN_SECONDS );
+	$legacy_email = array( 'state' => $legacy_state, 'attempt' => 3, 'retry_at' => time() + HOUR_IN_SECONDS );
+	DIN_Packages::$rows[1]['emails']['1:reminder'] = $legacy_email;
+	DIN_Packages_Mail::schedule( DIN_Packages::get( 1 ) );
+	DIN_Packages_Mail::send( 1, 1, 'reminder_7', 1 );
+	check_mail( count( $sent ) === 1 && DIN_Packages::get( 1 )['emails']['1:reminder'] === $legacy_email, "H-7 remains independent of a legacy H-14 $legacy_state outcome." );
 }
 
 $jobs = $sent = array();
 $transport_ok = false;
-DIN_Packages::$rows[1] = fixture_mail( time() + DAY_IN_SECONDS );
-for ( $attempt = 1; $attempt <= 4; $attempt++ ) {
-	if ( isset( DIN_Packages::$rows[1]['emails']['1:reminder'] ) ) { DIN_Packages::$rows[1]['emails']['1:reminder']['retry_at'] = 0; }
-	DIN_Packages_Mail::send( 1, 1, 'reminder', $attempt );
-	if ( $attempt === 1 ) {
-		DIN_Packages_Mail::send( 1, 1, 'reminder', 1 );
-		DIN_Packages_Mail::send( 1, 1, 'reminder', 2 );
-		check_mail( count( $sent ) === 1, 'A duplicate failed job or premature retry does not send.' );
-	}
-}
-check_mail( count( $sent ) === 3 && count( $jobs ) === 2, 'Failed delivery retries with maximum three total attempts.' );
-check_mail( ! DIN_Packages_Mail::has_sending( DIN_Packages::get( 1 ) ), 'Completed failure releases lease.' );
-check_mail( count( $logs ) >= 3, 'Failures logged for operations.' );
-
-$jobs = $sent = array();
-$transport_throw = true;
-DIN_Packages::$rows[1] = fixture_mail( time() + DAY_IN_SECONDS );
+DIN_Packages::$rows[1] = fixture_mail( time() + 10 * DAY_IN_SECONDS );
 DIN_Packages_Mail::send( 1, 1, 'reminder', 1 );
-DIN_Packages_Mail::send( 1, 1, 'reminder', 2 );
-check_mail( count( $sent ) === 1 && ! $jobs, 'Ambiguous transport exceptions do not trigger an automatic duplicate.' );
-check_mail( DIN_Packages::get( 1 )['emails']['1:reminder']['state'] === 'uncertain', 'Transport exception is recorded for review.' );
-$transport_throw = false;
-
-$sent = array();
+DIN_Packages::$rows[1]['expires_at'] = time() + 5 * DAY_IN_SECONDS;
+DIN_Packages::$rows[1]['emails']['1:reminder']['retry_at'] = 0;
+$failed_h14 = DIN_Packages::get( 1 )['emails']['1:reminder'];
 $transport_ok = true;
-DIN_Packages::$rows[1] = fixture_mail( time() + DAY_IN_SECONDS );
-$before_send = function () { DIN_Packages::$rows[1]['generation'] = 2; };
-DIN_Packages_Mail::send( 1, 1, 'reminder', 1 );
-check_mail( ! $sent, 'Generation is re-read immediately before transport.' );
-$before_send = null;
+DIN_Packages_Mail::send( ...$jobs[0]->args );
+check_mail( count( $sent ) === 1 && DIN_Packages::get( 1 )['emails']['1:reminder'] === $failed_h14, 'An H-14 retry crossing the H-7 cutoff does not send or consume an attempt.' );
+DIN_Packages_Mail::send( 1, 1, 'reminder_7', 1 );
+check_mail( count( $sent ) === 2 && DIN_Packages::get( 1 )['emails']['1:reminder_7']['attempt'] === 1, 'H-7 starts its own attempt after an obsolete H-14 retry.' );
 
-$sent = array();
-DIN_Packages::$rows[1] = fixture_mail( time() + DAY_IN_SECONDS );
-$before_send = function () {
-	DIN_Packages::$rows[1]['emails']['1:reminder']['state'] = 'uncertain';
-	DIN_Packages::$rows[1]['emails']['1:expired'] = array( 'state' => 'sending', 'lease_until' => time() + 60 );
-};
-DIN_Packages_Mail::send( 1, 1, 'reminder', 1 );
-check_mail( ! $sent, 'A different live lease cannot authorize an uncertain claim.' );
-$before_send = null;
+foreach ( array( 'reminder' => 10, 'reminder_7' => 5 ) as $event => $days ) {
+	$key = '1:' . $event;
+	$sent = $logs = array();
+	DIN_Packages::$rows[1] = fixture_mail( time() + $days * DAY_IN_SECONDS );
+	DIN_Packages::$next_error = new WP_Error( 'package_storage', 'Unavailable test storage' );
+	DIN_Packages_Mail::send( 1, 1, $event, 1 );
+	check_mail( ! $sent && count( $logs ) === 1, 'A failed claim never sends and logs the storage failure.' );
 
-$sent = array();
-DIN_Packages::$rows[1] = fixture_mail( time() + DAY_IN_SECONDS );
-$before_send = function () {
-	DIN_Packages_Mail::send( 1, 1, 'reminder', 1 );
-	DIN_Packages::$rows[1]['heading'] = 'Updated heading';
-};
-DIN_Packages_Mail::send( 1, 1, 'reminder', 1 );
-check_mail( count( $sent ) === 1, 'A simultaneous callback cannot reuse an active claim.' );
-check_mail( DIN_Packages::get( 1 )['heading'] === 'Updated heading', 'Email outcome preserves other concurrent package changes.' );
-$before_send = null;
+	$sent = array();
+	DIN_Packages::$rows[1] = fixture_mail( time() - 1 );
+	DIN_Packages_Mail::send( 1, 1, $event, 1 );
+	check_mail( ! $sent, 'Delayed H-14 reminder does not send after expiry.' );
+	DIN_Packages_Mail::send( 1, 1, 'expired', 1 );
+	DIN_Packages_Mail::send( 1, 1, 'expired', 1 );
+	check_mail( count( $sent ) === 1, 'Expired notice sends once.' );
 
-$jobs = $sent = array();
-DIN_Packages::$rows[1] = fixture_mail( time() + DAY_IN_SECONDS );
-DIN_Packages::$rows[1]['emails']['1:reminder'] = array( 'state' => 'sending', 'token' => 'dead-worker', 'attempt' => 1, 'lease_until' => time() - 1 );
-DIN_Packages_Mail::schedule( DIN_Packages::get( 1 ) );
-DIN_Packages_Mail::send( 1, 1, 'reminder', 1 );
-check_mail( ! $sent, 'Ambiguous crashed delivery is not sent twice.' );
-check_mail( DIN_Packages::get( 1 )['emails']['1:reminder']['state'] === 'uncertain', 'Expired send lease needs manual delivery review.' );
+	foreach ( array( 'owner', 'deleted', 'pending', 'on-hold', 'cancelled', 'refunded' ) as $case ) {
+		$sent = array();
+		$composed = 0;
+		$source_order = array( 'customer_id' => 'owner' === $case ? 99 : 7, 'status' => 'owner' === $case ? 'completed' : $case );
+		if ( 'deleted' === $case ) { $source_order = null; }
+		DIN_Packages::$rows[1] = fixture_mail( time() + $days * DAY_IN_SECONDS );
+		DIN_Packages_Mail::send( 1, 1, $event, 1 );
+		check_mail( ! $sent && 0 === $composed, "Invalid source order cannot compose or send an email: $case." );
+	}
+	$source_order = array( 'customer_id' => 7, 'status' => 'completed' );
+
+	$sent = array();
+	$composed = 0;
+	$source_read_error = true;
+	DIN_Packages::$rows[1] = fixture_mail( time() + $days * DAY_IN_SECONDS );
+	DIN_Packages_Mail::send( 1, 1, $event, 1 );
+	check_mail( ! $sent && 0 === $composed, 'A source data-store read failure blocks composition and transport.' );
+	$source_read_error = false;
+
+	foreach ( array( 'owner', 'deleted', 'pending' ) as $case ) {
+		$sent = array();
+		$source_order = array( 'customer_id' => 7, 'status' => 'completed' );
+		DIN_Packages::$rows[1] = fixture_mail( time() + $days * DAY_IN_SECONDS );
+		$before_send = function () use ( $case ) {
+			$GLOBALS['source_order'] = 'deleted' === $case ? null : array( 'customer_id' => 'owner' === $case ? 99 : 7, 'status' => 'pending' === $case ? 'pending' : 'completed' );
+		};
+		DIN_Packages_Mail::send( 1, 1, $event, 1 );
+		check_mail( ! $sent, "Immediate transport guard refreshes the source order: $case." );
+	}
+	$before_send = null;
+	$source_order = array( 'customer_id' => 7, 'status' => 'completed' );
+
+	foreach ( array( 'stale', 'lifetime', 'review', 'pending', 'early' ) as $case ) {
+		$sent = array();
+		DIN_Packages::$rows[1] = fixture_mail( time() + $days * DAY_IN_SECONDS );
+		if ( $case === 'stale' ) { DIN_Packages::$rows[1]['generation'] = 2; }
+		if ( $case === 'lifetime' ) { DIN_Packages::$rows[1]['period'] = 'lifetime'; }
+		if ( $case === 'review' ) { DIN_Packages::$rows[1]['review'] = 'Refund'; }
+		if ( $case === 'pending' ) { DIN_Packages::$rows[1]['started_at'] = 0; }
+		if ( $case === 'early' ) { DIN_Packages::$rows[1]['expires_at'] = time() + 20 * DAY_IN_SECONDS; }
+		DIN_Packages_Mail::send( 1, 1, $event, 1 );
+		check_mail( ! $sent, "No irrelevant email: $case." );
+	}
+
+	$jobs = $sent = array();
+	$transport_ok = false;
+	DIN_Packages::$rows[1] = fixture_mail( time() + $days * DAY_IN_SECONDS );
+	for ( $attempt = 1; $attempt <= 4; $attempt++ ) {
+		if ( isset( DIN_Packages::$rows[1]['emails'][$key] ) ) { DIN_Packages::$rows[1]['emails'][$key]['retry_at'] = 0; }
+		DIN_Packages_Mail::send( 1, 1, $event, $attempt );
+		if ( $attempt === 1 ) {
+			DIN_Packages_Mail::send( 1, 1, $event, 1 );
+			DIN_Packages_Mail::send( 1, 1, $event, 2 );
+			check_mail( count( $sent ) === 1, 'A duplicate failed job or premature retry does not send.' );
+		}
+	}
+	check_mail( count( $sent ) === 3 && count( $jobs ) === 2, 'Failed delivery retries with maximum three total attempts.' );
+	check_mail( ! DIN_Packages_Mail::has_sending( DIN_Packages::get( 1 ) ), 'Completed failure releases lease.' );
+	check_mail( count( $logs ) >= 3, 'Failures logged for operations.' );
+
+	$jobs = $sent = array();
+	$transport_throw = true;
+	DIN_Packages::$rows[1] = fixture_mail( time() + $days * DAY_IN_SECONDS );
+	DIN_Packages_Mail::send( 1, 1, $event, 1 );
+	DIN_Packages_Mail::send( 1, 1, $event, 2 );
+	check_mail( count( $sent ) === 1 && ! $jobs, 'Ambiguous transport exceptions do not trigger an automatic duplicate.' );
+	check_mail( DIN_Packages::get( 1 )['emails'][$key]['state'] === 'uncertain', 'Transport exception is recorded for review.' );
+	$transport_throw = false;
+
+	$sent = array();
+	$transport_ok = true;
+	DIN_Packages::$rows[1] = fixture_mail( time() + $days * DAY_IN_SECONDS );
+	$before_send = function () { DIN_Packages::$rows[1]['generation'] = 2; };
+	DIN_Packages_Mail::send( 1, 1, $event, 1 );
+	check_mail( ! $sent, 'Generation is re-read immediately before transport.' );
+	$before_send = null;
+
+	$sent = array();
+	DIN_Packages::$rows[1] = fixture_mail( time() + $days * DAY_IN_SECONDS );
+	$before_send = function () use ( $event ) {
+		DIN_Packages::$rows[1]['expires_at'] = 'reminder' === $event ? time() + 5 * DAY_IN_SECONDS : time() - 1;
+	};
+	DIN_Packages_Mail::send( 1, 1, $event, 1 );
+	check_mail( ! $sent && DIN_Packages::get( 1 )['emails'][ $key ]['state'] === 'skipped', "A window closing during composition blocks transport: $event." );
+	$before_send = null;
+
+	$sent = array();
+	DIN_Packages::$rows[1] = fixture_mail( time() + $days * DAY_IN_SECONDS );
+	$before_send = function () use ( $key ) {
+		DIN_Packages::$rows[1]['emails'][$key]['state'] = 'uncertain';
+		DIN_Packages::$rows[1]['emails']['1:expired'] = array( 'state' => 'sending', 'lease_until' => time() + 60 );
+	};
+	DIN_Packages_Mail::send( 1, 1, $event, 1 );
+	check_mail( ! $sent, 'A different live lease cannot authorize an uncertain claim.' );
+	$before_send = null;
+
+	$sent = array();
+	DIN_Packages::$rows[1] = fixture_mail( time() + $days * DAY_IN_SECONDS );
+	$before_send = function () use ( $event ) {
+		DIN_Packages_Mail::send( 1, 1, $event, 1 );
+		DIN_Packages::$rows[1]['heading'] = 'Updated heading';
+	};
+	DIN_Packages_Mail::send( 1, 1, $event, 1 );
+	check_mail( count( $sent ) === 1, 'A simultaneous callback cannot reuse an active claim.' );
+	check_mail( DIN_Packages::get( 1 )['heading'] === 'Updated heading', 'Email outcome preserves other concurrent package changes.' );
+	$before_send = null;
+
+	$jobs = $sent = array();
+	DIN_Packages::$rows[1] = fixture_mail( time() + $days * DAY_IN_SECONDS );
+	DIN_Packages::$rows[1]['emails'][$key] = array( 'state' => 'sending', 'token' => 'dead-worker', 'attempt' => 1, 'lease_until' => time() - 1 );
+	DIN_Packages_Mail::schedule( DIN_Packages::get( 1 ) );
+	DIN_Packages_Mail::send( 1, 1, $event, 1 );
+	check_mail( ! $sent, 'Ambiguous crashed delivery is not sent twice.' );
+	check_mail( DIN_Packages::get( 1 )['emails'][$key]['state'] === 'uncertain', 'Expired send lease needs manual delivery review.' );
+}
 
 $jobs = array();
 DIN_Packages::$rows[1] = fixture_mail( time() + 20 * DAY_IN_SECONDS );
@@ -270,11 +364,21 @@ DIN_Packages_Mail::schedule( DIN_Packages::get( 1 ) );
 as_schedule_single_action( time() + 1, 'din_packages_send_email', array( 2, 1, 'reminder', 1 ), 'din-package-lifecycle-2', true );
 DIN_Packages::$rows[1]['generation'] = 2;
 DIN_Packages_Mail::schedule( DIN_Packages::get( 1 ) );
-check_mail( count( $jobs ) === 3, 'Renewal replaces old-generation jobs and preserves a different package group.' );
+check_mail( count( $jobs ) === 4, 'Renewal replaces old-generation jobs and preserves a different package group.' );
 check_mail( ! array_filter( $jobs, fn( $j ) => $j->args[0] === 1 && $j->args[1] === 1 ), 'Every old-generation package job is cancelled.' );
+$new_generation_jobs = array_values( array_map( fn( $j ) => $j->args, array_filter( $jobs, fn( $j ) => $j->args[0] === 1 ) ) );
+check_mail( $new_generation_jobs === array( array( 1, 2, 'reminder', 1 ), array( 1, 2, 'reminder_7', 1 ), array( 1, 2, 'expired', 1 ) ), 'Renewal rebuilds all three distinct events for the new generation.' );
 as_schedule_single_action( time() + 1, 'din_packages_send_email', array( 1, 3, 'reminder', 1 ), 'din-package-lifecycle-1', true );
 DIN_Packages_Mail::schedule( DIN_Packages::get( 1 ) );
-check_mail( count( $jobs ) === 4, 'Scheduling an older snapshot cannot cancel a newer generation job.' );
+check_mail( count( $jobs ) === 5, 'Scheduling an older snapshot cannot cancel a newer generation job.' );
+
+$sent = array();
+DIN_Packages::$rows[1] = fixture_mail( time() + 5 * DAY_IN_SECONDS );
+DIN_Packages::$rows[1]['generation'] = 2;
+DIN_Packages::$rows[1]['emails']['1:reminder_7'] = array( 'state' => 'sent', 'attempt' => 1 );
+DIN_Packages_Mail::send( 1, 2, 'reminder_7', 1 );
+DIN_Packages_Mail::send( 1, 2, 'reminder_7', 1 );
+check_mail( count( $sent ) === 1 && DIN_Packages::get( 1 )['emails']['2:reminder_7']['state'] === 'sent' && DIN_Packages::get( 1 )['emails']['1:reminder_7'] === array( 'state' => 'sent', 'attempt' => 1 ), 'New-generation H-7 sends once without overwriting the old-generation history.' );
 
 $jobs = array();
 DIN_Packages_Mail::ensure_reconcile();
@@ -287,17 +391,21 @@ for ( $id = 1; $id <= 101; $id++ ) {
 	DIN_Packages::$rows[ $id ]['id'] = $id;
 }
 DIN_Packages_Mail::reconcile();
-check_mail( count( $jobs ) === 201, 'Reconciliation bounds the first page and chains the next cursor.' );
+check_mail( count( $jobs ) === 301, 'Reconciliation bounds the first page and chains the next cursor.' );
 DIN_Packages_Mail::reconcile( 100 );
-check_mail( count( $jobs ) === 203, 'Reconciliation repairs schedules on the next page.' );
+check_mail( count( $jobs ) === 304, 'Reconciliation repairs schedules on the next page.' );
 $jobs = $sent = array();
-DIN_Packages::$rows = array( 1 => fixture_mail( time() + DAY_IN_SECONDS ) );
+DIN_Packages::$rows = array( 1 => fixture_mail( time() + 20 * DAY_IN_SECONDS ) );
 DIN_Packages_Mail::schedule( DIN_Packages::get( 1 ) );
+check_mail( count( $jobs ) === 3, 'All three events are queued before stopping.' );
 DIN_Packages::$rows[1]['stopped_at'] = time();
 DIN_Packages::$rows[1]['generation'] = 2;
 DIN_Packages_Mail::schedule( DIN_Packages::get( 1 ) );
 check_mail( ! $jobs, 'Stopping cancels reminders and does not schedule new generation jobs.' );
-DIN_Packages_Mail::send( 1, 1, 'reminder' );
-DIN_Packages_Mail::send( 1, 2, 'reminder' );
-check_mail( ! $sent, 'Neither old nor current generation may email a stopped package.' );
-echo "PASS: package mail scheduling, race guards, cancellation, reconciliation, and stopped package suppression.\n";
+foreach ( array( 'reminder' => 10, 'reminder_7' => 5, 'expired' => -1 ) as $event => $days ) {
+	DIN_Packages::$rows[1]['expires_at'] = time() + $days * DAY_IN_SECONDS;
+	DIN_Packages_Mail::send( 1, 1, $event );
+	DIN_Packages_Mail::send( 1, 2, $event );
+	check_mail( ! $sent, "Neither old nor current generation may email a stopped package: $event." );
+}
+echo "PASS: H-14/H-7/expiry windows, independent delivery, race guards, cancellation, reconciliation, and stopped package suppression.\n";

@@ -121,6 +121,11 @@ function gpm_enqueue_child_styles() {
 }
 add_action( 'wp_enqueue_scripts', 'gpm_enqueue_child_styles', 20 );
 
+add_filter( 'woocommerce_my_account_my_orders_query', function ( $args ) {
+	$args['limit'] = 10;
+	return $args;
+}, 30 );
+
 /**
  * Shared authentication styles for WooCommerce and the WordPress login page.
  */
@@ -133,7 +138,7 @@ function gpm_enqueue_auth_styles() {
 
 	wp_enqueue_style(
 		'gpm-auth-fonts',
-		'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Unbounded:wght@700;800&display=swap',
+		'https://fonts.googleapis.com/css2?family=DM+Sans:wgh 00;500;700&family=Unbounded:wght@700;800&display=swap',
 		array(),
 		null
 	);

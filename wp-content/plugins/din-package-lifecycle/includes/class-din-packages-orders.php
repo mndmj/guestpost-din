@@ -6,7 +6,9 @@ final class DIN_Packages_Orders {
 
 	public static function boot() {
 		add_filter( 'woocommerce_my_account_my_orders_query', array( __CLASS__, 'orders_query' ), 20 );
+		add_filter( 'woocommerce_account_orders_columns', array( __CLASS__, 'order_columns' ), 20 );
 		add_action( 'woocommerce_my_account_my_orders_column_order-number', array( __CLASS__, 'order_number' ) );
+		add_action( 'woocommerce_my_account_my_orders_column_heading-post', array( __CLASS__, 'heading_post' ) );
 		add_action( 'woocommerce_my_account_my_orders_column_order-total', array( __CLASS__, 'order_total' ) );
 		add_filter( 'woocommerce_order_details_status', array( __CLASS__, 'detail_status' ), 20, 2 );
 		add_action( 'woocommerce_view_order', array( __CLASS__, 'detail' ), 5 );
@@ -20,10 +22,14 @@ final class DIN_Packages_Orders {
 	private static function purchase( $item ) {
 		$purchase = $item->get_meta( '_din_package_purchase' );
 		$id = is_array( $purchase ) ? ( $purchase['package_id'] ?? null ) : null;
-		if ( ! ( is_int( $id ) || is_string( $id ) ) || ! ctype_digit( (string) $id ) || (int) $id < 1 || ! in_array( $purchase['action'] ?? '', array( 'lifetime', 'renew_1', 'renew_2' ), true ) || (float) $item->get_quantity() !== 1.0 ) {
+		if ( ! ( is_int( $id ) || is_string( $id ) ) || ! ctype_digit( (string) $id ) || (int) $id < 1 || ! in_array( $purchase['action'] ?? '', array( 'lifetime', 'renew_1', 'renew_2', 'renew_custom' ), true ) || (float) $item->get_quantity() !== 1.0 ) {
 			return null;
 		}
-		return array( 'package_id' => (int) $id, 'action' => $purchase['action'] );
+		$years = is_array( $purchase['admin_request'] ?? null ) ? ( $purchase['admin_request']['years'] ?? 0 ) : 0;
+		if ( 'renew_custom' === $purchase['action'] && ( ! is_int( $years ) || ! DIN_Packages::custom_years( $years ) ) ) {
+			return null;
+		}
+		return array( 'package_id' => (int) $id, 'action' => $purchase['action'], 'years' => 'renew_custom' === $purchase['action'] ? $years : 0 );
 	}
 
 	private static function index() {
@@ -77,7 +83,7 @@ final class DIN_Packages_Orders {
 					$all_linked = false;
 					continue;
 				}
-				$matches[ $package['order_id'] ][] = array( 'package' => $package, 'item_id' => $item->get_id(), 'action' => $action );
+				$matches[ $package['order_id'] ][] = array( 'package' => $package, 'item_id' => $item->get_id(), 'action' => $action, 'years' => $purchase['years'] );
 			}
 			$hidden = $all_linked && count( $matches ) === 1 && ! isset( $index['groups'][ $order_id ] );
 			if ( $hidden ) {
@@ -151,6 +157,27 @@ final class DIN_Packages_Orders {
 		return $html;
 	}
 
+	public static function order_columns( $columns ) {
+		$heading = array( 'heading-post' => __( 'Heading Post', 'din-package-lifecycle' ) );
+		unset( $columns['heading-post'] );
+		$result = array();
+		foreach ( $columns as $key => $label ) {
+			$result[ $key ] = $label;
+			if ( 'order-number' === $key ) {
+				$result += $heading;
+			}
+		}
+		return $result + $heading;
+	}
+
+	public static function heading_post( $order ) {
+		if ( ! self::buyer() || (int) $order->get_customer_id() !== self::buyer() ) {
+			return;
+		}
+		$heading = trim( (string) $order->get_customer_note() );
+		echo '<span class="din-order-heading">' . esc_html( '' !== $heading ? $heading : '—' ) . '</span>';
+	}
+
 	public static function order_number( $order ) {
 		if ( ! self::buyer() || (int) $order->get_customer_id() !== self::buyer() ) {
 			return;
@@ -191,7 +218,7 @@ final class DIN_Packages_Orders {
 			if ( ! $purchase ) {
 				return false;
 			}
-			$option = DIN_Packages::purchase_option( (int) $purchase['package_id'], $purchase['action'], self::buyer(), false );
+			$option = DIN_Packages::purchase_option( (int) $purchase['package_id'], $purchase['action'], self::buyer(), false, $purchase['years'] );
 			if ( is_wp_error( $option ) || (int) $option['product_id'] !== (int) ( $item->get_variation_id() ?: $item->get_product_id() ) ) {
 				return false;
 			}
@@ -247,7 +274,7 @@ final class DIN_Packages_Orders {
 				echo 'Initial purchase';
 			}
 			foreach ( $transaction['links'] as $link ) {
-				$label = array( 'lifetime' => 'Annual → Lifetime', 'renew_1' => 'Renewal: 1 year', 'renew_2' => 'Renewal: 2 years' )[ $link['action'] ];
+				$label = 'renew_custom' === $link['action'] ? 'Renewal: ' . $link['years'] . ( 1 === $link['years'] ? ' year' : ' years' ) : array( 'lifetime' => 'Annual → Lifetime', 'renew_1' => 'Renewal: 1 year', 'renew_2' => 'Renewal: 2 years' )[ $link['action'] ];
 				echo '<div>Package #' . esc_html( $link['package']['id'] ) . ': ' . esc_html( $label );
 				$change = self::applied( $link ) ? 'Applied' : ( $order->has_status( array( 'cancelled', 'failed', 'refunded' ) ) ? 'Not applied' : 'Awaiting payment / admin approval' );
 				if ( ! empty( $link['package']['stopped_at'] ) ) {
@@ -275,7 +302,7 @@ final class DIN_Packages_Orders {
 
 	private static function timeline( $packages ) {
 		$events = array();
-		$labels = array( 'activate' => 'Service activated', 'lifetime' => 'Upgraded: Annual → Lifetime', 'renew_1' => 'Renewed for 1 year', 'renew_2' => 'Renewed for 2 years', 'stopped' => 'Service stopped' );
+		$labels = array( 'activate' => 'Service activated', 'lifetime' => 'Upgraded: Annual → Lifetime', 'renew_1' => 'Renewed for 1 year', 'renew_2' => 'Renewed for 2 years', 'renew_custom' => 'Custom renewal', 'expiry_adjusted' => 'Expiry adjusted manually', 'stopped' => 'Service stopped' );
 		foreach ( $packages as $package ) {
 			foreach ( $package['history'] ?? array() as $event ) {
 				if ( isset( $labels[ $event['action'] ?? '' ] ) ) {
@@ -287,11 +314,18 @@ final class DIN_Packages_Orders {
 		echo '<section class="din-order-history"><h2>Service history</h2><ol class="din-order-timeline">';
 		foreach ( $events as $entry ) {
 			$event = $entry['event'];
-			echo '<li><strong>Package #' . esc_html( $entry['package_id'] ) . ' — ' . esc_html( $labels[ $event['action'] ] ) . '</strong>';
+			$years = DIN_Packages::custom_years( $event['years'] ?? 0 );
+			$label = 'renew_custom' === $event['action'] && $years ? 'Renewed for ' . $years . ( 1 === $years ? ' year' : ' years' ) : $labels[ $event['action'] ];
+			echo '<li><strong>Package #' . esc_html( $entry['package_id'] ) . ' — ' . esc_html( $label ) . '</strong>';
 			if ( ! empty( $event['at'] ) ) {
 				echo '<small class="din-order-note">' . esc_html( wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), (int) $event['at'] ) ) . '</small>';
 			}
-			if ( 'stopped' === $event['action'] && ! empty( $event['reason'] ) ) {
+			if ( ( 'expiry_adjusted' === $event['action'] || ! empty( $event['requested_by'] ) ) && ! empty( $event['old_expires_at'] ) && isset( $event['expires_at'] ) ) {
+				$format = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
+				$expiry = $event['expires_at'] ? wp_date( $format, (int) $event['expires_at'] ) : 'No expiration date';
+				echo '<small class="din-order-note">' . esc_html( 'Expires: ' . wp_date( $format, (int) $event['old_expires_at'] ) . ' → ' . $expiry ) . '</small>';
+			}
+			if ( ! empty( $event['reason'] ) ) {
 				echo '<div class="din-order-reason">' . nl2br( esc_html( $event['reason'] ) ) . '</div>';
 			}
 			echo '</li>';

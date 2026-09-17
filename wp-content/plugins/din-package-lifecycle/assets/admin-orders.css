@@ -1,0 +1,264 @@
+.din-order-package-value {
+	line-height: 1.6;
+	overflow-wrap: anywhere;
+}
+
+.din-order-package-value + .din-order-package-value {
+	margin-top: 10px;
+	padding-top: 10px;
+	border-top: 1px solid #dcdcde;
+}
+
+.din-order-package-id {
+	display: block;
+	color: #646970;
+	font-size: 11px;
+}
+
+.column-din_package_name .din-order-package-value,
+.column-din_package_status .din-order-package-value {
+	font-weight: 600;
+}
+
+.din-order-table-scroll:focus-visible {
+	outline: 2px solid #2271b1;
+	outline-offset: 2px;
+}
+
+@media screen and (min-width: 783px) {
+	.din-order-table-scroll {
+		overflow-x: auto;
+	}
+
+	.din-order-table-scroll .wp-list-table {
+		table-layout: auto;
+	}
+
+	.din-order-table-scroll .column-order_number,
+	.din-order-table-scroll .column-din_package_name,
+	.din-order-table-scroll .column-din_package_changes {
+		min-width: 180px;
+	}
+
+	.din-order-table-scroll .column-order_total,
+	.din-order-table-scroll .column-din_package_period,
+	.din-order-table-scroll .column-din_package_source,
+	.din-order-table-scroll .column-din_package_remaining {
+		min-width: 100px;
+	}
+
+	.din-order-table-scroll .column-order_date,
+	.din-order-table-scroll .column-din_package_status,
+	.din-order-table-scroll .column-din_package_start,
+	.din-order-table-scroll .column-din_package_end {
+		min-width: 140px;
+	}
+}
+
+#din-packages .inside {
+	margin: 0;
+	padding: 16px;
+}
+
+#din-packages .din-package-notice,
+#din-packages .din-package-request,
+#din-packages .din-package-empty {
+	margin: 0 0 16px;
+	padding: 16px;
+	border: 1px solid #c3c4c7;
+	border-radius: 6px;
+	box-shadow: none;
+	color: #1d2327;
+	font-size: 14px;
+	line-height: 1.6;
+	overflow-wrap: anywhere;
+}
+
+#din-packages .din-package-notice {
+	border-left-width: 4px;
+}
+
+#din-packages .din-package-notice.notice-info {
+	border-color: #72aee6;
+	background: #f0f6fc;
+}
+
+#din-packages .din-package-notice.notice-warning {
+	border-color: #dba617;
+	background: #fcf9e8;
+}
+
+#din-packages .din-package-notice h3,
+#din-packages .din-package-request h3 {
+	margin: 0 0 8px;
+	font-size: 14px;
+	line-height: 1.5;
+}
+
+#din-packages .din-package-notice p,
+#din-packages .din-package-empty p {
+	margin: 0;
+	padding: 0;
+	font-size: inherit;
+	line-height: inherit;
+}
+
+#din-packages .din-package-notice ol {
+	margin: 8px 0 12px;
+	padding-left: 22px;
+}
+
+#din-packages .din-package-notice li {
+	margin: 0 0 4px;
+}
+
+#din-packages .din-package-request-summary {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px 12px;
+	margin-bottom: 12px;
+}
+
+#din-packages .din-package-request-badge {
+	padding: 3px 10px;
+	border-radius: 4px;
+	background: #f0f0f1;
+	color: #3c434a;
+	font-size: 12px;
+	font-weight: 600;
+}
+
+#din-packages .din-package-confirmation {
+	border: 1px solid #8c8f94;
+	border-radius: 6px;
+}
+
+#din-packages .din-package-confirmation:has(input:checked) {
+	border-color: #2271b1;
+	background: #f0f6fc;
+}
+
+#din-packages .din-package-confirmation label {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+	min-height: 44px;
+	box-sizing: border-box;
+	padding: 12px;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+#din-packages .din-package-confirmation input {
+	flex: 0 0 auto;
+	margin: 3px 0 0;
+}
+
+#din-packages .din-package-confirmation:focus-within {
+	outline: 2px solid #2271b1;
+	outline-offset: 2px;
+}
+
+#din-packages #din-packages-payment-help {
+	margin: 0;
+	padding: 0 12px 12px;
+	color: #50575e;
+	font-size: 13px;
+	line-height: 1.6;
+}
+
+#din-packages .din-package-empty {
+	margin-bottom: 0;
+	background: #f6f7f7;
+	color: #50575e;
+}
+
+#din-packages .din-package-table-wrap {
+	overflow-x: auto;
+}
+
+#din-packages .din-package-expiry {
+	min-width: 0;
+	margin: 24px 0 0;
+	padding: 16px;
+	border: 1px solid #c3c4c7;
+	border-radius: 6px;
+	background: #fff;
+	line-height: 1.6;
+	overflow-wrap: anywhere;
+}
+
+#din-packages .din-package-expiry legend {
+	padding: 0 8px;
+	font-size: 14px;
+	font-weight: 600;
+}
+
+#din-packages .din-package-expiry-current {
+	margin: 0 0 16px;
+	color: #50575e;
+}
+
+#din-packages .din-package-expiry-fields {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 16px;
+}
+
+#din-packages .din-package-expiry label {
+	display: block;
+	margin-bottom: 6px;
+	font-weight: 600;
+}
+
+#din-packages .din-package-expiry input[type="date"],
+#din-packages .din-package-expiry input[type="number"],
+#din-packages .din-package-expiry select,
+#din-packages .din-package-expiry textarea {
+	width: 100%;
+	max-width: 100%;
+	min-height: 40px;
+	box-sizing: border-box;
+}
+
+#din-packages .din-package-expiry textarea {
+	resize: vertical;
+}
+
+#din-packages .din-package-expiry-help,
+#din-packages .din-package-expiry-warning {
+	margin: 10px 0 16px;
+	color: #50575e;
+	font-size: 13px;
+}
+
+#din-packages .din-package-expiry-warning {
+	padding: 10px 12px;
+	border-left: 3px solid #dba617;
+	background: #fcf9e8;
+	color: #3c434a;
+}
+
+#din-packages .din-package-expiry .din-package-confirmation label {
+	display: flex;
+	margin: 0;
+}
+
+#din-packages .din-package-expiry-apply-help {
+	margin: 0;
+	padding: 0 12px 12px;
+	color: #50575e;
+}
+
+#din-packages .din-package-table-wrap:focus-visible,
+#din-packages .din-package-expiry :is(input, select, textarea):focus-visible {
+	outline: 2px solid #2271b1;
+	outline-offset: 2px;
+}
+
+@media screen and (max-width: 600px) {
+	#din-packages .din-package-expiry-fields {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}

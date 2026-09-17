@@ -59,8 +59,13 @@
 }
 .woocommerce-account .din-order-badge--upgraded { color: #fff; background: #435bff; }
 .woocommerce-account .din-order-badge--pending { color: #453000; background: #ffec99; }
+body.woocommerce-orders .woocommerce-orders-table__cell-order-number > .din-order-badge {
+  display: block;
+  width: fit-content;
+}
 .woocommerce-account .din-order-package-badges { margin-top: 8px; }
 .woocommerce-account .din-order-note { display: block; margin-top: 6px; color: #50515d; font-size: 12px; font-weight: 400; line-height: 1.5; }
+.woocommerce-account .din-order-heading { display: block; max-width: 32ch; white-space: pre-line; overflow-wrap: anywhere; line-height: 1.5; }
 body:is(.woocommerce-orders, .woocommerce-view-order) .woocommerce-MyAccount-content { min-width: 0; }
 .woocommerce-account .din-order-history {
   min-width: 0;
@@ -111,6 +116,9 @@ body:is(.woocommerce-orders, .woocommerce-view-order) .woocommerce-MyAccount-con
 }
 @media (max-width: 768px) {
   body.woocommerce-orders table.woocommerce-orders-table tbody th.woocommerce-orders-table__cell-order-number { display: block; text-align: left; }
+  body.woocommerce-orders table.woocommerce-orders-table td.woocommerce-orders-table__cell-heading-post { text-align: left !important; }
+  body.woocommerce-orders table.woocommerce-orders-table td.woocommerce-orders-table__cell-heading-post::before { display: block; float: none; margin-bottom: 6px; }
+  .woocommerce-account .din-order-heading { max-width: none; }
 }
 @media (max-width: 600px) {
   .woocommerce-account .din-order-history { padding: 16px; }
