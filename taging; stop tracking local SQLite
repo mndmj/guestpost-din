@@ -1,0 +1,203 @@
+ .gitignore                                         |    31 [32m+[m
+ .htaccess                                          |    16 [32m+[m
+ .../addresses-billing-desktop-20260907.png         |   Bin [31m63189[m -> [32m0[m bytes
+ .../addresses-list-desktop-20260907.png            |   Bin [31m62371[m -> [32m0[m bytes
+ .playwright-mcp/addresses-list-final-20260907.png  |   Bin [31m61344[m -> [32m0[m bytes
+ .../addresses-shipping-mobile-20260907.png         |   Bin [31m50934[m -> [32m0[m bytes
+ .playwright-mcp/auth-myaccount-mobile-20260907.png |   Bin [31m19378[m -> [32m0[m bytes
+ .../console-2026-09-04T03-57-00-680Z.log           |     2 [31m-[m
+ .../console-2026-09-04T07-26-40-779Z.log           |    34 [31m-[m
+ .../console-2026-09-04T08-05-19-730Z.log           |     1 [31m-[m
+ .../console-2026-09-04T08-13-34-844Z.log           |     1 [31m-[m
+ .../console-2026-09-07T02-04-07-224Z.log           |    56 [31m-[m
+ .../console-2026-09-08T02-18-49-572Z.log           |     3 [31m-[m
+ .../console-2026-09-08T02-50-25-826Z.log           |    25 [31m-[m
+ .../console-2026-09-08T06-59-32-053Z.log           |     6 [31m-[m
+ .playwright-mcp/din-stop-confirmation-desktop.png  |   Bin [31m11269[m -> [32m0[m bytes
+ .../din-stop-confirmation-form-mobile.png          |   Bin [31m10751[m -> [32m0[m bytes
+ .playwright-mcp/din-stop-confirmation-mobile.png   |   Bin [31m128232[m -> [32m0[m bytes
+ ...lost-password-confirmation-desktop-20260907.png |   Bin [31m27584[m -> [32m0[m bytes
+ .../lost-password-woocommerce-mobile-20260907.png  |   Bin [31m22804[m -> [32m0[m bytes
+ .../lost-password-wordpress-mobile-20260907.png    |   Bin [31m27690[m -> [32m0[m bytes
+ .playwright-mcp/page-2026-09-04T03-57-03-985Z.yml  |    88 [31m-[m
+ .playwright-mcp/page-2026-09-08T02-18-57-436Z.yml  |   924 [31m-[m
+ .vscode/launch.json                                |    15 [31m-[m
+ AGENTS.md                                          |     6 [31m-[m
+ CLAUDE.md                                          |     1 [31m-[m
+ STUDIO.md                                          |   290 [31m-[m
+ ...6-08-28-din-order-attach-implementation-plan.md |   368 [31m-[m
+ .../specs/2026-08-27-din-order-attach-prd.md       |   274 [31m-[m
+ .../2026-09-07-package-lifecycle-prd-draft.md      |   137 [31m-[m
+ docs/superpowers/specs/PRD.md                      |   274 [31m-[m
+ get_builder_content_for_display(11)                |     0
+ get_status())                                      |     0
+ node_modules/.bin/prettier                         |    16 [31m-[m
+ node_modules/.bin/prettier.cmd                     |    17 [31m-[m
+ node_modules/.bin/prettier.ps1                     |    28 [31m-[m
+ node_modules/.package-lock.json                    |    39 [31m-[m
+ node_modules/@wordpress/prettier-config/LICENSE.md |   788 [31m-[m
+ node_modules/@wordpress/prettier-config/README.md  |    41 [31m-[m
+ .../@wordpress/prettier-config/lib/index.js        |    38 [31m-[m
+ .../@wordpress/prettier-config/package.json        |    47 [31m-[m
+ node_modules/prettier/LICENSE                      |     7 [31m-[m
+ node_modules/prettier/README.md                    |   104 [31m-[m
+ node_modules/prettier/THIRD-PARTY-NOTICES.md       |  8019 [31m--------[m
+ node_modules/prettier/bin/prettier.cjs             |    84 [31m-[m
+ node_modules/prettier/doc.d.ts                     |   254 [31m-[m
+ node_modules/prettier/doc.js                       |  1575 [31m--[m
+ node_modules/prettier/doc.mjs                      |  1544 [31m--[m
+ node_modules/prettier/index.cjs                    |   790 [31m-[m
+ node_modules/prettier/index.d.ts                   |   959 [31m-[m
+ node_modules/prettier/index.mjs                    | 19074 [31m-------------------[m
+ .../prettier/internal/experimental-cli-worker.mjs  |  2756 [31m---[m
+ .../prettier/internal/experimental-cli.mjs         | 12572 [31m------------[m
+ node_modules/prettier/internal/legacy-cli.mjs      |  7059 [31m-------[m
+ node_modules/prettier/package.json                 |   207 [31m-[m
+ node_modules/prettier/plugins/acorn.d.ts           |     6 [31m-[m
+ node_modules/prettier/plugins/acorn.js             |    17 [31m-[m
+ node_modules/prettier/plugins/acorn.mjs            |    17 [31m-[m
+ node_modules/prettier/plugins/angular.d.ts         |     8 [31m-[m
+ node_modules/prettier/plugins/angular.js           |     5 [31m-[m
+ node_modules/prettier/plugins/angular.mjs          |     5 [31m-[m
+ node_modules/prettier/plugins/babel.d.ts           |    18 [31m-[m
+ node_modules/prettier/plugins/babel.js             |    16 [31m-[m
+ node_modules/prettier/plugins/babel.mjs            |    16 [31m-[m
+ node_modules/prettier/plugins/estree.d.ts          |     6 [31m-[m
+ node_modules/prettier/plugins/estree.js            |    44 [31m-[m
+ node_modules/prettier/plugins/estree.mjs           |    44 [31m-[m
+ node_modules/prettier/plugins/flow.d.ts            |     5 [31m-[m
+ node_modules/prettier/plugins/flow.js              |     7 [31m-[m
+ node_modules/prettier/plugins/flow.mjs             |     7 [31m-[m
+ node_modules/prettier/plugins/glimmer.d.ts         |     9 [31m-[m
+ node_modules/prettier/plugins/glimmer.js           |    37 [31m-[m
+ node_modules/prettier/plugins/glimmer.mjs          |    37 [31m-[m
+ node_modules/prettier/plugins/graphql.d.ts         |     9 [31m-[m
+ node_modules/prettier/plugins/graphql.js           |    17 [31m-[m
+ node_modules/prettier/plugins/graphql.mjs          |    17 [31m-[m
+ node_modules/prettier/plugins/html.d.ts            |    13 [31m-[m
+ node_modules/prettier/plugins/html.js              |    25 [31m-[m
+ node_modules/prettier/plugins/html.mjs             |    25 [31m-[m
+ node_modules/prettier/plugins/markdown.d.ts        |    11 [31m-[m
+ node_modules/prettier/plugins/markdown.js          |    70 [31m-[m
+ node_modules/prettier/plugins/markdown.mjs         |    70 [31m-[m
+ node_modules/prettier/plugins/meriyah.d.ts         |     5 [31m-[m
+ node_modules/prettier/plugins/meriyah.js           |     6 [31m-[m
+ node_modules/prettier/plugins/meriyah.mjs          |     6 [31m-[m
+ node_modules/prettier/plugins/postcss.d.ts         |    11 [31m-[m
+ node_modules/prettier/plugins/postcss.js           |    62 [31m-[m
+ node_modules/prettier/plugins/postcss.mjs          |    62 [31m-[m
+ node_modules/prettier/plugins/typescript.d.ts      |     5 [31m-[m
+ node_modules/prettier/plugins/typescript.js        |    22 [31m-[m
+ node_modules/prettier/plugins/typescript.mjs       |    22 [31m-[m
+ node_modules/prettier/plugins/yaml.d.ts            |     9 [31m-[m
+ node_modules/prettier/plugins/yaml.js              |   141 [31m-[m
+ node_modules/prettier/plugins/yaml.mjs             |   154 [31m-[m
+ node_modules/prettier/standalone.d.ts              |    33 [31m-[m
+ node_modules/prettier/standalone.js                |    29 [31m-[m
+ node_modules/prettier/standalone.mjs               |    29 [31m-[m
+ package-lock.json                                  |    43 [31m-[m
+ package.json                                       |     5 [31m-[m
+ posts}                                             |     0
+ wp-config-default.php                              |   107 [32m+[m
+ wp-config.php                                      |    33 [32m+[m[31m-[m
+ wp-content/database/.ht.sqlite                     |   Bin [31m58638336[m -> [32m0[m bytes
+ wp-content/plugins/din-package-lifecycle/README.md |    46 [32m+[m[31m-[m
+ .../din-package-lifecycle/assets/admin-expiry.js   |    45 [32m+[m
+ .../din-package-lifecycle/assets/admin-orders.css  |   264 [32m+[m
+ .../din-package-lifecycle/assets/admin-orders.js   |    11 [32m+[m
+ .../din-package-lifecycle/assets/packages.css      |     8 [32m+[m
+ .../din-package-lifecycle.php                      |     5 [32m+[m[31m-[m
+ .../includes/class-din-packages-admin.php          |   281 [32m+[m[31m-[m
+ .../includes/class-din-packages-customer.php       |    10 [32m+[m[31m-[m
+ .../includes/class-din-packages-mail.php           |    22 [32m+[m[31m-[m
+ .../includes/class-din-packages-orders.php         |    50 [32m+[m[31m-[m
+ .../includes/class-din-packages-requests.php       |   270 [32m+[m
+ .../includes/class-din-packages.php                |   205 [32m+[m[31m-[m
+ .../din-package-lifecycle/tests/admin-expiry.cjs   |   116 [32m+[m
+ .../din-package-lifecycle/tests/admin-smoke.php    |   384 [32m+[m[31m-[m
+ .../din-package-lifecycle/tests/core-smoke.php     |   250 [32m+[m[31m-[m
+ .../din-package-lifecycle/tests/customer-smoke.php |     6 [32m+[m[31m-[m
+ .../din-package-lifecycle/tests/mail-smoke.php     |   332 [32m+[m[31m-[m
+ .../din-package-lifecycle/tests/orders-smoke.php   |    65 [32m+[m[31m-[m
+ .../din-package-lifecycle/tests/requests-smoke.php |   297 [32m+[m
+ .../plugins/gpm-guest-post-results/plugin.php      |     2 [32m+[m[31m-[m
+ .../plugins/wps-hide-login/assets/js/functions.js  |    43 [32m+[m
+ wp-content/plugins/wps-hide-login/autoload.php     |   205 [32m+[m
+ .../plugins/wps-hide-login/classes/plugin.php      |   919 [32m+[m
+ .../plugins/wps-hide-login/classes/singleton.php   |    63 [32m+[m
+ wp-content/plugins/wps-hide-login/composer.json    |    26 [32m+[m
+ wp-content/plugins/wps-hide-login/composer.lock    |    20 [32m+[m
+ .../languages/wps-hide-login-cs_CZ.mo              |   Bin [31m0[m -> [32m3018[m bytes
+ .../languages/wps-hide-login-cs_CZ.po              |    80 [32m+[m
+ .../languages/wps-hide-login-da_DK.mo              |   Bin [31m0[m -> [32m2901[m bytes
+ .../languages/wps-hide-login-da_DK.po              |    80 [32m+[m
+ .../languages/wps-hide-login-es_ES.mo              |   Bin [31m0[m -> [32m3006[m bytes
+ .../languages/wps-hide-login-es_ES.po              |    80 [32m+[m
+ .../languages/wps-hide-login-fr_FR.mo              |   Bin [31m0[m -> [32m5017[m bytes
+ .../languages/wps-hide-login-fr_FR.po              |   183 [32m+[m
+ .../languages/wps-hide-login-it_IT.mo              |   Bin [31m0[m -> [32m2367[m bytes
+ .../languages/wps-hide-login-it_IT.po              |    80 [32m+[m
+ .../languages/wps-hide-login-ru_RU.mo              |   Bin [31m0[m -> [32m3510[m bytes
+ .../languages/wps-hide-login-ru_RU.po              |    80 [32m+[m
+ .../wps-hide-login/languages/wps-hide-login.pot    |   140 [32m+[m
+ wp-content/plugins/wps-hide-login/readme.txt       |   426 [32m+[m
+ wp-content/plugins/wps-hide-login/uninstall.php    |    47 [32m+[m
+ .../plugins/wps-hide-login/vendor/autoload.php     |     7 [32m+[m
+ .../wps-hide-login/vendor/composer/ClassLoader.php |   445 [32m+[m
+ .../vendor/composer/InstalledVersions.php          |   219 [32m+[m
+ .../plugins/wps-hide-login/vendor/composer/LICENSE |    21 [32m+[m
+ .../vendor/composer/autoload_classmap.php          |    10 [32m+[m
+ .../vendor/composer/autoload_namespaces.php        |     9 [32m+[m
+ .../vendor/composer/autoload_psr4.php              |     9 [32m+[m
+ .../vendor/composer/autoload_real.php              |    57 [32m+[m
+ .../vendor/composer/autoload_static.php            |    20 [32m+[m
+ .../wps-hide-login/vendor/composer/installed.json  |     5 [32m+[m
+ .../wps-hide-login/vendor/composer/installed.php   |    24 [32m+[m
+ .../vendor/composer/platform_check.php             |    26 [32m+[m
+ .../plugins/wps-hide-login/wps-hide-login.php      |    40 [32m+[m
+ .../hello-elementor-child/assets/css/404.css       |   371 [32m+[m
+ .../hello-elementor-child/assets/css/auth.css      |     9 [32m+[m[31m-[m
+ .../assets/css/my-account.css                      |   128 [32m+[m[31m-[m
+ .../hello-elementor-child/assets/css/shop.css      |     6 [32m+[m[31m-[m
+ .../themes/hello-elementor-child/assets/js/404.js  |    50 [32m+[m
+ .../themes/hello-elementor-child/functions.php     |    54 [32m+[m[31m-[m
+ .../hello-elementor-child/template-parts/404.php   |    49 [32m+[m
+ .../template-parts/dynamic-header.php              |     8 [32m+[m[31m-[m
+ .../hello-elementor-child/tests/404-page.cjs       |   119 [32m+[m
+ .../tests/account-navigation-smoke.php             |    42 [32m+[m
+ .../tests/account-orders-pagination-smoke.php      |    85 [32m+[m
+ .../tests/auth-styles-smoke.ps1                    |     2 [32m+[m[31m-[m
+ .../hello-elementor-child/tests/cart-header.cjs    |    14 [32m+[m[31m-[m
+ .../tests/my-account-auth-smoke.php                |   131 [32m+[m
+ .../hello-elementor-child/tests/shop-cart.cjs      |    23 [32m+[m
+ .../woocommerce/myaccount/dashboard.php            |   100 [32m+[m[31m-[m
+ .../woocommerce/myaccount/form-login.php           |   144 [32m+[m[31m-[m
+ .../woocommerce/myaccount/navigation.php           |     7 [32m+[m[31m-[m
+ .../woocommerce/myaccount/orders.php               |    28 [32m+[m[31m-[m
+ .../elementor/css/global-175-preview-desktop.css   |     1 [31m-[m
+ .../elementor/css/global-175-preview-tablet.css    |     1 [31m-[m
+ .../elementor/css/global-2-frontend-desktop.css    |     2 [32m+[m[31m-[m
+ .../elementor/css/global-2-preview-desktop.css     |     1 [31m-[m
+ .../elementor/css/global-2-preview-tablet.css      |     1 [31m-[m
+ .../elementor/css/global-97-frontend-desktop.css   |     2 [32m+[m[31m-[m
+ .../elementor/css/global-97-preview-desktop.css    |     1 [31m-[m
+ .../elementor/css/local-175-preview-desktop.css    |     1 [31m-[m
+ .../elementor/css/local-2-preview-desktop.css      |     1 [31m-[m
+ .../elementor/css/local-2-preview-mobile.css       |     1 [31m-[m
+ .../elementor/css/local-2-preview-tablet.css       |     1 [31m-[m
+ .../elementor/css/local-97-preview-desktop.css     |     1 [31m-[m
+ wp-content/uploads/elementor/css/post-793.css      |     1 [31m-[m
+ wp-content/uploads/elementor/css/post-9.css        |     1 [31m-[m
+ ...2026-08-14-8136f29554511b40e5d5c5e4d199ee33.log |    14 [31m-[m
+ ...2026-08-18-4f3312d5ecc9deaba0e441adffa04dff.log |   106 [31m-[m
+ ...2026-08-14-811c719548f61c765da29fa1a9792f11.log |    12 [31m-[m
+ ...2026-08-18-9befae8f95ca79a2d6fac09a3921952d.log |    20 [31m-[m
+ ...2026-08-12-0ca623856d0972d6c565eac0689359f6.log |     2 [31m-[m
+ ...2026-08-13-c9dac9345b5c74df0c6dad473d9ad22e.log |     2 [31m-[m
+ ...2026-08-14-2b66ba5a2c184d7c14f078f35c56f58e.log |     2 [31m-[m
+ ...2026-08-18-fe6a3d381dbeac70c3557de36beb2664.log |     2 [31m-[m
+ ...2026-08-14-d591bb2653bef07d329801b20e6eac42.log |     2 [31m-[m
+ ...2026-08-18-a69d365966e03e5d849dba92d4ec2ce2.log |     4 [31m-[m
+ ...2026-08-14-5663ff616734a44eb87976bc4508559b.log |    57 [31m-[m
+ ...2026-08-18-ba7923eb149dbcddfd0362d23b2e2a19.log |    11 [31m-[m
+ 202 files changed, 7218 insertions(+), 60350 deletions(-)
