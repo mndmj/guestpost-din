@@ -64,12 +64,17 @@ class Form_Data
 
                 list($map_data, $form_data, $checking_result) = self::condition_criteria_match($map_data, $key, $conditions, $form_data, $checking_result);
 
-                 if ($no_of_condition > 1 && $condition_match_criteria == "or") {
-                    if (!in_array(true, $checking_result)) {
-                        continue;
+                if (!empty($map_data[$key]["mf_conditional_logic_form_enable"]) && $map_data[$key]["mf_conditional_logic_form_enable"] == "yes" && $no_of_condition > 0) {
+                    $condition_action = !empty($map_data[$key]["mf_conditional_logic_form_action"]) ? $map_data[$key]["mf_conditional_logic_form_action"] : 'show';
+
+                    if ($condition_match_criteria == "or") {
+                        $is_validated = in_array(true, $checking_result, true);
+                    } else {
+                        $is_validated = !in_array(false, $checking_result, true);
                     }
-                } else {
-                    if (in_array(false, $checking_result)) {
+
+                    $should_hide = ($condition_action === 'hide') ? $is_validated : !$is_validated;
+                    if ($should_hide) {
                         continue;
                     }
                 }
@@ -168,7 +173,11 @@ class Form_Data
 
                 // ── Signature ─────────────────────────────────────────
                 if (isset($value['widgetType']) && $value['widgetType'] == 'mf-signature') {
-                    echo "<img class='mf-entries-signature-img' src='" . esc_attr(isset($form_data[$key]) ? $form_data[$key] : '') . "'>";
+                    if (!empty($form_data[$key])) {
+                        echo "<img class='mf-entries-signature-img' src='" . esc_attr($form_data[$key]) . "'>";
+                    } else {
+                        echo esc_html__('No signature provided', 'metform');
+                    }
                 }
 
                 // ── Textarea ──────────────────────────────────────────
@@ -283,12 +292,17 @@ class Form_Data
 
                         list($map_data, $form_data, $checking_result) = self::condition_criteria_match($map_data, $key, $conditions, $form_data, $checking_result);
 
-                        if ($no_of_condition > 1 && $condition_match_criteria == "or") {
-                            if (!in_array(true, $checking_result)) {
-                                continue;
+                        if (!empty($map_data[$key]["mf_conditional_logic_form_enable"]) && $map_data[$key]["mf_conditional_logic_form_enable"] == "yes" && $no_of_condition > 0) {
+                            $condition_action = !empty($map_data[$key]["mf_conditional_logic_form_action"]) ? $map_data[$key]["mf_conditional_logic_form_action"] : 'show';
+
+                            if ($condition_match_criteria == "or") {
+                                $is_validated = in_array(true, $checking_result, true);
+                            } else {
+                                $is_validated = !in_array(false, $checking_result, true);
                             }
-                        } else {
-                            if (in_array(false, $checking_result)) {
+
+                            $should_hide = ($condition_action === 'hide') ? $is_validated : !$is_validated;
+                            if ($should_hide) {
                                 continue;
                             }
                         }
@@ -401,7 +415,11 @@ class Form_Data
                         }                      
                         
                         if (isset($value['widgetType']) && $value['widgetType'] == 'mf-signature') {
-                            echo "<td><img class='signature-img' src='" . esc_attr(isset($form_data[$key]) ? $form_data[$key] : '') . "'></td>";
+                            if (!empty($form_data[$key])) {
+                                echo "<td><img class='signature-img' src='" . esc_attr($form_data[$key]) . "'></td>";
+                            } else {
+                                echo "<td>" . esc_html__('No signature provided', 'metform') . "</td>";
+                            }
                         }
 
                         if (isset($value['widgetType']) && $value['widgetType'] == 'mf-textarea') {
@@ -509,7 +527,7 @@ class Form_Data
     {
         if (!empty($map_data[$key]["mf_conditional_logic_form_enable"]) && $map_data[$key]["mf_conditional_logic_form_enable"] == "yes") {
 
-            foreach ($conditions as $key=> $condition) {
+            foreach ($conditions as $condition_key => $condition) {
 
                 $conditional_field_name = !empty($condition["mf_conditional_logic_form_if"]) ? $condition["mf_conditional_logic_form_if"] : '';
 
@@ -538,11 +556,32 @@ class Form_Data
                 }
 
                 $conditional_value_data = !empty($form_data[$conditional_field_name]) ? $form_data[$conditional_field_name] : '';
-                $condition_value_array = explode(",",$conditional_value_data);
+                $condition_value_array = explode(",", $conditional_value_data);
 
-                $condition_value_index = array_search($conditional_field_value, $condition_value_array);
+                $is_switch = false;
+                if (isset($map_data[$conditional_field_name]['widgetType']) && $map_data[$conditional_field_name]['widgetType'] === 'mf-switch') {
+                    $is_switch = true;
+                } else {
+                    foreach ($map_data as $field) {
+                        if (isset($field['mf_input_name']) && $field['mf_input_name'] === $conditional_field_name && isset($field['widgetType']) && $field['widgetType'] === 'mf-switch') {
+                            $is_switch = true;
+                            break;
+                        }
+                    }
+                }
 
-                $conditional_value = isset($condition_value_array[$condition_value_index])? $condition_value_array[$condition_value_index] : "";
+                if ($is_switch && in_array($conditional_operator, ['==', '!='])) {
+                    $lower_array = array_map('strtolower', $condition_value_array);
+                    $condition_value_index = array_search(strtolower($conditional_field_value), $lower_array);
+                    $conditional_value = isset($condition_value_array[$condition_value_index]) ? $condition_value_array[$condition_value_index] : "";
+
+                    if (strcasecmp($conditional_value, $conditional_field_value) === 0) {
+                        $conditional_field_value = $conditional_value;
+                    }
+                } else {
+                    $condition_value_index = array_search($conditional_field_value, $condition_value_array);
+                    $conditional_value = isset($condition_value_array[$condition_value_index]) ? $condition_value_array[$condition_value_index] : "";
+                }
 
                 $criteria_match = static::criteriaMet($conditional_value, $conditional_operator, $conditional_field_value);
                 array_push($checking_result, $criteria_match);

@@ -5,7 +5,7 @@ namespace MetForm\Core\Integrations\Onboard\Classes;
 defined( 'ABSPATH' ) || exit;
 
 class Ajax {
-	
+
 	private $utils;
 
 	public function __construct() {

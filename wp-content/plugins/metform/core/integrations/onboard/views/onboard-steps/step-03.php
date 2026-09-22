@@ -143,9 +143,9 @@ echo esc_html__('Take your website to the next level', 'metform'); ?></strong></
     </div>
 </div>
 <div class="mf-onboard-shapes">
-    <img src="<?php echo esc_url(self::get_url()); ?>assets/images/shape-06.png" alt="" class="shape-06">
-    <img src="<?php echo esc_url(self::get_url()); ?>assets/images/shape-10.png" alt="" class="shape-10">
-    <img src="<?php echo esc_url(self::get_url()); ?>assets/images/shape-11.png" alt="" class="shape-11">
-    <img src="<?php echo esc_url(self::get_url()); ?>assets/images/shape-12.png" alt="" class="shape-12">
-    <img src="<?php echo esc_url(self::get_url()); ?>assets/images/shape-13.png" alt="" class="shape-13">
+    <img src="<?php echo esc_url(self::image_url('onboard/shape-06.png')); ?>" alt="" class="shape-06">
+    <img src="<?php echo esc_url(self::image_url('onboard/shape-10.png')); ?>" alt="" class="shape-10">
+    <img src="<?php echo esc_url(self::image_url('onboard/shape-11.png')); ?>" alt="" class="shape-11">
+    <img src="<?php echo esc_url(self::image_url('onboard/shape-12.png')); ?>" alt="" class="shape-12">
+    <img src="<?php echo esc_url(self::image_url('onboard/shape-13.png')); ?>" alt="" class="shape-13">
 </div>

@@ -132,7 +132,6 @@ Class MetForm_Input_Range extends Widget_Base{
 			[
 				'label' => esc_html__( 'Default Value', 'metform' ),
 				'type' => Controls_Manager::NUMBER,
-				'default' => 0,
 				'condition' => [
 					'mf_input_range_control' => ['false', '']
 				]
@@ -144,7 +143,6 @@ Class MetForm_Input_Range extends Widget_Base{
 			[
 				'label' => esc_html__( 'Default Value', 'metform' ),
 				'type' => Controls_Manager::TEXT,
-				'default' => 0,
 				'condition' => [
 					'mf_input_range_control' => 'true'
 				]
@@ -536,16 +534,16 @@ Class MetForm_Input_Range extends Widget_Base{
 			<?php
 				$default_value = '';
 
-				if($mf_input_range_control){
+				if ($mf_input_range_control == 'true') {
 					$mf_input_range_default_value = $mf_input_dual_range_default_value;
 				} 
 
-				if(!empty($mf_input_range_default_value)){
-					if(is_numeric($mf_input_range_default_value)){
-						$default_value = $mf_input_range_default_value;
+				if ($mf_input_range_default_value !== '' && $mf_input_range_default_value !== null) {
+					if (is_numeric($mf_input_range_default_value)) {
+						$default_value = (string) $mf_input_range_default_value;
 					} elseif (is_string($mf_input_range_default_value)) {
 						$split_text = explode(',', $mf_input_range_default_value);
-						if(is_numeric(trim($split_text[0])) && is_numeric(trim($split_text[1]))){
+						if (isset($split_text[0]) && isset($split_text[1]) && is_numeric(trim($split_text[0])) && is_numeric(trim($split_text[1]))) {
 							$default_value = trim($split_text[0]) . ',' . trim($split_text[1]);
 						}
 					}
@@ -565,10 +563,10 @@ Class MetForm_Input_Range extends Widget_Base{
 					}}
 					value=${
 						parent.state.formData['<?php echo esc_attr($mf_input_name); ?>'] ? {min: parent.state.formData['<?php echo esc_attr($mf_input_name); ?>']['0'], max: parent.state.formData['<?php echo esc_attr($mf_input_name); ?>']['1']} : {min: 
-						<?php if(esc_attr($default_value)) { ?>
+						<?php if($default_value !== '') { ?>
 							<?php echo esc_attr(isset($multipile_value[1]) ? ($mf_input_min_length_range <= $multipile_value[0] ? $multipile_value[0] : $mf_input_min_length_range) : $multipile_value[0]) ?>
 							<?php } else { echo esc_attr(($mf_input_min_length_range != '') ? $mf_input_min_length_range : 0); } ?>, max: 
-								<?php if(esc_attr($default_value)) { ?>
+								<?php if($default_value !== '') { ?>
 							<?php echo esc_attr(isset($multipile_value[1]) ? ($mf_input_max_length_range <= $multipile_value[1] ? $mf_input_max_length_range : $multipile_value[1]) : 100) ?>
 						<?php } else { echo esc_attr(($mf_input_max_length_range != '') ? $mf_input_max_length_range : 100); } ?>
 						}
@@ -577,10 +575,15 @@ Class MetForm_Input_Range extends Widget_Base{
                     formatLabel=${ val => `<?php echo isset($mf_input_enable_range_prefix) && $mf_input_enable_range_prefix === 'yes' ? esc_js($mf_input_range_prefix_text) . ' ' : ''; ?>${val}<?php echo isset($mf_input_enable_range_suffix) && $mf_input_enable_range_suffix === 'yes' ? ' ' . esc_js($mf_input_range_suffix_text) : ''; ?>`}
                     <?php endif; ?>
 					ref=${input => {
-						register({ name: "<?php echo esc_attr($mf_input_name); ?>" }, parent.activateValidation(<?php echo json_encode($configData); ?>));
+						register("<?php echo esc_attr($mf_input_name); ?>", parent.activateValidation(<?php echo json_encode($configData); ?>));
 
-						if (<?php echo esc_attr($default_value ? 'true' : 'false'); ?>) {
-							!parent.state.formData['<?php echo esc_attr($mf_input_name); ?>'] ? parent.state.formData['<?php echo esc_attr($mf_input_name); ?>'] = <?php echo json_encode($multipile_value); ?> : ''
+						if (<?php echo ($default_value !== '') ? 'true' : 'false'; ?>) {
+							if (!parent.state.formData['<?php echo esc_attr($mf_input_name); ?>']) {
+								parent.handleMultipileRangeChange({
+									min: <?php echo esc_attr(isset($multipile_value[0]) ? $multipile_value[0] : 0); ?>,
+									max: <?php echo esc_attr(isset($multipile_value[1]) ? $multipile_value[1] : 100); ?>
+								}, '<?php echo esc_attr($mf_input_name); ?>');
+							}
 						}
 					}}
 					name="<?php echo esc_attr($mf_input_name); ?>"
@@ -594,7 +597,7 @@ Class MetForm_Input_Range extends Widget_Base{
 							parent.handleRangeChange(el, '<?php echo esc_attr($mf_input_name); ?>')
 						}}
 						value=${<?php 
-							if(esc_attr($default_value)) { ?>
+							if($default_value !== '') { ?>
 								isNaN(Number(parent.state.formData['<?php echo esc_attr($mf_input_name); ?>'])) ? <?php if ($mf_input_min_length_range <= $multipile_value[0]) {
 									echo $multipile_value[0] >= $mf_input_max_length_range ? esc_attr($mf_input_max_length_range) : esc_attr($multipile_value[0]);
 								} else {
@@ -608,15 +611,15 @@ Class MetForm_Input_Range extends Widget_Base{
                         formatLabel=${ val => `<?php echo isset($mf_input_enable_range_prefix) && $mf_input_enable_range_prefix === 'yes' ? esc_js($mf_input_range_prefix_text) . ' ' : ''; ?>${val}<?php echo isset($mf_input_enable_range_suffix) && $mf_input_enable_range_suffix === 'yes' ? ' ' . esc_js($mf_input_range_suffix_text) : ''; ?>`}
                         <?php endif; ?>
 						ref=${ input => {
-							register({ name: "<?php echo esc_attr($mf_input_name); ?>" }, parent.activateValidation(<?php echo json_encode($configData); ?>));
-							if ( parent.getValue("<?php echo esc_attr($mf_input_name); ?>") === '' && <?php echo !empty($default_value) ? 'true' : 'false'; ?> ) {
+							register("<?php echo esc_attr($mf_input_name); ?>", parent.activateValidation(<?php echo json_encode($configData); ?>));
+							if ( parent.getValue("<?php echo esc_attr($mf_input_name); ?>") === '' && <?php echo ($default_value !== '') ? 'true' : 'false'; ?> ) {
 								parent.handleChange({
 									target: {
 										name: '<?php echo esc_attr($mf_input_name); ?>',
-										value: '<?php echo !empty($default_value) ? esc_attr($default_value) : ''; ?>'
+										value: '<?php echo esc_attr($default_value); ?>'
 									}
 								});
-								parent.setValue( '<?php echo esc_attr($mf_input_name); ?>', '<?php echo !empty($default_value) ?esc_attr($default_value) : ''; ?>', true );
+								parent.setValue( '<?php echo esc_attr($mf_input_name); ?>', '<?php echo esc_attr($default_value); ?>', true );
 							}
 						} }
 						name="<?php echo esc_attr($mf_input_name); ?>" 

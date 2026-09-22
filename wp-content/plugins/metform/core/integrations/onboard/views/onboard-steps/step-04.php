@@ -30,9 +30,9 @@ echo esc_html__('Check Out the Easy to Understand Video Tutorials to learn the d
     <a class="mf-onboard-btn mf-onboard-pagi-btn next" href="#"><?php echo esc_html__('Next', 'metform'); ?></a>
 </div>
 <div class="mf-onboard-shapes">
-    <img src="<?php echo esc_url(self::get_url()); ?>assets/images/onboard/shape-07.png" alt="" class="shape-07">
-    <img src="<?php echo esc_url(self::get_url()); ?>assets/images/onboard/shape-14.png" alt="" class="shape-14">
-    <img src="<?php echo esc_url(self::get_url()); ?>assets/images/onboard/shape-15.png" alt="" class="shape-15">
-    <img src="<?php echo esc_url(self::get_url()); ?>assets/images/onboard/shape-16.png" alt="" class="shape-16">
-    <img src="<?php echo esc_url(self::get_url()); ?>assets/images/onboard/shape-17.png" alt="" class="shape-17">
+    <img src="<?php echo self::image_url('onboard/shape-07.png'); ?>" alt="" class="shape-07">
+    <img src="<?php echo self::image_url('onboard/shape-14.png'); ?>" alt="" class="shape-14">
+    <img src="<?php echo self::image_url('onboard/shape-15.png'); ?>" alt="" class="shape-15">
+    <img src="<?php echo self::image_url('onboard/shape-16.png'); ?>" alt="" class="shape-16">
+    <img src="<?php echo self::image_url('onboard/shape-17.png'); ?>" alt="" class="shape-17">
 </div>

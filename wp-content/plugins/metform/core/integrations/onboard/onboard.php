@@ -39,6 +39,18 @@ class Onboard {
         return Plugin::instance()->core_url() . 'integrations/onboard/';
     }
 
+	public static function plugin_url(){
+		return Plugin::instance()->plugin_url();
+	}
+
+	public static function image_url( $path = '' ){
+		$build_dir = Plugin::instance()->plugin_dir() . 'build/assets/images/';
+		if ( ! is_dir( $build_dir ) ) {
+			return '';
+		}
+		return esc_url( self::plugin_url() . 'build/assets/images/' . $path );
+	}
+
 	public function init() {
 
 		new Classes\Ajax;

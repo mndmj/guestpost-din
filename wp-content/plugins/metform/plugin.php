@@ -2,6 +2,8 @@
 
 namespace MetForm;
 
+use MetForm\Base\Assets_Enqueue;
+use MetForm\Base\Assets_Register;
 use MetForm\Core\Integrations\Onboard\Attr;
 use MetForm\Core\Integrations\Emailkit_Builder;
 use MetForm\Core\Integrations\Onboard\Onboard;
@@ -30,7 +32,7 @@ final class Plugin {
 
     public function version()
     {
-        return '4.2.0';
+        return METFORM_VERSION;
     }
 
     public function package_type()
@@ -47,6 +49,7 @@ final class Plugin {
     {
         return trailingslashit(plugin_dir_path(__FILE__));
     }
+
 
     public function core_url()
     {
@@ -115,14 +118,14 @@ final class Plugin {
         if( ! isset($_GET['redirect_from']) || ! $_GET['redirect_from'] == 'mf_promo_banner'){
 
             Onboard::instance()->init();
-    
+
             if(isset($_GET['met-onboard-steps']) && isset($_GET['met-onboard-steps-nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_GET['met-onboard-steps-nonce'])),'met-onboard-steps-action')) {
                 Attr::instance();
             }
         }
 
         if( get_option('rewrite_rules') == '' && isset($_GET['redirect_from']) && $_GET['redirect_from'] == 'mf_promo_banner'){
-            
+
             add_action('init', function() {
                 Utils\Util::change_permalink();
             });
@@ -136,7 +139,7 @@ final class Plugin {
         $filter_string .= (!class_exists('\MetForm_Pro\Plugin') ? '' : ',metform-pro');
 
         if ( is_admin() && \MetForm\Utils\Util::get_settings( 'metform_user_consent_for_banner', 'yes' ) == 'yes' ) {
-      
+
             //Rating notice
             \Wpmet\Libs\Rating::instance('metform')
             ->set_plugin_logo('https://ps.w.org/metform/assets/icon-128x128.png')
@@ -171,9 +174,9 @@ final class Plugin {
         }
 
 
-    
+
         if( class_exists('WooCommerce') && !class_exists('EmailKit') && !did_action('edit_with_emailkit_loaded') && class_exists('\Wpmet\Libs\Emailkit') && \MetForm\Utils\Util::get_settings( 'metform_user_consent_for_banner', 'yes' ) == 'yes') {
-            new \Wpmet\Libs\Emailkit();        
+            new \Wpmet\Libs\Emailkit();
         }
 
         // Check if Elementor installed and activated.
@@ -207,20 +210,21 @@ final class Plugin {
         if(current_user_can('manage_options') && $my_theme->get('Name') == 'Cleano'){
             add_action( 'admin_enqueue_scripts', [$this, 'cleanoThemeConflict'], 100 );
         }
-        
+
         add_action('elementor/frontend/before_enqueue_scripts', [$this, 'elementor_js']);
 
         add_action('elementor/editor/before_enqueue_styles', [$this, 'elementor_css']);
 
         add_action('admin_footer', [$this, 'footer_data']);
 
-       
+
         Controls\Base::instance()->init();
 
         Widgets\Manifest::instance()->init();
 
         // settings page
         Core\Admin\Base::instance()->init();
+
 
         Core\Forms\Auto_Increment_Entry::instance();
 
@@ -239,7 +243,7 @@ final class Plugin {
         if ( ! function_exists( 'is_plugin_active' ) ) {
             require_once ABSPATH . 'wp-admin/includes/plugin.php';
         }
-        
+
         if ( is_plugin_active( 'enhanced-tooltipglossary/enhanced-tooltipglossary.php' ) ) {
             add_filter( 'the_content', function( $content ) {
                 global $cmtt_metform_scripts;
@@ -273,6 +277,7 @@ final class Plugin {
     function metform_load_textdomain_on_init(){
 
         $apps_img_path = $this->public_url() . 'assets/img/apps-page/';
+        $apps_plugin_url = $this->plugin_url() . 'build/assets/images/apps-page/';
 
         /**
          * Show apps menu for others wpmet plugins
@@ -288,14 +293,14 @@ final class Plugin {
             'elementskit-lite/elementskit-lite.php' => [
                 'name' => esc_html__('ElementsKit', 'metform'),
                 'url'  => 'https://wordpress.org/plugins/elementskit-lite/',
-                'icon' => $apps_img_path. 'elementskit.gif',
+                'icon' => $apps_plugin_url. 'elementskit.gif',
                 'desc' => esc_html__('All-in-one Elementor addon trusted by 1 Million+ users, makes your website builder process easier with ultimate freedom.', 'metform'),
                 'docs' => 'https://wpmet.com/doc/elementskit/',
             ],
             'gutenkit-blocks-addon/gutenkit-blocks-addon.php' => [
                 'name' => esc_html__('GutenKit', 'metform'),
                 'url'  => 'https://wordpress.org/plugins/gutenkit-blocks-addon/',
-                'icon' => $apps_img_path. 'guten-kit.png',
+                'icon' => $apps_plugin_url. 'guten-kit.png',
                 'desc' => esc_html__('Gutenberg blocks, patterns, and templates that extend the page-building experience using the WordPress block editor.', 'metform'),
                 'docs' => 'https://wpmet.com/doc/gutenkit/',
             ],
@@ -316,7 +321,7 @@ final class Plugin {
             'shopengine/shopengine.php' => [
                 'name' => esc_html__('ShopEngine', 'metform'),
                 'url'  => 'https://wordpress.org/plugins/shopengine/',
-                'icon' => $apps_img_path. 'shopengine.gif',
+                'icon' => $apps_plugin_url. 'shopengine.gif',
                 'desc' => esc_html__('Complete WooCommerce solution for Elementor to fully customize any pages including cart, checkout, shop page, and so on.
                 ', 'metform'),
                 'docs' => 'https://wpmet.com/doc/shopengine/',
@@ -338,36 +343,36 @@ final class Plugin {
             'getgenie/getgenie.php' => [
                 'name' => esc_html__('GetGenie', 'metform'),
                 'url'  => 'https://wordpress.org/plugins/getgenie/',
-                'icon' => $apps_img_path.'getgenie.gif',
+                'icon' => $apps_plugin_url.'getgenie.gif',
                 'desc' => esc_html__('Your personal AI assistant for content and SEO. Write content that ranks on Google with NLP keywords and SERP analysis data.', 'metform'),
                 'docs' => 'https://getgenie.ai/docs/',
             ],
             'emailkit/EmailKit.php' => [
                 'name' => esc_html__('EmailKit', 'metform'),
                 'url'  => 'https://wordpress.org/plugins/emailkit/',
-                'icon' => $apps_img_path . 'emailkit.png',
+                'icon' => $apps_plugin_url . 'emailkit.png',
                 'desc' => esc_html__('Advanced email customizer for WooCommerce and WordPress. Build, customize, and send emails from WordPress to boost your sales!', 'metform'),
                 'docs' => 'https://wpmet.com/doc/emailkit/',
             ],
             'wp-social/wp-social.php' => [
                 'name' => esc_html__('Wp Social', 'metform'),
                 'url'  => 'https://wordpress.org/plugins/wp-social/',
-                'icon' => $apps_img_path . 'wp-social.png',
+                'icon' => $apps_plugin_url . 'wp-social.png',
                 'desc' => esc_html__('Add social share, login, and engagement counter — unified solution for all social media with tons of different styles for your website.', 'metform'),
                 'docs' => 'https://wpmet.com/doc/wp-social/',
             ],
             'blocks-for-shopengine/shopengine-gutenberg-addon.php' => [
                 'name' => esc_html__('Blocks for ShopEngine', 'metform'),
                 'url'  => 'https://wordpress.org/plugins/blocks-for-shopengine/',
-                'icon' => $apps_img_path . 'shopengine.gif',
+                'icon' => $apps_plugin_url . 'shopengine.gif',
                 'desc' => esc_html__('All in one WooCommerce solution for Gutenberg! Build your WooCommerce pages in a block editor with full customization.', 'metform'),
                 'docs' => 'https://wpmet.com/doc/shopengine/',
             ],
-           
+
         ]
         )
         ->call();
-        
+
 
          /**
          * Pro awareness feature;
@@ -432,11 +437,11 @@ final class Plugin {
         Core\Forms\Base::instance()->init();
         Core\Analytics\Base::instance()->init();
         $this->entries = Core\Entries\Base::instance();
-        
+
      }
 
     function metform_editor_script(){
-	    	wp_enqueue_script('metform-editor-panel-script', $this->public_url() . '/assets/js/editor-panel.js', ['jquery'], $this->version(), true);
+            Assets_Enqueue::get_script('metform-editor-panel-script');
     }
 
     function js_css_public()
@@ -444,16 +449,20 @@ final class Plugin {
         $this->global_settings = \MetForm\Core\Admin\Base::instance()->get_settings_option();
         $is_form_cpt = ('metform-form' === get_post_type());
 
-        wp_register_style('metform-ui', $this->public_url() . 'assets/css/metform-ui.css', false, $this->version());
 
-        wp_register_style('metform-style', $this->public_url() . 'assets/css/style.css', false, $this->version());
+        Assets_Register::get_style('metform-ui');
+        Assets_Register::get_style('metform-style');
+        Assets_Register::get_style('metform-icon');
 
-        wp_register_style('text-editor-style', $this->public_url() . 'assets/css/text-editor.css', false, $this->version());
+        // wp_register_style('text-editor-style', $this->public_url() . 'assets/css/text-editor.css', false, $this->version());
+        Assets_Register::get_style('text-editor-style');
 
-        wp_register_script('htm', $this->public_url() . 'assets/js/htm.js', null, $this->version(), true);
+        // wp_register_script('htm', $this->public_url() . 'assets/js/htm.js', null, $this->version(), true);
+        Assets_Register::get_script('htm');
 
-        wp_register_script('metform-app', $this->public_url() . 'assets/js/app.js', ['htm', 'jquery', 'wp-element'], $this->version(), true);
-        wp_register_script('mf-widget-frontend', $this->public_url() . 'assets/js/widget-forntend.js', ['metform-app'], $this->version(), true);
+        Assets_Register::get_script('metform-app');
+        wp_set_script_translations( 'metform-app', 'metform' );
+        Assets_Enqueue::get_script('mf-widget-frontend');
 
         wp_localize_script('metform-app', 'mf', [
             'postType' => get_post_type(),
@@ -466,16 +475,14 @@ final class Plugin {
         ]);
 
         // Recaptcha Support Script.
-        wp_register_script( 'recaptcha-support', $this->public_url() . 'assets/js/recaptcha-support.js', ['jquery'], $this->version(), true );
+        Assets_Register::get_script('recaptcha-support');
 
 
         // begins pro feature
         // begins for mf-simple-repeater
-        wp_register_style('asRange', $this->public_url() . 'assets/css/asRange.min.css', false, $this->version());
-        wp_register_script('asRange', $this->public_url() . 'assets/js/jquery-asRange.min.js', [], $this->version(), true);
-        wp_enqueue_script('cute-alert', $this->public_url() . 'assets/lib/cute-alert/cute-alert.js', [], $this->version(), true);
-        wp_register_style('mf-select2', $this->public_url() . 'assets/css/select2.min.css', false, $this->version());
-        wp_register_script('mf-select2', $this->public_url() . 'assets/js/select2.min.js', [], $this->version(), true);
+        Assets_Register::get('asRange');
+        Assets_Enqueue::get_script('cute-alert');
+        Assets_Register::get('mf-select2');
         // ends for mf-simple-repeater
 
         wp_register_script('recaptcha-v2', 'https://google.com/recaptcha/api.js?render=explicit', [], null, true);
@@ -489,35 +496,35 @@ final class Plugin {
         }
 
         // for date, time, simple repeater
-        wp_deregister_style('flatpickr'); // flatpickr stylesheet
-        wp_register_style('flatpickr', $this->public_url() . 'assets/css/flatpickr.min.css', false, $this->version()); // flatpickr stylesheet
-        wp_enqueue_style('cute-alert', $this->public_url() . 'assets/lib/cute-alert/style.css', false, $this->version());
+        Assets_Register::remove_script('flatpickr'); // flatpickr stylesheet
+        Assets_Register::get_style('flatpickr'); // deregister handled via the 'deregister' flag on the definition
+        Assets_Enqueue::get_style('cute-alert');
         // ends pro feature
 
+        Assets_Enqueue::get_style('text-editor-style');
 
-        wp_enqueue_style('text-editor-style');
-        
         if($is_form_cpt){
-            wp_enqueue_style('metform-ui');
-            wp_enqueue_style('metform-style');
-            wp_enqueue_script('htm');
-            wp_enqueue_script('metform-app');
-            wp_enqueue_script('mf-widget-frontend');
-        } 
+            Assets_Enqueue::get_style('metform-ui');
+            Assets_Enqueue::get_style('metform-style');
+            // wp_enqueue_script('htm');
+            Assets_Enqueue::get_script('htm');
+            Assets_Enqueue::get_script('metform-app');
+            Assets_Enqueue::get_script('mf-widget-frontend');
+        }
 
         do_action('metform/onload/enqueue_scripts');
     }
 
-   
+
 
     public function edit_view_scripts()
     {
-        wp_enqueue_style('metform-ui', $this->public_url() . 'assets/css/metform-ui.css', false, $this->version());
-        wp_enqueue_style('metform-icon', $this->public_url() . 'assets/mf-icon/mf-icon.css', false, $this->version());
-        wp_enqueue_style('metform-admin-style', $this->public_url() . 'assets/css/admin-style.css', false, $this->version());
-
-        wp_enqueue_script('metform-ui', $this->public_url() . 'assets/js/ui.min.js', [], $this->version(), true);
-        wp_enqueue_script('metform-admin-script', $this->public_url() . 'assets/js/admin-script.js', [], null, true);
+        Assets_Enqueue::get_style('metform-ui');
+        Assets_Enqueue::get_style('metform-icon');
+        Assets_Enqueue::get_style('metform-admin-style');
+        Assets_Enqueue::get_script('metform-ui');
+        Assets_Enqueue::get_script('metform-admin-script');
+        wp_set_script_translations( 'metform-admin-script', 'metform' );
 
         wp_add_inline_script('metform-admin-script', "
             var metform_api = {
@@ -533,7 +540,7 @@ final class Plugin {
     public function elementor_css()
     {
         if ('metform-form' == get_post_type()) {
-            wp_enqueue_style('metform-category-top', $this->public_url() . 'assets/css/category-top.css', false, $this->version());
+            Assets_Enqueue::get_style('metform-category-top');
         }
     }
 
@@ -554,19 +561,17 @@ final class Plugin {
 
     function js_css_admin()
     {
-
-
-        wp_enqueue_style( 'mf-wp-dashboard', $this->core_url() . 'admin/css/mf-wp-dashboard.css', [], $this->version() );
+        Assets_Enqueue::get_style('mf-wp-dashboard');
 
         $screen = get_current_screen();
 
         if (in_array($screen->id, ['edit-metform-form', 'metform_page_mt-form-settings', 'metform-entry', 'metform_page_metform-menu-settings'])) {
-            wp_enqueue_style('metform-admin-fonts', $this->public_url() . 'assets/admin-fonts.css', false, $this->version());
-            wp_enqueue_style('metform-ui', $this->public_url() . 'assets/css/metform-ui.css', false, $this->version());
-            wp_enqueue_style('metform-admin-style', $this->public_url() . 'assets/css/admin-style.css', false, $this->version());
-
-            wp_enqueue_script('metform-ui', $this->public_url() . 'assets/js/ui.min.js', [], $this->version(), true);
-            wp_enqueue_script('metform-admin-script', $this->public_url() . 'assets/js/admin-script.js', [], null, true);
+            Assets_Enqueue::get_style('metform-admin-fonts');
+            Assets_Enqueue::get_style('metform-ui');
+            Assets_Enqueue::get_style('metform-admin-style');
+            Assets_Enqueue::get_script('metform-ui');
+            Assets_Enqueue::get_script('metform-admin-script');
+            wp_set_script_translations( 'metform-admin-script', 'metform' );
             wp_localize_script('metform-admin-script', 'metform_api', ['resturl' => get_rest_url(), 'admin_url' => get_admin_url()]);
 
             wp_localize_script('metform-admin-script', 'metform_emailkit_config', [
@@ -578,13 +583,13 @@ final class Plugin {
         }
 
         if (in_array($screen->id, ['edit-metform-entry', 'metform-entry', 'edit-metform-form'])) {
-            wp_enqueue_style('admin-form-list-style', $this->public_url() . 'assets/css/admin-form-list-style.css', [], $this->version());
+            Assets_Enqueue::get_style('admin-form-list-style');
         }
 
         if ($screen->id == 'edit-metform-entry' || $screen->id == 'metform-entry') {
-            wp_enqueue_style('metform-ui', $this->public_url() . 'assets/css/metform-ui.css', false, $this->version());
-            wp_enqueue_style('metform-admin-entries-view', $this->public_url() . 'assets/css/admin-entries-view.css', false, $this->version());
-            wp_enqueue_script('metform-entry-script', $this->public_url() . 'assets/js/admin-entry-script.js', [], $this->version(), true);
+            Assets_Enqueue::get_style('metform-ui');
+            Assets_Enqueue::get_style('metform-admin-entries-view-css');
+            Assets_Enqueue::get_script('metform-entry-script');
             wp_localize_script('metform-entry-script', 'metform_entry_i18n', [
                 'bulk_actions'  => esc_html__('Bulk actions', 'metform'),
                 'move_to_trash' => esc_html__('Move to Trash', 'metform'),
@@ -595,9 +600,9 @@ final class Plugin {
             ]);
         }
 
-        if ($screen->id == 'edit-metform-form') {
-            wp_enqueue_style('metform-admin-entries-view', $this->public_url() . 'assets/css/admin-entries-view.css', [], $this->version());
-            wp_enqueue_script('metform-form-script', $this->public_url() . 'assets/js/admin-form-script.js', ['jquery'], $this->version(), true);
+         if ($screen->id == 'edit-metform-form') {
+            Assets_Enqueue::get_style('metform-admin-entries-view-css');
+            Assets_Enqueue::get_script('metform-form-script');
             wp_localize_script('metform-form-script', 'metform_form_i18n', [
                 'bulk_actions'  => esc_html__('Bulk actions', 'metform'),
                 'move_to_trash' => esc_html__('Move to Trash', 'metform'),
@@ -612,7 +617,7 @@ final class Plugin {
 	 *
 	 */
 	public function add_meta_for_search_excluded() {
-       
+
 
 
 		if ( in_array(get_post_type(), ['metform-form']) ) {
@@ -658,7 +663,7 @@ final class Plugin {
             'read',
             'metform-menu',
             '',
-            $this->core_url() . 'admin/images/icon-menu.png',
+            $this->plugin_url() . 'build/assets/images/admin/icon-menu.png',
             5
         );
     }
@@ -723,7 +728,7 @@ final class Plugin {
     }
 
     public function metform_permalink_setup(){
-       
+
         Utils\Util::permalink_setup();
     }
 
@@ -733,27 +738,27 @@ final class Plugin {
      */
     public function hide_other_plugin_notices() {
         $screen = get_current_screen();
-        
+
         if (!$screen) {
             return;
         }
-        
+
         // Check if current page is a MetForm page by screen ID
         $is_metform_page = (strpos($screen->id, 'metform') !== false);
-        
+
         // Also check for post_type parameter
         if (!$is_metform_page && isset($_GET['post_type'])) {
             $post_type = sanitize_text_field($_GET['post_type']);
             $is_metform_page = (strpos($post_type, 'metform') !== false);
         }
-        
+
         // Check if current page is a MetForm page
         if ($is_metform_page) {
             global $wp_filter;
-            
+
             // Store MetForm notices before removing all
             $metform_notices = [];
-            
+
             if (isset($wp_filter['admin_notices'])) {
                 foreach ($wp_filter['admin_notices']->callbacks as $priority => $callbacks) {
                     foreach ($callbacks as $key => $callback) {
@@ -769,11 +774,11 @@ final class Plugin {
                     }
                 }
             }
-            
+
             // Remove all admin notices
             remove_all_actions('admin_notices');
             remove_all_actions('all_admin_notices');
-            
+
             // Re-add only MetForm notices
             if (!empty($metform_notices)) {
                 foreach ($metform_notices as $priority => $callbacks) {

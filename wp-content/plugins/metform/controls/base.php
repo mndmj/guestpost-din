@@ -1,11 +1,11 @@
-<?php 
+<?php
 namespace MetForm\Controls;
-
+use MetForm\Base\Assets_Enqueue;
 defined( 'ABSPATH' ) || exit;
 
 class Base{
 
-    use \MetForm\Traits\Singleton; 
+    use \MetForm\Traits\Singleton;
 
     // Instance of all control's base class
     // ##readhere
@@ -16,6 +16,8 @@ class Base{
         return \MetForm\Plugin::instance()->plugin_dir() . 'controls/';
     }
 
+
+
     public function init() {
 
         // Includes necessary files
@@ -25,8 +27,10 @@ class Base{
         add_action('elementor/controls/controls_registered', array( $this, 'formpicker' ), 11 );
 
         // Initilizating control scripts
-        add_action( 'elementor/frontend/after_enqueue_styles', array( $this, 'formpicker_enqueue_styles_editor' ), 11 );
-        add_action( 'elementor/frontend/after_enqueue_scripts', array( $this, 'formpicker_enqueue_scripts_editor' ), 11 );
+        add_action( 'elementor/frontend/after_enqueue_scripts', array( $this, 'formpicker_enqueue_editor' ), 11 );
+
+        // Enqueue inspector script/style in the Elementor editor panel
+        add_action( 'elementor/editor/after_enqueue_scripts', array( $this, 'formpicker_enqueue_inspactor' ), 11 );
 
         // Enqueue React form-picker modal in the Elementor editor (parent window)
         add_action( 'elementor/editor/footer', array( $this, 'enqueue_form_picker_modal_react' ) );
@@ -52,17 +56,16 @@ class Base{
     public function formpicker( $controls_manager ) {
         $controls_manager->register( new \MetForm\Controls\Form_Picker() );
     }
-    
-	public function formpicker_enqueue_scripts_editor() {
 
-        if ( is_preview() || \Elementor\Plugin::$instance->preview->is_preview_mode() || ( class_exists('ReduxFramework') && get_stylesheet() == 'itfirm' ) ) {  //for itfirm theme the preview mode is not working, that is why for compatibility we are adding this condition
-		    wp_enqueue_script( 'metform-js-formpicker-control-editor',  self::get_url() . 'assets/js/form-picker-editor.js', [], \MetForm\Plugin::instance()->version() );
-        }
+    public function formpicker_enqueue_inspactor() {
+        Assets_Enqueue::get_script( 'metform-js-formpicker-control-inspactor' );
+        Assets_Enqueue::get_style( 'metform-css-formpicker-control-inspactor' );
     }
-    
-	public function formpicker_enqueue_styles_editor() {
-        if ( is_preview() || \Elementor\Plugin::$instance->preview->is_preview_mode() ) {
-            wp_enqueue_style( 'metform-css-formpicker-control-editor',  self::get_url() . 'assets/css/form-picker-editor.css', [], '1.0.0' );
+
+	public function formpicker_enqueue_editor() {
+        if ( is_preview() || \Elementor\Plugin::$instance->preview->is_preview_mode() || ( class_exists('ReduxFramework') && get_stylesheet() == 'itfirm' ) ) {  //for itfirm theme the preview mode is not working, that is why for compatibility we are adding this condition
+            Assets_Enqueue::get_script( 'metform-js-formpicker-control-editor' );
+            Assets_Enqueue::get_style( 'metform-css-formpicker-control-editor' );
         }
     }
 
@@ -70,29 +73,11 @@ class Base{
      * Enqueue the React-powered form-picker modal in the Elementor editor (parent window).
      */
     public function enqueue_form_picker_modal_react() {
-        $plugin         = \MetForm\Plugin::instance();
-        $asset_file     = $plugin->plugin_dir() . 'build/form-picker-modal.asset.php';
-        $asset          = file_exists( $asset_file ) ? require( $asset_file ) : [ 'dependencies' => [], 'version' => '1.0.0' ];
-
-        wp_enqueue_script(
-            'metform-form-picker-modal-react',
-            $plugin->plugin_url() . 'build/form-picker-modal.js',
-            $asset['dependencies'],
-            $asset['version'],
-            true
-        );
+        Assets_Enqueue::get_script( 'metform-form-picker-modal-react' );
+        Assets_Enqueue::get_style( 'metform-form-picker-modal-react-style' );
 
         // Register script translations so strings inside the modal JS are translated
         wp_set_script_translations( 'metform-form-picker-modal-react', 'metform' );
-
-        if ( file_exists( $plugin->plugin_dir() . 'build/style-form-picker-modal.css' ) ) {
-            wp_enqueue_style(
-                'metform-form-picker-modal-react-style',
-                $plugin->plugin_url() . 'build/style-form-picker-modal.css',
-                [],
-                $asset['version']
-            );
-        }
 
         // Pass templates and saved forms to React
         $raw_templates = \MetForm\Templates\Base::instance()->get_templates();

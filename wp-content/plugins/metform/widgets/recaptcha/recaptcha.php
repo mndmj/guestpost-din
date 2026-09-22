@@ -12,7 +12,7 @@ Class MetForm_Input_Recaptcha extends Widget_Base{
 	public function get_icon() {
 		return 'mf-widget-icon icon-metform_recaptcha';
 	}
-    
+
 	public function get_title() {
 		return esc_html__( 'reCAPTCHA', 'metform' );
     }
@@ -28,7 +28,7 @@ Class MetForm_Input_Recaptcha extends Widget_Base{
 	public function get_categories() {
 		return [ 'metform' ];
 	}
-	    
+
 	public function get_keywords() {
         return ['metform', 'input', 'captcha', 'recaptcha', 'google'];
 	}
@@ -40,7 +40,7 @@ Class MetForm_Input_Recaptcha extends Widget_Base{
 	public function get_help_url() {
         return 'https://wpmet.com/doc/form-widgets/#-recaptcha-';
     }
-	
+
     protected function register_controls() {
         $this->start_controls_section(
 			'content_section',
@@ -55,7 +55,7 @@ Class MetForm_Input_Recaptcha extends Widget_Base{
 			[
 				'label' => esc_html__( 'reCAPTCHA configure: ', 'metform' ),
 				'type' => Controls_Manager::RAW_HTML,
-				'raw' => \MetForm\Utils\Util::kses( 'Turn on recaptcha from form setting.<br>Then you have to must configure recaptcha site and secret key from MetForm -> Settings <a target="__blank" href="'.get_dashboard_url().'admin.php?page=metform-menu-settings#mf-general_options'.'">from here.</a><br><a target="__blank" href="https://help.wpmet.com/docs/form-settings/recaptcha-integration">See Documentation.</a>', 'metform-pro' ),
+				'raw' => \MetForm\Utils\Util::kses( 'Turn on recaptcha from form setting.<br>Then you have to must configure recaptcha site and secret key from MetForm -> Settings <a target="__blank" href="'.get_dashboard_url().'admin.php?page=metform-menu-settings#mf-general_options'.'">from here.</a><br><a target="__blank" href="https://wpmet.com/doc/recaptcha-integration/">See Documentation.</a>', 'metform-pro' ),
 				'content_classes' => 'mf-input-map-api-notice',
 			]
 		);
@@ -76,7 +76,7 @@ Class MetForm_Input_Recaptcha extends Widget_Base{
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
-		
+
 		$this->add_control(
 			'mf_input_warning_text_color',
 			[
@@ -103,7 +103,7 @@ Class MetForm_Input_Recaptcha extends Widget_Base{
 				'selector' => '{{WRAPPER}} .mf-error-message',
 			]
 		);
-		
+
 		$this->end_controls_section();
 
 		$this->insert_pro_message();
@@ -115,7 +115,7 @@ Class MetForm_Input_Recaptcha extends Widget_Base{
 
 		$render_on_editor = false;
 		$is_edit_mode = 'metform-form' === get_post_type() && \Elementor\Plugin::$instance->editor->is_edit_mode();
-		
+
 		$configData = [
 			'message' 		=> $errorMessage 	= isset($mf_input_validation_warning_message) ? !empty($mf_input_validation_warning_message) ? $mf_input_validation_warning_message : __("reCAPTCHA is required.", 'metform') : __("reCAPTCHA is required.", 'metform'),
 			'required'		=> true,
@@ -137,9 +137,9 @@ Class MetForm_Input_Recaptcha extends Widget_Base{
 						id="g-recaptcha"
 						data-sitekey="<?php echo esc_attr($recaptcha_key_v2 != '') ? $recaptcha_key_v2  : 'dummy'; ?>"
 						<?php if ( !$is_edit_mode ): ?>
-							data-callback="handleReCAPTCHA_${this.state.recaptcha_uid}"
-							data-expired-callback="handleReCAPTCHA_${this.state.recaptcha_uid}"
-							data-error-callback="handleReCAPTCHA_${this.state.recaptcha_uid}"
+							data-callback="handleReCAPTCHA_${state.recaptcha_uid}"
+							data-expired-callback="handleReCAPTCHA_${state.recaptcha_uid}"
+							data-error-callback="handleReCAPTCHA_${state.recaptcha_uid}"
 							aria-invalid=${validation.errors['g-recaptcha-response'] ? 'true' : 'false'}
 						<?php endif; ?>
 						></div>
@@ -161,7 +161,7 @@ Class MetForm_Input_Recaptcha extends Widget_Base{
 
 					<?php
 					wp_enqueue_script('recaptcha-v2');
-					
+
 					/**
 					 * Add async and defer to 'recaptcha-v2' script loading tag.
 					 */
@@ -183,11 +183,11 @@ Class MetForm_Input_Recaptcha extends Widget_Base{
 
 				if($mf_recaptcha_type == 'recaptcha-v3'){
 					?>
-					
+
 					<div id="recaptcha_site_key_v3" data-sitekey="<?php echo esc_attr( $recaptcha_key_v3 ); ?>"  class="recaptcha_site_key_v3 <?php echo esc_attr($mf_recaptcha_class_name); ?>">
 						<input type="hidden" class="g-recaptcha-response-v3" name="g-recaptcha-response-v3" />
 					</div>
-					
+
 					<?php
 					if(('metform-form' == get_post_type() || 'page' == get_post_type()) && \Elementor\Plugin::$instance->editor->is_edit_mode()){
 						echo "<div class='attr-alert attr-alert-warning' style='margin-bottom: 0;'>".esc_html__('reCAPTCHA will be shown on preview.', 'metform')."</div>";
@@ -199,5 +199,5 @@ Class MetForm_Input_Recaptcha extends Widget_Base{
 
 		<?php
     }
-    
+
 }

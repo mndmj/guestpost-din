@@ -32,14 +32,14 @@ class Base {
 
     /**
      * Save settings data via ajax.
-     * 
+     *
      * @since 3.9.9
      * @return void
      */
     public function mf_setting_data_save(){
-        
+
         if ( ! current_user_can( 'manage_options' ) || ! isset( $_SERVER['HTTP_X_WP_NONCE'] ) || ! wp_verify_nonce( $_SERVER['HTTP_X_WP_NONCE'], 'wp_rest' ) ) {
-            
+
             wp_send_json_error('You are not allowed to do this.');
             wp_die();
         }
@@ -73,7 +73,7 @@ class Base {
 
         $settings = is_array($request) ? array_merge($settings, $request) : $settings;
         $status = \MetForm\Core\Forms\Action::instance()->store( -1, $settings);
-        
+
         wp_send_json_success($status);
         exit;
     }
@@ -83,7 +83,7 @@ class Base {
     }
 
     public function register_settings_contents__settings(){
-        
+
         if(isset($_GET['met-onboard-steps']) && $_GET['met-onboard-steps'] == 'loaded' && isset($_GET['met-onboard-steps-nonce'])  && wp_verify_nonce(sanitize_text_field(wp_unslash($_GET['met-onboard-steps-nonce'])),'met-onboard-steps-action')) {
             Onboard::instance()->views();
         } else {
@@ -95,7 +95,7 @@ class Base {
                 #Must be pro loaded....
 
                 if(!empty($_REQUEST['access_token']) && !empty($_REQUEST['refresh_token']) && !empty($_REQUEST['not_hubspot'])) {
-                    
+
 
                     $code   = isset($_REQUEST['code']) ? sanitize_text_field(wp_unslash($_REQUEST['code'])) : '';
                     $nonce  = isset($_REQUEST['state']) ? sanitize_text_field(wp_unslash($_REQUEST['state'])): '';
@@ -107,8 +107,8 @@ class Base {
                     $accessToken['expires_in']      =   isset($_REQUEST['expires_in'])? sanitize_text_field( wp_unslash( $_REQUEST['expires_in'] )) : '';
                     $accessToken['refresh_token']   =   isset($_REQUEST['refresh_token'])? sanitize_text_field( wp_unslash( $_REQUEST['refresh_token'] )) : '';
                     $accessToken['access_token']    =   isset($_REQUEST['access_token'])? sanitize_text_field( wp_unslash( $_REQUEST['access_token'] )) : '';
-    
-    
+
+
                     set_transient('mf_aweber_token_transient',  $accessToken['access_token'], $accessToken['expires_in'] - 20 );
                     update_option(\MetForm_Pro\Core\Integrations\Aweber::ACCESS_TOKEN_KEY, $accessToken);
                     ?>
@@ -122,7 +122,7 @@ class Base {
 
                     $option = get_option(\MetForm_Pro\Core\Integrations\Aweber::ACCESS_TOKEN_KEY);
 
-                    
+
                     if($option) {
                         $code  = $option;
                     }
@@ -143,7 +143,7 @@ class Base {
                     if(!empty($_REQUEST['mf_dropbox_disconnect'])) {
                         delete_option('mf_dropbox_access_token');
                         delete_transient('mf_dropbox_token');
-                        
+
                         ?>
                         <script type="text/javascript">
                             // redirect to general settings section
@@ -154,24 +154,24 @@ class Base {
 
                     /**
                      * Checks if the current request is from Dropbox OAuth callback
-                     * 
+                     *
                      * Validates that the request contains a 'code' parameter (Dropbox authorization code),
                      * does not have a 'state' parameter, does not have a 'scope' parameter set,
                      * and the scope does not contain 'googleapis' (to distinguish from Google OAuth)
-                     * 
+                     *
                      * @var bool $is_dropbox True if request appears to be from Dropbox OAuth flow, false otherwise
                      */
-                    $is_dropbox = !empty($_REQUEST['code']) && empty($_REQUEST['state']) && (!isset($_REQUEST['scope']) || strpos($_REQUEST['scope'], 'googleapis') === false);  
+                    $is_dropbox = !empty($_REQUEST['code']) && empty($_REQUEST['state']) && (!isset($_REQUEST['scope']) || strpos($_REQUEST['scope'], 'googleapis') === false);
                     if($is_dropbox ){
                         $dropbox = new \MetForm_Pro\Core\Integrations\Dropbox\Dropbox_Access_Token;
                         $access_code = $dropbox->get_access_token();
-                        
+
                         if(isset($access_code['body'])){
                             // Save access token and set transient
                             $expire_time = isset(json_decode($access_code['body'], true)['expires_in'] ) ? json_decode($access_code['body'], true)['expires_in'] : '';
                             update_option( 'mf_dropbox_access_token', $access_code['body'] );
                             set_transient( 'mf_dropbox_token', $access_code['body'] , $expire_time - 20 );
-                            
+
                             ?>
                             <script type="text/javascript">
                                 // redirect to general settings section
@@ -184,7 +184,7 @@ class Base {
                 if(!empty($_REQUEST['mf_google_disconnect'])) {
                     delete_option('wf_google_access_token');
                     delete_transient('mf_google_sheet_token');
-                    
+
                     ?>
                     <script type="text/javascript">
                         // redirect to google sheet integration section
@@ -195,7 +195,7 @@ class Base {
                 if( !empty($_REQUEST['code']) && empty($_REQUEST['state']) ) {
                     $google = new \MetForm_Pro\Core\Integrations\Google_Sheet\Google_Access_Token;
                     $access_code = $google->get_access_token();
-                    
+
                     if(isset($access_code['body'])){
                         $expire_time = isset(json_decode($access_code['body'], true)['expires_in'] ) ? json_decode($access_code['body'], true)['expires_in'] : '';
                         update_option( 'wf_google_access_token', $access_code['body'] );
@@ -203,7 +203,7 @@ class Base {
                     }
                 }
             }
-            
+
             #Let check if this is returned from aweber..
             #Give state check
 

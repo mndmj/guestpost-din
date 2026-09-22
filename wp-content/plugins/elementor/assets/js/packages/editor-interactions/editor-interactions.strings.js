@@ -3,8 +3,6 @@ __( 'Interactions', 'elementor' );
 __( 'Upgrade now', 'elementor' );
 __( 'Interaction Applied', 'elementor' );
 __( 'Interaction Deleted', 'elementor' );
-__( 'Elements', 'elementor' );
-__( 'Interactions Pasted', 'elementor' );
 __( 'Interactions', 'elementor' );
 __(
 					"You've reached the limit of 5 interactions for this element. Please remove an interaction before creating a new one.",
@@ -37,6 +35,8 @@ __(
 					'elementor'
 				);
 __( 'Create an interaction', 'elementor' );
+__( 'Elements', 'elementor' );
+__( 'Interactions Pasted', 'elementor' );
 __( 'Page load', 'elementor' );
 __( 'Scroll into view', 'elementor' );
 __( 'While scrolling', 'elementor' );

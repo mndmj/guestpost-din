@@ -6,13 +6,13 @@ Class MetForm_Input_Date extends Widget_Base{
 	use \MetForm\Traits\Common_Controls;
 	use \MetForm\Traits\Conditional_Controls;
 	use \MetForm\Widgets\Widget_Notice;
-	
+
 	public function __construct( $data = [], $args = null ) {
 		parent::__construct( $data, $args );
 		$this->add_style_depends('flatpickr');
 
 		foreach ($this->get_locales() as $key => $value) {
-			wp_register_script( 'flatpickr-'.$key, plugin_dir_url(__FILE__) . '../../public/assets/js/lang/'. $key .'.js', false, null, true );
+			wp_register_script( 'flatpickr-'.$key, METFORM_FREE_URL . 'assets/libs/flatpickr/lang/'. $key .'.js', [], null, true );
 		}
 	}
 
@@ -23,11 +23,11 @@ Class MetForm_Input_Date extends Widget_Base{
 	public function get_icon() {
 		return 'mf-widget-icon icon-metform_date';
 	}
-	
+
 	public function has_widget_inner_wrapper(): bool {
 		return ! Plugin::$instance->experiments->is_feature_active('e_optimized_markup');
 	}
-    
+
 	public function get_title() {
 		return esc_html__( 'Date', 'metform' );
 	}
@@ -43,7 +43,7 @@ Class MetForm_Input_Date extends Widget_Base{
 	public function get_keywords() {
         return ['metform', 'input', 'date', 'calendar'];
 	}
-	
+
 	public function get_locales() {
 		return [
 			'sq'	=> esc_html__( 'Albanian', 'metform' ),
@@ -111,9 +111,9 @@ Class MetForm_Input_Date extends Widget_Base{
 	public function get_help_url() {
         return 'https://wpmet.com/doc/form-widgets/#date';
     }
-	
+
     protected function register_controls() {
-        
+
         $this->start_controls_section(
 			'content_section',
 			[
@@ -218,7 +218,7 @@ Class MetForm_Input_Date extends Widget_Base{
 				'default' => 'no',
 			]
 		);
-		
+
 		$this->add_control(
 			'mf_input_year_select',
 			[
@@ -434,7 +434,7 @@ Class MetForm_Input_Date extends Widget_Base{
 		$this->input_get_params_controls();
 
 		$this->end_controls_section();
-	
+
 		if(class_exists('\MetForm_Pro\Base\Package')){
 			$this->input_conditional_control();
 		}
@@ -475,7 +475,7 @@ Class MetForm_Input_Date extends Widget_Base{
         );
 
 		$this->input_controls();
-		
+
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
@@ -647,11 +647,11 @@ Class MetForm_Input_Date extends Widget_Base{
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
-		
+
 		$this->input_place_holder_controls();
 
 		$this->end_controls_section();
-		
+
 		$this->start_controls_section(
 			'help_text_section',
 			[
@@ -662,7 +662,7 @@ Class MetForm_Input_Date extends Widget_Base{
 				]
 			]
 		);
-		
+
 		$this->input_help_text_controls();
 
         $this->end_controls_section();
@@ -701,7 +701,7 @@ Class MetForm_Input_Date extends Widget_Base{
 			}
 		}
 
-		$date_format = (isset($mf_input_date_format_all) ? $mf_input_date_format_all : 
+		$date_format = (isset($mf_input_date_format_all) ? $mf_input_date_format_all :
 							(isset($mf_input_date_format_dm) ? $mf_input_date_format_dm :
 								(isset($mf_input_date_format_yd) ? $mf_input_date_format_yd :
 									(isset($mf_input_date_format_ym) ? $mf_input_date_format_ym :
@@ -715,7 +715,7 @@ Class MetForm_Input_Date extends Widget_Base{
 			$date_format .= " H:i";
 		}
 		$class = (isset($settings['mf_conditional_logic_form_list']) ? 'mf-conditional-input' : '');
-		
+
 		$configData = [
 			'message' 		=> $errorMessage 	= isset($mf_input_validation_warning_message) ? !empty($mf_input_validation_warning_message) ? $mf_input_validation_warning_message : esc_html__('This field is required.', 'metform') : esc_html__('This field is required.', 'metform'),
 			'required'		=> isset($mf_input_required) && $mf_input_required == 'yes' ? true : false,
@@ -732,7 +732,7 @@ Class MetForm_Input_Date extends Widget_Base{
 		} else {
 			$minDate = $mf_input_min_date;
 		}
-		
+
 		$dateConfig = [
 			'minDate'		=> $minDate,
 			'maxDate'		=> $mf_input_max_date,
@@ -767,13 +767,13 @@ Class MetForm_Input_Date extends Widget_Base{
 					value=${parent.getValue('<?php echo esc_attr( $mf_input_name ); ?>')}
 					onInput=${parent.handleDateTime}
 					aria-invalid=${validation.errors['<?php echo esc_attr( $mf_input_name ); ?>'] ? 'true' : 'false'}
-					ref=${el => props.DateWidget(
-							el, 
-							'<?php echo esc_attr( $locale ) ?>', 
-							<?php echo json_encode($configData); ?>,  
-							register, 
-							parent 
-						)}
+					onReady=${(dates, dateStr, instance) => props.DateWidget(
+		instance,
+		'<?php echo esc_attr( $locale ) ?>',
+		<?php echo json_encode($configData); ?>,
+		register,
+		parent
+	)}
 					/>
 
 			<?php if ( !$is_edit_mode ) : ?>

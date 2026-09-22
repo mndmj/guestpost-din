@@ -70,6 +70,14 @@ function gpm_enqueue_child_styles() {
 				filemtime( $file )
 			);
 		}
+
+		wp_enqueue_script(
+			'gpm-cart',
+			$theme_uri . '/assets/js/cart.js',
+			array(),
+			filemtime( $theme_dir . '/assets/js/cart.js' ),
+			true
+		);
 	}
 
 	if ( function_exists( 'is_shop' ) && is_shop() ) {
@@ -350,6 +358,27 @@ function gpm_render_shop_cart_modal() {
 	<?php
 }
 add_action( 'wp_footer', 'gpm_render_shop_cart_modal', 10 );
+
+function gpm_render_cart_remove_dialog() {
+	if ( ! function_exists( 'is_cart' ) || ! is_cart() ) {
+		return;
+	}
+	?>
+	<dialog id="gpm-cart-remove-dialog" class="gpm-cart-remove-dialog"
+		aria-labelledby="gpm-cart-remove-title" aria-describedby="gpm-cart-remove-description">
+		<h2 id="gpm-cart-remove-title"><?php esc_html_e( 'Remove this item?', 'guest-post-child' ); ?></h2>
+		<p id="gpm-cart-remove-description">
+			<strong id="gpm-cart-remove-product"></strong><br>
+			<?php esc_html_e( 'This will remove the item from your cart. You can add it again later.', 'guest-post-child' ); ?>
+		</p>
+		<form method="dialog" class="gpm-cart-remove-dialog__actions">
+			<button type="submit" value="cancel" autofocus><?php esc_html_e( 'Cancel', 'guest-post-child' ); ?></button>
+			<button type="button" data-gpm-cart-remove-confirm><?php esc_html_e( 'Yes, remove', 'guest-post-child' ); ?></button>
+		</form>
+	</dialog>
+	<?php
+}
+add_action( 'wp_footer', 'gpm_render_cart_remove_dialog', 10 );
 
 /**
  * Gunakan pricing card yang ada, dengan AJAX Add to Cart
@@ -815,4 +844,22 @@ add_filter( 'gettext_woocommerce', function ( $translated, $text ) {
 
 	return $translated;
 }, 20, 2 );
+
+function gpm_register_metform_style_dependencies( $css_file ) {
+	if ( ! ( $css_file instanceof \Elementor\Core\Files\CSS\Post ) ) {
+		return;
+	}
+
+	if ( 'metform-form' !== get_post_type( $css_file->get_post_id() ) ) {
+		return;
+	}
+
+	if ( ! wp_style_is( 'elementor-frontend', 'registered' ) ) {
+		\Elementor\Plugin::instance()->frontend->register_styles();
+	}
+}
+add_action(
+	'elementor/css-file/before_enqueue',
+	'gpm_register_metform_style_dependencies'
+);
 ?>

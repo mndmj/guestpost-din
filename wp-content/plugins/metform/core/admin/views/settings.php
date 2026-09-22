@@ -3,6 +3,7 @@
 namespace MetForm\Core\Admin\Views;
 
 use MetForm\Core\Admin\Base;
+use MetForm\Plugin;
 use MetForm\Core\Integrations\Mail_Chimp;
 use MetForm\Utils\Util;
 use MetForm_Pro\Base\Package;
@@ -14,6 +15,7 @@ use MetForm_Pro\Core\Integrations\Dropbox\Dropbox_Access_Token;
 defined('ABSPATH') || exit;
 
 $settings = Base::instance()->get_settings_option();
+$admin_images_url = Plugin::instance()->plugin_url() . 'build/assets/images/admin/';
 
 $is_metform_pro_active = class_exists(Package::class);
 $is_analytics_enabled = !empty($settings['mf_enable_form_analytics']);
@@ -97,7 +99,7 @@ if (!function_exists('mf_dummy_checkbox_input')) {
 		<div class="attr-col-lg-3 attr-col-sm-4 mf-setting-sidebar-column">
 			<div class="mf-setting-sidebar">
 				<div class="mf_setting_logo">
-					<img src="<?php echo esc_url(plugin_dir_url(__FILE__) . '../images/metform-logo.svg'); ?>">
+					<img src="<?php echo esc_url($admin_images_url . 'metform-logo.svg'); ?>">
 				</div>
 				<div class="mf-settings-tab">
 					<ul class="nav-tab-wrapper">
@@ -197,7 +199,7 @@ if (!function_exists('mf_dummy_checkbox_input')) {
 								</div>
 
 								<div class="mf-setting-dashboard-banner">
-									<img src="<?php echo esc_url(plugin_dir_url(__FILE__) . '../images/dashboard-banner.jpg'); ?>" class="mf-admin-dashboard-banner" style="border-radius: 4px;">
+									<img src="<?php echo esc_url($admin_images_url . 'dashboard-banner.jpg'); ?>" class="mf-admin-dashboard-banner" style="border-radius: 4px;">
 								</div>
 
 								<div class="mf-set-dash-section">
@@ -289,7 +291,7 @@ if (!function_exists('mf_dummy_checkbox_input')) {
 										<div class="attr-tab-content" id="myTabContent">
 											<div class="attr-tab-pane attr-fade attr-active attr-in" id="mf-set-feature-1">
 												<div class="mf-set-dash-tab-img">
-													<img src="<?php echo esc_url(plugin_dir_url(__FILE__) . '../images/feature-preview.png'); ?>" class="">
+													<img src="<?php echo esc_url($admin_images_url . 'feature-preview.png'); ?>" class="">
 												</div>
 												<p><?php esc_html_e('Get started by spending some time with the documentation to get familiar with MetForm Get started by spending some time with the documentation to get notification in real time.', 'metform'); ?>
 												</p>
@@ -305,7 +307,7 @@ if (!function_exists('mf_dummy_checkbox_input')) {
 											</div>
 											<div class="attr-tab-pane attr-fade" id="mf-set-feature-2">
 												<div class="mf-set-dash-tab-img">
-													<img src="<?php echo esc_url(plugin_dir_url(__FILE__) . '../images/feature-preview.png'); ?>" class="">
+													<img src="<?php echo esc_url($admin_images_url . 'feature-preview.png'); ?>" class="">
 												</div>
 												<p><?php esc_html_e('Get started by spending some time with the documentation to get familiar with MetForm Get started by spending some time with the documentation to get notification in real time.', 'metform'); ?>
 												</p>
@@ -319,7 +321,7 @@ if (!function_exists('mf_dummy_checkbox_input')) {
 											</div>
 											<div class="attr-tab-pane attr-fade" id="mf-set-feature-3">
 												<div class="mf-set-dash-tab-img">
-													<img src="<?php echo esc_url(plugin_dir_url(__FILE__) . '../images/feature-preview.png'); ?>" class="">
+													<img src="<?php echo esc_url($admin_images_url . 'feature-preview.png'); ?>" class="">
 												</div>
 												<p><?php esc_html_e('Get started by spending some time with the documentation to get familiar with MetForm Get started by spending some time with the documentation to get notification in real time.', 'metform'); ?>
 												</p>
@@ -390,7 +392,7 @@ if (!function_exists('mf_dummy_checkbox_input')) {
 								<div class="mf-dash-content">
 									<div class="ekit-admin-section ekit-admin-dual-layout ekit-admin-documentation-section">
 										<div class="ekit-admin-left-thumb" style="margin-right: 50px;">
-											<img src="<?php echo esc_url(plugin_dir_url(__FILE__) . '../images/documentation-thumb.png'); ?>" alt="<?php esc_attr_e('Documentation Thumb', 'metform'); ?>">
+											<img src="<?php echo esc_url($admin_images_url . 'documentation-thumb.png'); ?>" alt="<?php esc_attr_e('Documentation Thumb', 'metform'); ?>">
 										</div>
 										<div class="ekit-admin-right-content">
 											<div class="ekit-admin-right-content--heading">
@@ -422,7 +424,7 @@ if (!function_exists('mf_dummy_checkbox_input')) {
 										</div>
 
 										<div class="ekit-admin-left-thumb">
-											<img src="<?php echo esc_url(plugin_dir_url(__FILE__) . '../images/suport-thumb.png'); ?>" alt="<?php esc_attr_e('Support Thumb', 'metform'); ?>">
+											<img src="<?php echo esc_url($admin_images_url . 'suport-thumb.png'); ?>" alt="<?php esc_attr_e('Support Thumb', 'metform'); ?>">
 										</div>
 
 									</div>
@@ -430,7 +432,7 @@ if (!function_exists('mf_dummy_checkbox_input')) {
 									<!-- Feature Request  -->
 									<div class="ekit-admin-section ekit-admin-dual-layout ekit-admin-feature-request-section ekit-admin-except-title">
 										<div class="ekit-admin-left-thumb" style="margin-right: 50px;">
-											<img src="<?php echo esc_url(plugin_dir_url(__FILE__) . '../images/featured-request-thumb.png'); ?>" alt="<?php esc_attr_e('Feature Request Thumb', 'metform'); ?>">
+											<img src="<?php echo esc_url($admin_images_url . 'featured-request-thumb.png'); ?>" alt="<?php esc_attr_e('Feature Request Thumb', 'metform'); ?>">
 										</div>
 										<div class="ekit-admin-right-content two">
 
@@ -467,7 +469,7 @@ if (!function_exists('mf_dummy_checkbox_input')) {
 										</div>
 
 										<div class="mf-admin-left-thumb">
-											<img src="<?php echo esc_url(plugin_dir_url(__FILE__) . '../images/rate-now-thumb.png'); ?>" alt="<?php esc_attr_e('Rate Now Thumb', 'metform'); ?>">
+											<img src="<?php echo esc_url($admin_images_url . 'rate-now-thumb.png'); ?>" alt="<?php esc_attr_e('Rate Now Thumb', 'metform'); ?>">
 										</div>
 									</div>
 

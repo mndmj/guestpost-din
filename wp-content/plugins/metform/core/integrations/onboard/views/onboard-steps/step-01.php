@@ -1,15 +1,15 @@
 <div class="mf-onboard-main-header">
     <h1 class="mf-onboard-main-header--title"><strong><?php
 
-echo esc_html__('Get Started with MetForm!', 'metform'); ?></strong></h1>
+                                                        echo esc_html__('Get Started with MetForm!', 'metform'); ?></strong></h1>
 </div>
 <div class="mf-onboard-tutorial">
     <div class="mf-onboard-tutorial--btn">
         <a class="mf-onboard-tutorial--link" data-video_id="zg1QIouKO_Q" href="#"><i class="xs-onboard-play"></i></a>
     </div>
-    
+
     <div class="mf-admin-video-tutorial-popup">
-            <div class="mf-admin-video-tutorial-iframe"></div>
+        <div class="mf-admin-video-tutorial-iframe"></div>
     </div>
 </div>
 
@@ -18,7 +18,7 @@ echo esc_html__('Get Started with MetForm!', 'metform'); ?></strong></h1>
     <label class="mf-onboard-tut-term--label">
         <?php $term = MetForm\Core\Integrations\Onboard\Attr::instance()->utils->get_option('settings', []);
         ?>
-        <input <?php if(empty($term['tut_term']) || $term['tut_term'] !== 'user_agreed') : ?>checked="checked"<?php endif; ?> class="mf-onboard-tut-term--input" name="settings[tut_term]" type="checkbox" value="user_agreed">
+        <input <?php if (empty($term['tut_term']) || $term['tut_term'] !== 'user_agreed') : ?>checked="checked" <?php endif; ?> class="mf-onboard-tut-term--input" name="settings[tut_term]" type="checkbox" value="user_agreed">
         <?php echo esc_html__('Share non-sensitive diagnostic data and details about plugin usage.', 'metform'); ?>
     </label>
 
@@ -30,9 +30,9 @@ echo esc_html__('Get Started with MetForm!', 'metform'); ?></strong></h1>
     <a class="mf-onboard-btn mf-onboard-pagi-btn next" href="#"><?php echo esc_html__('Next', 'metform'); ?></a>
 </div>
 <div class="mf-onboard-shapes">
-    <img src="<?php echo esc_url(self::get_url()); ?>assets/images/shape-07.png" alt="" class="shape-07">
-    <img src="<?php echo esc_url(self::get_url()); ?>assets/images/shape-14.png" alt="" class="shape-14">
-    <img src="<?php echo esc_url(self::get_url()); ?>assets/images/shape-15.png" alt="" class="shape-15">
-    <img src="<?php echo esc_url(self::get_url()); ?>assets/images/shape-16.png" alt="" class="shape-16">
-    <img src="<?php echo esc_url(self::get_url()); ?>assets/images/shape-17.png" alt="" class="shape-17">
+    <img src="<?php echo self::image_url('onboard/shape-07.png'); ?>" alt="" class="shape-07">
+    <img src="<?php echo self::image_url('onboard/shape-14.png'); ?>" alt="" class="shape-14">
+    <img src="<?php echo self::image_url('onboard/shape-15.png'); ?>" alt="" class="shape-15">
+    <img src="<?php echo self::image_url('onboard/shape-16.png'); ?>" alt="" class="shape-16">
+    <img src="<?php echo self::image_url('onboard/shape-17.png'); ?>" alt="" class="shape-17">
 </div>

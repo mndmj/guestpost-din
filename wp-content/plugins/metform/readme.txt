@@ -2,8 +2,8 @@
 Contributors: Roxnor, Ataurr, aion11
 Tags: form builder, Elementor form, contact form builder, Multi step form, custom form
 Requires at least: 6.0
-Tested up to: 7.0
-Stable tag: 4.2.0
+Tested up to: 7.1
+Stable tag: 4.3.0
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.txt
@@ -83,7 +83,7 @@ Add mandatory consent checkboxes to meet privacy regulations and capture explici
 ## Quiz & Survey Forms Module
 
 Create interactive quizzes and detailed surveys. Assign point values to specific questions, calculate total scores, and display custom results based on user responses.
- 
+
 ## Export Contact Form Entries as CSV
 
 Want to Export form entries as CSV? Yes, you can do that too with the Metform Elementor form builder addon.
@@ -98,7 +98,7 @@ Send leads from any contact form straight to your Mailchimp list and grows your 
 
 ## ✨Top Features of MetForm — Elementor Form Builder
 
-- **Built for Elementor:** MetForm is based on Elementor. This means this contact form builder offers an Elementor-like intuitive drag-and-drop workflow and real-time preview of your customizations. And, this budget-friendly email building tool with impressive form-building functionality powered by Elementor Builder has no learning curve. 
+- **Built for Elementor:** MetForm is based on Elementor. This means this contact form builder offers an Elementor-like intuitive drag-and-drop workflow and real-time preview of your customizations. And, this budget-friendly email building tool with impressive form-building functionality powered by Elementor Builder has no learning curve.
 
 So, beginners can easily create a query form to collect reporting and other forms like a contact form or booking form. Learn how to create a WordPress Booking form with MetForm 👇
 
@@ -110,7 +110,7 @@ https://youtu.be/K7YJmNn9nIY?si=vY3lBCRm8NkfLH60
 
 > Text field, Email field, Number field, Date field Time field, Select field, Textarea field, Checkbox field, Radio field, Switcher field, Range slider field, URL field, Password field, Response Message, Opt-in, reCAPTCHA, Rating, File Upload, and many more.
 
-- **User Confirmation Email:** Send automatic confirmation emails to form submitters right after they register or complete your campaign. 
+- **User Confirmation Email:** Send automatic confirmation emails to form submitters right after they register or complete your campaign.
 
 - **Admin Notification Email:** Notify admin of successful order notifications after users or customers complete a form submission.
 
@@ -118,9 +118,9 @@ https://youtu.be/K7YJmNn9nIY?si=vY3lBCRm8NkfLH60
 
 - **Export Form Entries as CSV:** Export all form submissions, contacts, and messages directly to Google Sheets with one integration.
 
-- **Export Form to Google Sheets:** The popular Elementor form creator MetForm allows you to export all your users’ personal contacts, databases, and messages on Google Sheets. 
+- **Export Form to Google Sheets:** The popular Elementor form creator MetForm allows you to export all your users’ personal contacts, databases, and messages on Google Sheets.
 
-- **Required Login to Submit the Form:** Mark required fields with a red star or error message to keep your contact form spam-free and complete. 
+- **Required Login to Submit the Form:** Mark required fields with a red star or error message to keep your contact form spam-free and complete.
 
 - **Capture User Browser Data:** Displays the user’s browser information like Web browser, Visited URL, Title, Visit Time, Visit Count, User Profile, etc.
 
@@ -180,9 +180,9 @@ https://youtu.be/s5IKNowcLi0?si=VvZz_YtAbZvieunL
 
 - **REST API Support:** Get form submission data and submission notification to Third Party API URL or Webhook by integrating our Rest API very easily.
 
-- **WooCommerce checkout:** Shows you the add to cart product and checkout form on a single page, Also, MetForm enables you to complete orders and payments without leaving the page. 
+- **WooCommerce checkout:** Shows you the add to cart product and checkout form on a single page, Also, MetForm enables you to complete orders and payments without leaving the page.
 
-- **Auto Populate Field:** Show additional fields after someone fills up the form. 
+- **Auto Populate Field:** Show additional fields after someone fills up the form.
 - **Calculation:** Help you to perform your calculations and display the results within seconds in your form.
 
 [ **Calculation demo 1** ](https://products.wpmet.com/metform/pro-demos/calculation-form-1/?utm_source=org&utm_medium=readme) -  [ **Calculation demo 2** ](https://products.wpmet.com/metform/pro-demos/calculation-form-2/?utm_source=org&utm_medium=readme)
@@ -197,7 +197,7 @@ https://youtu.be/g9P1pSDr65w?si=-Y_QGq7zwdOmkKxJ
 
 **🔷** [MailChimp Integration](https://wpmet.com/doc/integration/?utm_source=org&utm_medium=readme): Easily integrates MailChimp to create and manage a mailing list, automated mailing, newsletter, send leads, and many other options.
 
-**🔷** [WordPress ZoHo CRM Integration](https://wpmet.com/doc/zoho/?utm_source=org&utm_medium=readme): Manage customers’ relationships and speed up marketing and sales with the ZoHo integration of our Elementor form builder MetForm.  
+**🔷** [WordPress ZoHo CRM Integration](https://wpmet.com/doc/zoho/?utm_source=org&utm_medium=readme): Manage customers’ relationships and speed up marketing and sales with the ZoHo integration of our Elementor form builder MetForm.
 
 **🔷** [HubSpot Integration](https://wpmet.com/doc/hubspot-integration/?utm_source=org&utm_medium=readme): Store all the contacts inside your **HubSpot** account without having fear of losing them. As a result, you can easily manage your visitors’ or clients’ information.
 
@@ -213,7 +213,7 @@ https://youtu.be/g9P1pSDr65w?si=-Y_QGq7zwdOmkKxJ
 
 **🔷** [ActiveCampaign Integration](https://wpmet.com/doc/activecampaign/?utm_source=org&utm_medium=readme): Make a super easy contact list management with ActiveCampaign integration.
 
-**🔷** [Aweber Integration](https://wpmet.com/doc/aweber-integration/?utm_source=org&utm_medium=readme): Simply integrate with Aweber, the email marketing service provider, and build Aweber forms that let you keep in touch with your subscribers.  
+**🔷** [Aweber Integration](https://wpmet.com/doc/aweber-integration/?utm_source=org&utm_medium=readme): Simply integrate with Aweber, the email marketing service provider, and build Aweber forms that let you keep in touch with your subscribers.
 
 **🔷** [GetResponse Integration](https://wpmet.com/doc/getresponse-integration/?utm_source=org&utm_medium=readme): It is another newsletter integration like others to keep your email marketing list sorted.
 
@@ -270,180 +270,226 @@ If you like using the MetForm form builder, then consider checking out our other
 
 ⭕ [TableKit](https://wordpress.org/plugins/table-builder-block/) – Make fully-customizable multipurpose table & generate data table within Gutenberg block editor.
 
-**Visit**  [wpmet](https://wpmet.com/)  to learn more about how to get the best out of WordPress using our plugins. 
+**Visit**  [wpmet](https://wpmet.com/)  to learn more about how to get the best out of WordPress using our plugins.
 **Check out** [Tutorials, Tips & Tricks](https://wpmet.com/blog)! 👌
 
 == Changelog ==
-Version: 4.2.0 // 2026-08-12
-Improved: Admin dashboard UI/UX.
 
-Version: 4.1.9 // 2026-08-09
-Fixed: Corrected the formatting of file validation strings to ensure they are properly translatable.
-Fixed: Text area field font size not applying on the frontend.
-Fixed: Authenticated stored cross-site scripting vulnerability in the mf_form_id widget setting.
+= Version: 4.3.0 // 2026-08-30 =
 
-Version: 4.1.8 // 2026-07-22
-Fixed: Email header injection issue in admin notification email fields.
-Fixed: Replaced hardcoded admin interface strings with translatable text for localization support.
+- Added: Conditional Redirect feature for form submissions.
+- Improved: Powerup plugin installation process from onboarding process.
+- Improved: Overall form field stability and behavior issues.
+- Improved: Updated js packages for better Compatibility.
+- Fixed: File Upload widget not resetting after form submission issue.
+- Fixed: Resolved translation issues for improved localization compatibility.
+- Fixed: Conditional "Hide this field" issue for switch widget.
+- Fixed: Conditional field data storage issue in entries.
+- Fixed: Conditional validation issues for Select, Multi-select, and Range Slider fields.
+- Fixed: Single Range Slider functionality issue.
+- Fixed: Range Slider width control issue.
+- Fixed: Range Slider default value handling.
+- Fixed: Date and Time widget re-rendering issue.
 
-Version: 4.1.7 // 2026-07-12
-Improved: Onboarding process.
-Fixed: Validate entry ownership before updating the form submission to prevent IDOR.
+= Version: 4.2.0 // 2026-08-12 =
 
-Version: 4.1.6 // 2026-07-05
-Added: Form analytics feature to track submissions and monitor form performance with insights.
-Added: Conditional redirect support for form submissions based on rules.
-Improved: Entry list and entry details UI in the admin dashboard.
-Improved: Form list UI in the admin dashboard.
-Fixed: Compatibility issue with The7 theme and CM Tooltip Glossary plugin conflict.
-Fixed: Resolved conditional email field validation and hidden field visibility issues.
-Fixed: Country flag display issue in mobile number fields for multistep forms.
-Fixed: Multilingual issue.
+- Improved: Admin dashboard UI/UX.
 
-Version: 4.1.5 // 2026-06-09
-Added: Dynamic field value support in conditional logic for advanced form validation and field comparison.
-Added: Dynamic values support for hidden fields and submit tracking.
-Improved: Form picker modal UI for metform main widget.
-Improved: Payment submission feature.
-Fixed: Limit entries value saving issue.
-Fixed: Hard-coded untranslatable string issue.
+= Version: 4.1.9 // 2026-08-09 =
 
-Version: 4.1.4 // 2026-05-03
-Added: Default number control for Number widget.
-Added: Support for .heic file types in the File Upload widget.
-Improved: Form picker modal for MetForm main widget.
-Fixed: Compatibility issue with Astra-portfolio plugin.
-Fixed: Load text-domain warning issue.
-Fixed: Simple-repeater widget issue where empty values were showing in entries.
-Fixed: Conditional logic issue where hidden referenced fields caused incorrect condition results. 
+- Fixed: Corrected the formatting of file validation strings to ensure they are properly translatable.
+- Fixed: Text area field font size not applying on the frontend.
+- Fixed: Authenticated stored cross-site scripting vulnerability in the mf_form_id widget setting.
 
-Version: 4.1.3 // 2026-03-03
-Added: Option to delete associated files when deleting form entries.
-Added: Newsletter Signup Form is now available in the Free version.
-Added: Subscribe Form 1 is now available in the Free version.
-Added: Subscribe Form 2 is now available in the Free version.
-Improved: New form creation modal UI.
-Improved: Added support for .iges, .igs, .step, and .stp file types in the File Upload widget.
-Fixed: Compatibility issue with Royal Elementor Addons.
-Fixed: Editor panel script compatibility issue.
-Fixed: Global settings UI issue.
+= Version: 4.1.8 // 2026-07-22 =
 
-Version: 4.1.2 // 2026-01-14
-Fixed: Google drive integration issue.
+- Fixed: Email header injection issue in admin notification email fields.
+- Fixed: Replaced hardcoded admin interface strings with translatable text for localization support.
 
-Version: 4.1.1 // 2026-01-12
-Improved: Webp support for file upload widget.
-Fixed: Unauthenticated form submission issue related to forgeable cookie value.
-Fixed: Calculation field was not working properly when using OR conditions.
-Fixed: Third-party plugin notice issue.
+= Version: 4.1.7 // 2026-07-12 =
 
-Version: 4.1.0 // 2025-12-14
-Added: Range widget suffix/prefix with range value.
-Improved: Integration settings UI.
+- Improved: Onboarding process.
+- Fixed: Validate entry ownership before updating the form submission to prevent IDOR.
 
-Version: 4.0.8 // 2025-11-30
-Fixed: Conflict issue with ShopEngine plugin.
+= Version: 4.1.6 // 2026-07-05 =
 
-Version: 4.0.7 // 2025-10-07
-Fixed: Summary widget issue with File upload widget.
-Improved: Form settings admin UI.
+- Added: Form analytics feature to track submissions and monitor form performance with insights.
+- Added: Conditional redirect support for form submissions based on rules.
+- Improved: Entry list and entry details UI in the admin dashboard.
+- Improved: Form list UI in the admin dashboard.
+- Fixed: Compatibility issue with The7 theme and CM Tooltip Glossary plugin conflict.
+- Fixed: Resolved conditional email field validation and hidden field visibility issues.
+- Fixed: Country flag display issue in mobile number fields for multistep forms.
+- Fixed: Multilingual issue.
 
-Version: 4.0.6 // 2025-08-31
-Improved: File upload widget.
-Fixed: Mailchimp and GetResponse list not appearing in MailChimp and GetResponse Integration settings.
-Fixed: Multi Select value doesn't appear in entries data for image select widget.
+= Version: 4.1.5 // 2026-06-09 =
 
-Version: 4.0.5 // 2025-08-20
-Fixed: URL/Webhook input field not displaying in REST API integration settings.
-Fixed: Google Sheet list not appearing in Google Sheet integration settings.
+- Added: Dynamic field value support in conditional logic for advanced form validation and field comparison.
+- Added: Dynamic values support for hidden fields and submit tracking.
+- Improved: Form picker modal UI for metform main widget.
+- Improved: Payment submission feature.
+- Fixed: Limit entries value saving issue.
+- Fixed: Hard-coded untranslatable string issue.
 
-Version: 4.0.4 // 2025-08-10
-Improved: Date widget.
-Improved: Form settings UI.
-Fixed: Integration settings UI issue.
+= Version: 4.1.4 // 2026-05-03 =
 
-Version: 4.0.3 // 2025-07-28
-Improved: Onboarding process.
-Fixed: Multi select widget issue.
+- Added: Default number control for Number widget.
+- Added: Support for .heic file types in the File Upload widget.
+- Improved: Form picker modal for MetForm main widget.
+- Fixed: Compatibility issue with Astra-portfolio plugin.
+- Fixed: Load text-domain warning issue.
+- Fixed: Simple-repeater widget issue where empty values were showing in entries.
+- Fixed: Conditional logic issue where hidden referenced fields caused incorrect condition results.
 
-Version: 4.0.2 // 2025-07-14
-Fixed: Cross-Site Scripting (XSS) vulnerability.
-Fixed: Dashboard security issue.
+= Version: 4.1.3 // 2026-03-03 =
 
-Version: 4.0.1 // 2025-07-02
-Improved: Editor panel UI/UX.
-Improved: Admin dashboard get help page.
+- Added: Option to delete associated files when deleting form entries.
+- Added: Newsletter Signup Form is now available in the Free version.
+- Added: Subscribe Form 1 is now available in the Free version.
+- Added: Subscribe Form 2 is now available in the Free version.
+- Improved: New form creation modal UI.
+- Improved: Added support for .iges, .igs, .step, and .stp file types in the File Upload widget.
+- Fixed: Compatibility issue with Royal Elementor Addons.
+- Fixed: Editor panel script compatibility issue.
+- Fixed: Global settings UI issue.
 
-Version: 4.0.0 // 2025-06-24
-Added: Elementor optimized markup support.
-Added: User confirmation email edit option with EmailKit.
-Improved: Admin settings dashboard UI/UX.
-Improved: Google sheet integration.
-Improved: Google reCAPTCHA widget.
-Improved: Security.
-Fixed: Pre-built templates section and container issue.
-Fixed: Pre-built quiz forms are not showing on the form creation modal.
-Fixed: Radio and checkbox issue for user confirmation and admin notification email.
-Fixed: Email shortcode issue with conditional widget.
-Removed: Promotional notice displayed during plugin activation.
+= Version: 4.1.2 // 2026-01-14 =
 
-Version: 3.9.9 // 2025-05-26
-Added: Simple message widget.
-Improved: All widgets icon.
-Fixed: GetResponse integration not working.
-Fixed: Itfirm theme conflict issue.
-Fixed: Form submission entry name issue.
+- Fixed: Google drive integration issue.
 
-Version: 3.9.8 // 2025-04-15
-Improved: Admin UI.
+= Version: 4.1.1 // 2026-01-12 =
 
-Version: 3.9.7 // 2025-03-25
-Improved: Form creation process.
-Fixed: Form settings notification issue on the admin area.
-Fixed: Onboarding UI issue.
+- Improved: Webp support for file upload widget.
+- Fixed: Unauthenticated form submission issue related to forgeable cookie value.
+- Fixed: Calculation field was not working properly when using OR conditions.
+- Fixed: Third-party plugin notice issue.
 
-Version: 3.9.6 // 2025-03-10
-Added: Compatibility with Elementor plugin performance improvement.
-Fixed: URL widget validation issue.
+= Version: 4.1.0 // 2025-12-14 =
 
-Version: 3.9.5 // 2025-02-24
-Improved: Admin UI.
+- Added: Range widget suffix/prefix with range value.
+- Improved: Integration settings UI.
 
-Version: 3.9.4 // 2025-02-18
-Fixed: Compatibility issue with Elementor.
-Fixed: XSS security issue.
+= Version: 4.0.8 // 2025-11-30 =
 
-Version: 3.9.3 // 2025-01-20
-Improved: MailChimp integration security.
-Fixed: Email notification issue with selection type widgets.
-Fixed: Dual range slider not working and default value issue of range widget.
-Fixed: Translation warning issue for Wordpress version 6.7.1.
+- Fixed: Conflict issue with ShopEngine plugin.
 
-Version: 3.9.2 // 2024-12-25
-Added: Submit button, Next Step, and Previous Step widgets on focus style control.
-Fixed: Calculation fields minimum and maximum fraction issue.
-Fixed: Multistep form fields does not navigate by tab key press.
-Fixed: Simple repeater widget select option issue with Multistep form.
+= Version: 4.0.7 // 2025-10-07 =
 
-Version: 3.9.1 // 2024-11-13
-Fixed: Date widget design issue.
-Fixed: Get value form url is not working for range date widget.
-Tweaked: FAQs and documentation section updated.
+- Fixed: Summary widget issue with File upload widget.
+- Improved: Form settings admin UI.
 
-Version: 3.9.0 // 2024-08-21
-Removed: Edit with EmailKit button from WooCommerce email settings
+= Version: 4.0.6 // 2025-08-31 =
 
-Version: 3.8.9 // 2024-06-09
-Improved: Notify to admin on form submission feature.
-Improved: File uploading security.
-Fixed: Form required field auto scrolling issue.
-Fixed: .stl file type uploading not working.
-Fixed: Calculation widget is not working if toggle select widget has same value.
-Fixed: Translation issue.
+- Improved: File upload widget.
+- Fixed: Mailchimp and GetResponse list not appearing in MailChimp and GetResponse Integration settings.
+- Fixed: Multi Select value doesn't appear in entries data for image select widget.
+
+= Version: 4.0.5 // 2025-08-20 =
+
+- Fixed: URL/Webhook input field not displaying in REST API integration settings.
+- Fixed: Google Sheet list not appearing in Google Sheet integration settings.
+
+= Version: 4.0.4 // 2025-08-10 =
+
+- Improved: Date widget.
+- Improved: Form settings UI.
+- Fixed: Integration settings UI issue.
+
+= Version: 4.0.3 // 2025-07-28 =
+
+- Improved: Onboarding process.
+- Fixed: Multi select widget issue.
+
+= Version: 4.0.2 // 2025-07-14 =
+
+- Fixed: Cross-Site Scripting (XSS) vulnerability.
+- Fixed: Dashboard security issue.
+
+= Version: 4.0.1 // 2025-07-02 =
+
+- Improved: Editor panel UI/UX.
+- Improved: Admin dashboard get help page.
+
+= Version: 4.0.0 // 2025-06-24 =
+
+- Added: Elementor optimized markup support.
+- Added: User confirmation email edit option with EmailKit.
+- Improved: Admin settings dashboard UI/UX.
+- Improved: Google sheet integration.
+- Improved: Google reCAPTCHA widget.
+- Improved: Security.
+- Fixed: Pre-built templates section and container issue.
+- Fixed: Pre-built quiz forms are not showing on the form creation modal.
+- Fixed: Radio and checkbox issue for user confirmation and admin notification email.
+- Fixed: Email shortcode issue with conditional widget.
+- Removed: Promotional notice displayed during plugin activation.
+
+= Version: 3.9.9 // 2025-05-26 =
+
+- Added: Simple message widget.
+- Improved: All widgets icon.
+- Fixed: GetResponse integration not working.
+- Fixed: Itfirm theme conflict issue.
+- Fixed: Form submission entry name issue.
+
+= Version: 3.9.8 // 2025-04-15 =
+
+- Improved: Admin UI.
+
+= Version: 3.9.7 // 2025-03-25 =
+
+- Improved: Form creation process.
+- Fixed: Form settings notification issue on the admin area.
+- Fixed: Onboarding UI issue.
+
+= Version: 3.9.6 // 2025-03-10 =
+
+- Added: Compatibility with Elementor plugin performance improvement.
+- Fixed: URL widget validation issue.
+
+= Version: 3.9.5 // 2025-02-24 =
+
+- Improved: Admin UI.
+
+= Version: 3.9.4 // 2025-02-18 =
+
+- Fixed: Compatibility issue with Elementor.
+- Fixed: XSS security issue.
+
+= Version: 3.9.3 // 2025-01-20 =
+
+- Improved: MailChimp integration security.
+- Fixed: Email notification issue with selection type widgets.
+- Fixed: Dual range slider not working and default value issue of range widget.
+- Fixed: Translation warning issue for Wordpress version 6.7.1.
+
+= Version: 3.9.2 // 2024-12-25 =
+
+- Added: Submit button, Next Step, and Previous Step widgets on focus style control.
+- Fixed: Calculation fields minimum and maximum fraction issue.
+- Fixed: Multistep form fields does not navigate by tab key press.
+- Fixed: Simple repeater widget select option issue with Multistep form.
+
+= Version: 3.9.1 // 2024-11-13 =
+
+- Fixed: Date widget design issue.
+- Fixed: Get value form url is not working for range date widget.
+- Improved: FAQs and documentation section updated.
+
+= Version: 3.9.0 // 2024-08-21 =
+
+- Removed: Edit with EmailKit button from WooCommerce email settings
+
+= Version: 3.8.9 // 2024-06-09 =
+
+- Improved: Notify to admin on form submission feature.
+- Improved: File uploading security.
+- Fixed: Form required field auto scrolling issue.
+- Fixed: .stl file type uploading not working.
+- Fixed: Calculation widget is not working if toggle select widget has same value.
+- Fixed: Translation issue.
 
 [View changelog for all versions.](https://wpmet.com/plugin/metform/roadmaps#changelog)
-
-
 
 == Upgrade Notice ==
 Metform 1.3.0-beta1 is a major update. We have reconstructed the form builder's widgets with react and huge optimization for future proof. If you face any issue please contact our support team here https://wpmet.com/support-ticket
@@ -461,7 +507,7 @@ e.g.  This plugin requires an Elementor builder.
 == Frequently Asked Questions ==
 
 =What type of WordPress form can you make with MetForm form builder?=
-MetForm allows you to make WordPress forms with a new experience. With the most flexible drag and drop feature, the form builder supports your Elementor site to become a powerful site. Some form types the Elementor forms builder offers are - 
+MetForm allows you to make WordPress forms with a new experience. With the most flexible drag and drop feature, the form builder supports your Elementor site to become a powerful site. Some form types the Elementor forms builder offers are -
 -Contact Form
 -Multi Step Form
 -Calculation Form
@@ -482,11 +528,11 @@ MetForm allows you to make WordPress forms with a new experience. With the most 
 -Patient Form
 -Suggestion Form
 -Offline Contact Form
-There are more form types you can build with MetForm. Check it [here](https://wpmet.com/plugin/metform/). 
+There are more form types you can build with MetForm. Check it [here](https://wpmet.com/plugin/metform/).
 
 =Does MetForm offer Newsletter Integration?=
 
-Yes. Metform has various Newsletter integrations, such as Mailchimp, AWeber, ActiveCampaign, Get Response, etc. 
+Yes. Metform has various Newsletter integrations, such as Mailchimp, AWeber, ActiveCampaign, Get Response, etc.
 
 =Does MetForm include spam protection?=
 

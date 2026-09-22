@@ -1,5 +1,7 @@
-<?php 
+<?php
 namespace MetForm\Controls;
+
+use MetForm\Base\Assets_Enqueue;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -26,12 +28,10 @@ class Form_Picker extends \Elementor\Base_Data_Control {
 	 */
 	public function enqueue() {
 		// Styles
-		wp_register_style( 'metform-css-formpicker-control-inspactor',  Base::get_url() . 'assets/css/form-picker-inspactor.css', [], '1.0.0' );
-		wp_enqueue_style( 'metform-css-formpicker-control-inspactor' );
+		Assets_Enqueue::get_style( 'metform-css-formpicker-control-inspactor' );
 
 		// Script
-		wp_register_script( 'metform-js-formpicker-control-inspactor',  Base::get_url() . 'assets/js/form-picker-inspactor.js' );
-		wp_enqueue_script( 'metform-js-formpicker-control-inspactor' );
+		Assets_Enqueue::get_script( 'metform-js-formpicker-control-inspactor' );
 	}
 
 
