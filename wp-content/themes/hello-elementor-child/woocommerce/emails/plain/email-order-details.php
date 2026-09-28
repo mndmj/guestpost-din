@@ -27,6 +27,14 @@ if ( $email_improvements_enabled ) {
 
 do_action( 'woocommerce_email_before_order_table', $order, $sent_to_admin, $plain_text, $email );
 
+if ( $order->get_customer_note() ) {
+	if ( $email_improvements_enabled ) {
+		echo "\n" . esc_html__( 'Heading Post:', 'guest-post-child' ) . "\n" . wp_kses( wc_wptexturize_order_note( $order->get_customer_note() ), array() ) . "\n";
+	} else {
+		echo esc_html__( 'Heading Post:', 'guest-post-child' ) . "\t " . wp_kses( wc_wptexturize_order_note( $order->get_customer_note() ), array() ) . "\n";
+	}
+}
+
 /**
  * Filter whether to display the order number in the order details heading of emails.
  *
@@ -78,14 +86,6 @@ if ( $item_totals ) {
 		} else {
 			echo wp_kses_post( $total['label'] . "\t " . $total['value'] ) . "\n";
 		}
-	}
-}
-
-if ( $order->get_customer_note() ) {
-	if ( $email_improvements_enabled ) {
-		echo "\n" . esc_html__( 'Heading Post:', 'guest-post-child' ) . "\n" . wp_kses( wc_wptexturize_order_note( $order->get_customer_note() ), array() ) . "\n";
-	} else {
-		echo esc_html__( 'Heading Post:', 'guest-post-child' ) . "\t " . wp_kses( wc_wptexturize_order_note( $order->get_customer_note() ), array() ) . "\n";
 	}
 }
 

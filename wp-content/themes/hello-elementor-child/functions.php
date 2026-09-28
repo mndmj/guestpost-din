@@ -845,6 +845,18 @@ add_filter( 'gettext_woocommerce', function ( $translated, $text ) {
 	return $translated;
 }, 20, 2 );
 
+/**
+ * Keep WooCommerce's download permissions intact; change only the email order.
+ */
+function gpm_email_downloads_after_order_summary( $mailer ) {
+	$callback = array( $mailer, 'order_downloads' );
+
+	if ( remove_action( 'woocommerce_email_order_details', $callback, 10 ) ) {
+		add_action( 'woocommerce_email_order_details', $callback, 20, 4 );
+	}
+}
+add_action( 'woocommerce_email', 'gpm_email_downloads_after_order_summary' );
+
 function gpm_register_metform_style_dependencies( $css_file ) {
 	if ( ! ( $css_file instanceof \Elementor\Core\Files\CSS\Post ) ) {
 		return;
