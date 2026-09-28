@@ -255,12 +255,65 @@ final class DIN_Packages_Customer {
 			exit;
 		}
 		$is_variation = $product->is_type( 'variation' );
-		$added = WC()->cart->add_to_cart( $is_variation ? $product->get_parent_id() : $product->get_id(), 1, $is_variation ? $product->get_id() : 0, $is_variation ? $product->get_variation_attributes() : array(), array( '_din_package_purchase' => array( 'package_id' => $id, 'action' => $action ) ) );
+		$args = array( $is_variation ? $product->get_parent_id() : $product->get_id(), 1, $is_variation ? $product->get_id() : 0, $is_variation ? $product->get_variation_attributes() : array(), array( '_din_package_purchase' => array( 'package_id' => $id, 'action' => $action ) ) );
+		$added = self::replace_cart_with_package( $args );
 		if ( $added ) {
-			wc_add_notice( __( 'Package options have been added. Prices and durations can be checked before payment.', 'din-package-lifecycle' ), 'success' );
+			wc_add_notice( __( 'Your cart now contains only the selected package renewal or upgrade. Previous cart items and coupons have been removed. Review your cart before payment.', 'din-package-lifecycle' ), 'success' );
 		}
 		wp_safe_redirect( $added ? wc_get_cart_url() : wc_get_account_endpoint_url( 'din-packages' ) );
 		exit;
+	}
+
+	/** Replace only after purchase() validates the owner, nonce and available package option. */
+	private static function replace_cart_with_package( $args ) {
+		$cart = WC()->cart;
+		$cart->get_cart(); // Load the session before taking the rollback snapshot.
+		$before = array();
+		foreach ( array( 'cart_contents', 'removed_cart_contents', 'applied_coupons', 'coupon_discount_totals', 'coupon_discount_tax_totals', 'totals' ) as $field ) {
+			$before[ $field ] = $cart->{ 'get_' . $field }();
+		}
+		$fees = $cart->fees_api()->get_fees();
+		$session_before = array();
+		foreach ( array( 'cart', 'cart_totals', 'applied_coupons', 'coupon_discount_totals', 'coupon_discount_tax_totals', 'removed_cart_contents', 'chosen_shipping_methods', 'previous_shipping_methods', 'shipping_method_counts', 'order_awaiting_payment', 'store_api_draft_order' ) as $key ) {
+			$session_before[ $key ] = WC()->session->get( $key );
+		}
+		$added = false;
+		try {
+			// ponytail: use native setters so a failed attempt never fires destructive cart-empty hooks.
+			foreach ( $before as $field => $value ) {
+				$cart->{ 'set_' . $field }( array() );
+			}
+			$cart->fees_api()->remove_all_fees();
+			$added = $cart->add_to_cart( ...$args );
+			$items = $cart->get_cart();
+			// Hooks can alter quantity or add other lines; do not accept a mixed or rewritten selection.
+			if ( ! $added || count( $items ) !== 1 || ! isset( $items[ $added ] )
+				|| ( $items[ $added ]['_din_package_purchase'] ?? null ) !== $args[4]['_din_package_purchase']
+				|| is_wp_error( self::option_for_item( $items[ $added ] ) ) ) {
+				$added = false;
+			}
+		} catch ( \Throwable $error ) {
+			$added = false;
+			wc_get_logger()->error( 'Package cart replacement failed: ' . $error->getMessage(), array( 'source' => 'din-packages' ) );
+		}
+		if ( ! $added ) {
+			foreach ( $before as $field => $value ) {
+				$cart->{ 'set_' . $field }( $value );
+			}
+			$cart->fees_api()->set_fees( $fees );
+			// add_to_cart hooks may have persisted the attempted cart before a later hook failed.
+			foreach ( $session_before as $key => $value ) {
+				WC()->session->set( $key, $value );
+			}
+			$cart->persistent_cart_update();
+			$cart->maybe_set_cart_cookies();
+			self::notice( new WP_Error( 'din_package_cart', __( 'The package renewal or upgrade could not be added. Your previous cart has been restored. Please try again.', 'din-package-lifecycle' ) ) );
+			return false;
+		}
+		// Detach the previous checkout, without cancelling or deleting any existing order.
+		WC()->session->set( 'order_awaiting_payment', null );
+		WC()->session->set( 'store_api_draft_order', null );
+		return $added;
 	}
 
 	/** A single trust boundary for request data, restored carts, pricing and checkout. */

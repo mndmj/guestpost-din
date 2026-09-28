@@ -1,6 +1,13 @@
-# DIN Package Lifecycle 1.0.5
+# DIN Package Lifecycle 1.0.7
 
 Plugin pendamping DIN Order Attach untuk masa aktif guest post. Memakai hook WooCommerce, tabel `{$wpdb->prefix}din_packages`, dan Action Scheduler bawaan WooCommerce. Tidak mengubah core WooCommerce atau DIN Order Attach. Dashboard terintegrasi dengan template pada child theme Guest Post Monitoring.
+
+## Cart upgrade dan perpanjangan (1.0.7)
+
+- **My Package → Extend for 1 Year / Extend for 2 Years / Upgrade Lifetime** mengganti seluruh isi cart dan kupon dengan satu produk pilihan, quantity 1, lalu menuju Cart. Klik ulang, mengganti durasi, atau memilih paket lain mengganti pilihan sebelumnya, tidak menambah item. Versi 1.0.7 memperluas perilaku Lifetime dari versi 1.0.6 ke perpanjangan 1/2 tahun.
+- Pemilik paket, nonce, status dan ketersediaan produk diperiksa sebelum penggantian. Jika penambahan gagal, isi/metadata cart, kupon, total dan penyimpanan cart dipulihkan, lalu buyer kembali ke My Package dengan pesan error. Hasil hook yang mengubah quantity atau menambah item lain juga ditolak.
+- Penggantian hanya berlaku pada ketiga tombol pembelian di **My Package**; Shop dan permintaan pembayaran admin tetap memakai alur sebelumnya. Syarat perpanjangan mulai H-14, harga Annual × 1/2, pembayaran dan persetujuan admin tidak berubah. Penggantian cart tidak menghapus/membatalkan order lama dan tidak langsung mengubah masa aktif/Lifetime. Tidak ada migrasi database.
+- Tes terisolasi: `php tests/upgrade-cart-smoke.php`, memakai `WC_Cart` dan `WC_Cart_Session` asli dengan katalog/pengguna/session in-memory; tidak memuat situs, mengubah database buyer, atau melakukan pembayaran. Uji di staging sebelum deploy produksi, terutama jika terdapat ekstensi yang mengubah cart.
 
 ## Custom duration (1.0.5)
 
@@ -63,7 +70,7 @@ Plugin pendamping DIN Order Attach untuk masa aktif guest post. Memakai hook Woo
 1. Buyer login/membuat akun dan checkout produk Annual/Lifetime. Setiap quantity menjadi satu paket terpisah; satu order dapat berisi beberapa paket.
 2. Admin atau Shop Manager membuka **Edit order**, mengisi **Guest Post Result → Publication Date**, mengunggah bukti DIN Order Attach, memilih **Completed**, lalu **Update**. Minimal satu file valid yang benar-benar tersimpan berlaku untuk seluruh item order. Aktivasi disetujui hanya sekali; tanggal mulai layanan mengikuti tanggal publish, bukan waktu Update.
 3. Buyer membuka **My Account → My Package**. Dashboard menampilkan tiga paket berjalan terbaru jika tidak ada order yang masih dalam proses. Halaman paket menampilkan Heading Post, order/bukti, periode, tanggal mulai/akhir, sisa hari, dan status.
-4. Perpanjangan 1/2 tahun tersedia mulai H-14 sampai kedaluwarsa. Upgrade Lifetime tersedia sejak Annual aktif. Pilihan masuk cart WooCommerce tanpa menghapus belanja lain; buyer melihat total sebelum checkout. Satu pilihan per paket, quantity satu; dua tahun berarti harga dua tahun, bukan dua unit layanan.
+4. Perpanjangan 1/2 tahun tersedia mulai H-14 dan setelah kedaluwarsa. Upgrade Lifetime tersedia sejak Annual aktif. Memilih salah satu tombol mengganti belanja/kupon sebelumnya sehingga cart hanya berisi satu pilihan paket; buyer melihat total sebelum checkout. Quantity satu; dua tahun berarti harga dua tahun, bukan dua unit layanan.
 5. Pada order renewal/upgrade, admin memverifikasi pembayaran, mencentang **Pembayaran renewal/upgrade sudah saya verifikasi**, lalu menyimpan **Completed**. Bukti order asal dipakai kembali. WooCommerce mengisi `date_paid` saat Completed manual, sehingga tanggal itu tidak dipakai sendirian sebagai bukti pembayaran.
 
 Pada checkout klasik (`[woocommerce_checkout]`), upgrade Annual → Lifetime menampilkan **Heading Post** paket asal sebagai informasi baca-saja di **Additional information**. Jika cart juga berisi pembelian baru, kolom Heading Post untuk publikasi baru tetap wajib diisi. Jalankan `php tests/checkout-heading-smoke.php` dari folder plugin untuk memeriksa tampilan upgrade, kepemilikan, escaping, dan cart campuran tanpa mengubah data.
@@ -121,6 +128,7 @@ Get-ChildItem 'wp-content/plugins/din-package-lifecycle/tests' -Filter '*-smoke.
 
 - `core-smoke.php`: aktivasi/bukti, mixed order/quantity, tanggal kabisat, renewal aktif/expired, CAS contention, duplikasi, benturan refund/cancel, legacy, kepemilikan.
 - `customer-smoke.php`: kepemilikan, product binding, input malformed, quantity, harga berulang, isolasi cart biasa, snapshot, akun wajib, render/heading checkout.
+- `upgrade-cart-smoke.php`: penggantian cart Lifetime dan renewal 1/2 tahun kosong/berisi, klik ulang/ganti paket/durasi, kupon/session/persistent cart, kegagalan awal/akhir hook, otorisasi, serta belanja biasa yang tidak berubah.
 - `dashboard-smoke.php`: pemilihan Order Progress/paket/empty state, invoice independen, hook tidak ganda, kepemilikan, dan paket aktif di halaman data berikutnya.
 - `admin-smoke.php`: nonce, hak akses, fresh read, prioritas, checkbox pembayaran, konfigurasi produk, panel HPOS/legacy.
 - `requests-smoke.php`: order pembayaran 1/2 tahun/Lifetime, harga/tax API, CAS/form ulang, kegagalan penyimpanan/email, validasi sumber, dan tidak ada perubahan hak layanan sebelum approval.

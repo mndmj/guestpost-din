@@ -1,37 +1,28 @@
 <?php
 /**
  * Custom functions for the SQLite implementation.
- *
- * @package wp-sqlite-integration
- * @since 1.0.0
  */
 
 /**
- * This class defines user defined functions(UDFs) for PDO library.
+ * Registers MySQL-compatible functions with PDO SQLite.
  *
- * These functions replace those used in the SQL statement with the PHP functions.
+ * Each callback implements a MySQL SQL function that SQLite does not provide.
  *
- * Usage:
- *
- * <code>
- * new WP_SQLite_PDO_User_Defined_Functions(ref_to_pdo_obj);
- * </code>
- *
- * This automatically enables ref_to_pdo_obj to replace the function in the SQL statement
- * to the ones defined here.
+ * @access private
  */
 class WP_SQLite_PDO_User_Defined_Functions {
 
 	/**
-	 * Registers the user defined functions for SQLite to a PDO instance.
+	 * Register the user-defined SQLite functions on a PDO connection.
+	 *
 	 * The functions are registered using PDO::sqliteCreateFunction().
 	 *
-	 * @param PDO|PDO\SQLite $pdo The PDO object.
+	 * @param PDO|Pdo\Sqlite $pdo The PDO object.
 	 */
 	public static function register_for( $pdo ): self {
 		$instance = new self();
 		foreach ( $instance->functions as $f => $t ) {
-			if ( $pdo instanceof PDO\SQLite ) {
+			if ( $pdo instanceof Pdo\Sqlite ) {
 				$pdo->createFunction( $f, array( $instance, $t ) );
 			} else {
 				$pdo->sqliteCreateFunction( $f, array( $instance, $t ) );
@@ -842,7 +833,7 @@ class WP_SQLite_PDO_User_Defined_Functions {
 	 * @return int long integer
 	 */
 	public function inet_aton( $addr ) {
-		return absint( ip2long( $addr ) );
+		return abs( (int) ip2long( $addr ) );
 	}
 
 	/**
@@ -953,14 +944,14 @@ class WP_SQLite_PDO_User_Defined_Functions {
 	}
 
 	/**
-	 * A helper to covert LIKE pattern to a GLOB pattern for "LIKE BINARY" support.
+	 * A helper to convert a LIKE pattern to a GLOB pattern for "LIKE BINARY" support.
 
 	 * @TODO: Some of the MySQL string specifics described below are likely to
 	 *        affect also other patterns than just "LIKE BINARY". We should
 	 *        consider applying some of the conversions more broadly.
 	 *
-	 * @param string $pattern
-	 * @return string
+	 * @param string|null $pattern
+	 * @return string|null
 	 */
 	public function _helper_like_to_glob_pattern( $pattern ) {
 		if ( null === $pattern ) {
@@ -1000,10 +991,9 @@ class WP_SQLite_PDO_User_Defined_Functions {
 		 * This is true also for multi-byte characters:
 		 *   SELECT '\\©' prints '\©', but LIKE '\\©' is equivalent to LIKE '©'.
 		 *
-		 * However, the multi-byte behavior is likely to depend on the charset.
-		 * For now, we'll assume UTF-8 and thus the "u" modifier for the regex.
+		 * Use "s" to include escaped newlines and omit "u" to preserve raw bytes.
 		 */
-		$pattern = preg_replace( '/\\\\(.)/u', '$1', $pattern );
+		$pattern = preg_replace( '/\\\\(.)/s', '$1', $pattern );
 
 		return $pattern;
 	}

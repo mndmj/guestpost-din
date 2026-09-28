@@ -236,6 +236,11 @@ function gpm_render_pricing_cards_shortcode( $attributes ) {
 					array( 'add-to-cart' => $product_id, 'gpm_shop_cart' => '1' ),
 					wc_get_page_permalink( 'shop' )
 				);
+			} elseif ( is_front_page() && $is_available && $product->is_type( 'simple' ) ) {
+				$button_url = add_query_arg(
+					array( 'add-to-cart' => $product_id, 'gpm_shop_cart' => '1' ),
+					wc_get_cart_url()
+				);
 			}
 
 			$billing = $product->get_attribute( 'billing' );
@@ -364,8 +369,8 @@ function gpm_render_cart_remove_dialog() {
 		return;
 	}
 	?>
-	<dialog id="gpm-cart-remove-dialog" class="gpm-cart-remove-dialog"
-		aria-labelledby="gpm-cart-remove-title" aria-describedby="gpm-cart-remove-description">
+	<dialog id="gpm-cart-remove-dialog" class="gpm-cart-remove-dialog" aria-labelledby="gpm-cart-remove-title"
+		aria-describedby="gpm-cart-remove-description">
 		<h2 id="gpm-cart-remove-title"><?php esc_html_e( 'Remove this item?', 'guest-post-child' ); ?></h2>
 		<p id="gpm-cart-remove-description">
 			<strong id="gpm-cart-remove-product"></strong><br>
@@ -373,7 +378,8 @@ function gpm_render_cart_remove_dialog() {
 		</p>
 		<form method="dialog" class="gpm-cart-remove-dialog__actions">
 			<button type="submit" value="cancel" autofocus><?php esc_html_e( 'Cancel', 'guest-post-child' ); ?></button>
-			<button type="button" data-gpm-cart-remove-confirm><?php esc_html_e( 'Yes, remove', 'guest-post-child' ); ?></button>
+			<button type="button"
+				data-gpm-cart-remove-confirm><?php esc_html_e( 'Yes, remove', 'guest-post-child' ); ?></button>
 		</form>
 	</dialog>
 	<?php

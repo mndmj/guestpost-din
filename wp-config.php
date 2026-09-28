@@ -96,6 +96,8 @@ define( 'WP_DEBUG_DISPLAY', false );
 
 // define( 'WP_HOME', 'https://guestpost.nextdin.com' );
 // define( 'WP_SITEURL', 'https://guestpost.nextdin.com' );
+define( 'SCRIPT_DEBUG', false );
+define( 'WP_ENVIRONMENT_TYPE', 'local' );
 /* That's all, stop editing! Happy publishing. */
 
 /** Absolute path to the WordPress directory. */

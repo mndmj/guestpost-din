@@ -5,6 +5,8 @@
  *
  * This class represents a MySQL SQL token that is produced by WP_MySQL_Lexer,
  * and consumed by WP_MySQL_Parser during the parsing process.
+ *
+ * @access private
  */
 class WP_MySQL_Token extends WP_Parser_Token {
 	/**
@@ -72,11 +74,16 @@ class WP_MySQL_Token extends WP_Parser_Token {
 			$value = substr( $value, 1, -1 );
 
 			/*
-			 * When the NO_BACKSLASH_ESCAPES SQL mode is enabled, we only need to
-			 * handle escaped bounding quotes, as the other characters preserve
-			 * their literal values.
+			 * Quoted identifiers escape their bounding quote by doubling it, while
+			 * backslashes remain literal. Strings in NO_BACKSLASH_ESCAPES mode use
+			 * the same unquoting rule.
+			 *
+			 * See: https://dev.mysql.com/doc/refman/8.4/en/identifiers.html
 			 */
-			if ( $this->sql_mode_no_backslash_escapes_enabled ) {
+			if (
+				WP_MySQL_Lexer::BACK_TICK_QUOTED_ID === $this->id
+				|| $this->sql_mode_no_backslash_escapes_enabled
+			) {
 				return str_replace( $quote . $quote, $quote, $value );
 			}
 
@@ -165,9 +172,14 @@ class WP_MySQL_Token extends WP_Parser_Token {
 			/*
 			 * A backslash with any other character represents the character itself.
 			 * That is, \x evaluates to x, \\ evaluates to \, and \🙂 evaluates to 🙂.
+			 *
+			 * Use "s" (DOTALL) to match all characters including newlines. Do not use
+			 * "u", so non-UTF-8 bytes are preserved (binary or single-byte charsets).
+			 * Legacy multi-byte charsets like big5 or gbk, where a trail byte can be
+			 * a backslash, are not supported.
 			 */
 			$preg_quoted_backslash = preg_quote( $backslash );
-			$value                 = preg_replace( "/$preg_quoted_backslash(.)/u", '$1', $value );
+			$value                 = preg_replace( "/$preg_quoted_backslash(.)/s", '$1', $value );
 		}
 		return $value;
 	}
