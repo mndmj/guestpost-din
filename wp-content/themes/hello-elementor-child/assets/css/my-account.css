@@ -1263,6 +1263,7 @@ body.woocommerce-view-order .woocommerce-MyAccount-content mark.order-status {
 body.woocommerce-view-order .woocommerce-MyAccount-content > h2,
 body.woocommerce-view-order .woocommerce-order-details__title,
 body.woocommerce-view-order .woocommerce-column__title,
+body.woocommerce-view-order .din-order-history > h2,
 body:is(.woocommerce-edit-address, .woocommerce-edit-account)
   .woocommerce-MyAccount-content
   h2 {
@@ -1452,6 +1453,10 @@ body:is(.woocommerce-edit-address, .woocommerce-edit-account)
 
 body.woocommerce-view-order .woocommerce-order-details .order-again {
   margin: 24px 0 0;
+}
+
+body.woocommerce-view-order .order-again + .din-order-attachments {
+  margin-top: 24px;
 }
 
 /* Billing dan Shipping address */
