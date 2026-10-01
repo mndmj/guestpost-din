@@ -80,6 +80,14 @@ final class DIN_Packages {
 		return self::decode( $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . self::table() . ' WHERE id = %d', $id ), ARRAY_A ) );
 	}
 
+	public static function count_for_customer( $customer_id ) {
+		global $wpdb;
+		if ( $customer_id < 1 ) {
+			return 0;
+		}
+		return (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM ' . self::table() . ' WHERE customer_id = %d', $customer_id ) );
+	}
+
 	public static function for_customer( $customer_id, $page = 1, $limit = 20 ) {
 		global $wpdb;
 		if ( $customer_id < 1 ) {

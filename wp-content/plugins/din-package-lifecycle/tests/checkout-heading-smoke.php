@@ -29,7 +29,7 @@ require dirname( __DIR__ ) . '/includes/class-din-packages-customer.php';
 DIN_Packages_Customer::boot();
 heading_check( isset( $GLOBALS['hooks']['woocommerce_after_order_notes'] ), 'Upgrade Heading Post must render inside Additional information.' );
 $GLOBALS['buyer'] = 7;
-$GLOBALS['heading'] = "Original <script>alert(1)</script> & heading\nSecond line";
+$GLOBALS['heading'] = "Original <script>alert(1)</script> & heading #27\nSecond line";
 $cart = new class {
 	public $cart_contents = array();
 	public function get_cart() { return $this->cart_contents; }
@@ -44,7 +44,7 @@ $render = static function () {
 };
 $cart->cart_contents = array( $upgrade );
 $html = $render();
-heading_check( str_contains( $html, 'Heading Post' ) && str_contains( $html, '#10' ) && str_contains( $html, 'Second line' ), 'Upgrade displays source heading and package identity.' );
+heading_check( str_contains( $html, 'Heading Post' ) && ! str_contains( $html, '#10' ) && ! str_contains( $html, 'Package #' ) && str_contains( $html, 'Second line' ) && str_contains( $html, '#27' ), 'Upgrade displays the source heading and literal buyer hash number without a generated package ID.' );
 heading_check( str_contains( $html, '&lt;script&gt;' ) && ! str_contains( $html, '<script>' ) && ! preg_match( '/<(input|textarea)\b/', $html ), 'Source heading is escaped and read-only.' );
 heading_check( ! isset( DIN_Packages_Customer::checkout_fields( array( 'order' => array( 'order_comments' => array() ) ) )['order']['order_comments'] ), 'Pure upgrade must not require a new Heading Post.' );
 heading_check( '#10: ' . $GLOBALS['heading'] === DIN_Packages_Customer::checkout_data( array( 'order_comments' => 'Forged title' ) )['order_comments'], 'Server still preserves the original heading.' );
@@ -55,7 +55,7 @@ heading_check( $fields === DIN_Packages_Customer::checkout_fields( $fields ), 'M
 $second = $upgrade;
 $second['_din_package_purchase']['package_id'] = 11;
 $cart->cart_contents = array( $upgrade, $second );
-heading_check( substr_count( $render(), 'Heading Post' ) === 2 && str_contains( $render(), '#11' ), 'Multiple upgrades retain distinct package headings.' );
+heading_check( substr_count( $render(), 'Heading Post' ) === 2 && ! str_contains( $render(), '#11' ) && substr_count( $render(), '#27' ) === 2, 'Multiple upgrades retain both headings without exposing their generated package IDs.' );
 foreach ( array( 0, 8 ) as $buyer ) {
 	$GLOBALS['buyer'] = $buyer;
 	heading_check( '' === $render(), 'Guests and other buyers cannot see source headings.' );

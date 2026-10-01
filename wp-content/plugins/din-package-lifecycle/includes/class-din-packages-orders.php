@@ -3,6 +3,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class DIN_Packages_Orders {
 	private static $indexes = array();
+	private static $display_orders = array();
 
 	public static function boot() {
 		add_filter( 'woocommerce_my_account_my_orders_query', array( __CLASS__, 'orders_query' ), 20 );
@@ -11,8 +12,75 @@ final class DIN_Packages_Orders {
 		add_action( 'woocommerce_my_account_my_orders_column_heading-post', array( __CLASS__, 'heading_post' ) );
 		add_action( 'woocommerce_my_account_my_orders_column_order-total', array( __CLASS__, 'order_total' ) );
 		add_filter( 'woocommerce_order_details_status', array( __CLASS__, 'detail_status' ), 20, 2 );
-		add_action( 'woocommerce_view_order', array( __CLASS__, 'detail' ), 5 );
+		add_action( 'woocommerce_after_order_details', array( __CLASS__, 'detail_after_order' ) );
 		add_action( 'woocommerce_order_details_before_order_table', array( __CLASS__, 'original_receipt' ) );
+		add_action( 'woocommerce_order_details_before_order_table', array( __CLASS__, 'begin_buyer_display' ) );
+		add_action( 'woocommerce_order_details_after_order_table', array( __CLASS__, 'end_buyer_display' ) );
+		add_action( 'woocommerce_before_template_part', array( __CLASS__, 'begin_payment_display' ), 10, 4 );
+		add_action( 'woocommerce_after_template_part', array( __CLASS__, 'end_payment_display' ) );
+	}
+
+	/** Classic and Blocks order tables share these render boundaries; storage stays untouched. */
+	public static function begin_buyer_display( $order ) {
+		$buyer = (int) get_current_user_id();
+		self::$display_orders[] = ! is_admin() && $buyer && $order instanceof WC_Order && (int) $order->get_customer_id() === $buyer ? (int) $order->get_id() : 0;
+		add_filter( 'woocommerce_order_get_customer_note', array( __CLASS__, 'display_customer_note' ), 10, 2 );
+		add_filter( 'woocommerce_order_item_display_meta_value', array( __CLASS__, 'display_item_meta' ), 10, 3 );
+	}
+
+	public static function end_buyer_display() {
+		array_pop( self::$display_orders );
+		if ( ! self::$display_orders ) {
+			remove_filter( 'woocommerce_order_get_customer_note', array( __CLASS__, 'display_customer_note' ), 10 );
+			remove_filter( 'woocommerce_order_item_display_meta_value', array( __CLASS__, 'display_item_meta' ), 10 );
+		}
+	}
+
+	public static function begin_payment_display( $template, $path, $located, $args ) {
+		if ( 'checkout/form-pay.php' === $template ) {
+			self::begin_buyer_display( $args['order'] ?? null );
+		}
+	}
+
+	public static function end_payment_display( $template ) {
+		if ( 'checkout/form-pay.php' === $template ) {
+			self::end_buyer_display();
+		}
+	}
+
+	private static function displaying_order( $order_id ) {
+		return $order_id && (int) $order_id === end( self::$display_orders ) && ! doing_action( 'woocommerce_email_order_details' );
+	}
+
+	public static function display_item_meta( $value, $meta, $item ) {
+		if ( ! self::displaying_order( $item->get_order_id() ) || 'Destination package' !== $meta->key ) {
+			return $value;
+		}
+		$purchase = self::purchase( $item );
+		if ( ! $purchase ) {
+			return $value;
+		}
+		$prefix = '#' . $purchase['package_id'] . ' — ';
+		return is_string( $value ) && str_starts_with( (string) $meta->value, $prefix ) && str_starts_with( $value, $prefix ) ? substr( $value, strlen( $prefix ) ) : $value;
+	}
+
+	public static function display_customer_note( $note, $order ) {
+		return self::displaying_order( $order->get_id() ) ? self::buyer_heading( $note, $order ) : $note;
+	}
+
+	private static function buyer_heading( $note, $order ) {
+		$original = $headings = array();
+		foreach ( $order->get_items() as $item ) {
+			$purchase = self::purchase( $item );
+			$heading = $item->get_meta( '_din_package_heading' );
+			if ( ! $purchase || ! $item->meta_exists( '_din_package_heading' ) || ! is_string( $heading ) ) {
+				return $note;
+			}
+			$original[] = '#' . $purchase['package_id'] . ': ' . $heading;
+			$headings[] = $heading;
+		}
+		// Match the full stored snapshot, not arbitrary buyer-written #numbers.
+		return $original && $note === implode( "\n", $original ) ? implode( "\n", $headings ) : $note;
 	}
 
 	private static function buyer() {
@@ -174,7 +242,7 @@ final class DIN_Packages_Orders {
 		if ( ! self::buyer() || (int) $order->get_customer_id() !== self::buyer() ) {
 			return;
 		}
-		$heading = trim( (string) $order->get_customer_note() );
+		$heading = trim( (string) self::buyer_heading( $order->get_customer_note(), $order ) );
 		echo '<span class="din-order-heading">' . esc_html( '' !== $heading ? $heading : '—' ) . '</span>';
 	}
 
@@ -226,6 +294,12 @@ final class DIN_Packages_Orders {
 		return true;
 	}
 
+	public static function detail_after_order( $order ) {
+		if ( $order instanceof WC_Order ) {
+			self::detail( $order->get_id() );
+		}
+	}
+
 	public static function detail( $order_id ) {
 		if ( ! is_wc_endpoint_url( 'view-order' ) ) {
 			return;
@@ -275,7 +349,7 @@ final class DIN_Packages_Orders {
 			}
 			foreach ( $transaction['links'] as $link ) {
 				$label = 'renew_custom' === $link['action'] ? 'Renewal: ' . $link['years'] . ( 1 === $link['years'] ? ' year' : ' years' ) : array( 'lifetime' => 'Annual → Lifetime', 'renew_1' => 'Renewal: 1 year', 'renew_2' => 'Renewal: 2 years' )[ $link['action'] ];
-				echo '<div>Package #' . esc_html( $link['package']['id'] ) . ': ' . esc_html( $label );
+				echo '<div>' . esc_html( self::package_label( $link['package'] ) ) . ': ' . esc_html( $label );
 				$change = self::applied( $link ) ? 'Applied' : ( $order->has_status( array( 'cancelled', 'failed', 'refunded' ) ) ? 'Not applied' : 'Awaiting payment / admin approval' );
 				if ( ! empty( $link['package']['stopped_at'] ) ) {
 					$change .= ' · Service stopped';
@@ -300,13 +374,17 @@ final class DIN_Packages_Orders {
 		echo '</tbody></table></div></section>';
 	}
 
+	private static function package_label( $package ) {
+		return ( $package['product_name'] ?: 'Package' ) . ( ! empty( $package['heading'] ) ? ' — ' . $package['heading'] : '' );
+	}
+
 	private static function timeline( $packages ) {
 		$events = array();
 		$labels = array( 'activate' => 'Service activated', 'lifetime' => 'Upgraded: Annual → Lifetime', 'renew_1' => 'Renewed for 1 year', 'renew_2' => 'Renewed for 2 years', 'renew_custom' => 'Custom renewal', 'expiry_adjusted' => 'Expiry adjusted manually', 'stopped' => 'Service stopped' );
 		foreach ( $packages as $package ) {
 			foreach ( $package['history'] ?? array() as $event ) {
 				if ( isset( $labels[ $event['action'] ?? '' ] ) ) {
-					$events[] = array( 'package_id' => $package['id'], 'event' => $event, 'position' => count( $events ) );
+					$events[] = array( 'package_label' => self::package_label( $package ), 'event' => $event, 'position' => count( $events ) );
 				}
 			}
 		}
@@ -316,7 +394,7 @@ final class DIN_Packages_Orders {
 			$event = $entry['event'];
 			$years = DIN_Packages::custom_years( $event['years'] ?? 0 );
 			$label = 'renew_custom' === $event['action'] && $years ? 'Renewed for ' . $years . ( 1 === $years ? ' year' : ' years' ) : $labels[ $event['action'] ];
-			echo '<li><strong>Package #' . esc_html( $entry['package_id'] ) . ' — ' . esc_html( $label ) . '</strong>';
+			echo '<li><strong>' . esc_html( $entry['package_label'] ) . ' — ' . esc_html( $label ) . '</strong>';
 			if ( ! empty( $event['at'] ) ) {
 				echo '<small class="din-order-note">' . esc_html( wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), (int) $event['at'] ) ) . '</small>';
 			}

@@ -202,17 +202,16 @@ $status_step_map = array(
 	'completed' => 3,
 );
 
-$progress_orders = wc_get_orders(
+$invoice_orders = wc_get_orders(
 	array(
 		'customer_id' => $current_user->ID,
 		'status' => array_keys( $status_step_map ),
-		'limit' => 1,
+		'limit' => 3,
 		'orderby' => 'date',
 		'order' => 'DESC',
 	)
 );
 
-$invoice_order = $progress_orders[0] ?? false;
 // A newer Completed order must not hide an unfinished order's progress.
 $progress_orders = wc_get_orders(
 	array(
@@ -247,6 +246,8 @@ if ( class_exists( 'DIN_Packages_Customer' ) ) {
 do_action( 'woocommerce_account_dashboard' );
 ?>
 
+<div class="gpm-dashboard-bento">
+<div class="gpm-dashboard-grid">
 <?php if ( $running_packages ) : ?>
 	<?php DIN_Packages_Customer::dashboard( $running_packages ); ?>
 <?php else : ?>
@@ -365,12 +366,7 @@ do_action( 'woocommerce_account_dashboard' );
 	<?php endif; ?>
 </section>
 
-<?php if ( $invoice_order ) : ?>
-	<?php
-	$invoice_date = $invoice_order->get_date_created();
-	$payment_method = $invoice_order->get_payment_method_title();
-	?>
-
+<?php if ( $invoice_orders ) : ?>
 	<section class="gpm-invoice-card" aria-labelledby="gpm-invoice-title">
 		<header class="gpm-panel-header">
 			<div>
@@ -383,48 +379,27 @@ do_action( 'woocommerce_account_dashboard' );
 				</h2>
 			</div>
 
-			<span
-				class="gpm-history-status gpm-history-status--<?php echo esc_attr( sanitize_html_class( $invoice_order->get_status() ) ); ?>">
-				<?php echo esc_html( wc_get_order_status_name( $invoice_order->get_status() ) ); ?>
-			</span>
+			<a class="gpm-panel-header__link" href="<?php echo esc_url( wc_get_account_endpoint_url( 'orders' ) ); ?>">
+				View All
+			</a>
 		</header>
 
-		<dl class="gpm-invoice-card__details">
-			<div class="gpm-invoice-card__field">
-				<dt>Order Number</dt>
-				<dd>#<?php echo esc_html( $invoice_order->get_order_number() ); ?></dd>
-			</div>
-
-			<div class="gpm-invoice-card__field">
-				<dt>Date</dt>
-				<dd>
-					<?php echo $invoice_date ? esc_html( wc_format_datetime( $invoice_date ) ) : '&mdash;'; ?>
-				</dd>
-			</div>
-
-			<div class="gpm-invoice-card__field">
-				<dt>Payment Method</dt>
-				<dd><?php echo esc_html( $payment_method ?: 'Not available' ); ?></dd>
-			</div>
-
-			<div class="gpm-invoice-card__field">
-				<dt>Total</dt>
-				<dd><?php echo wp_kses_post( $invoice_order->get_formatted_order_total() ); ?></dd>
-			</div>
-		</dl>
-
-		<div class="gpm-invoice-card__actions">
-			<?php if ( $invoice_order->needs_payment() ) : ?>
-				<a class="gpm-invoice-card__button gpm-invoice-card__button--pay"
-					href="<?php echo esc_url( $invoice_order->get_checkout_payment_url() ); ?>">
-					Pay Now
-				</a>
-			<?php endif; ?>
-
-			<a href="<?php echo esc_url( $invoice_order->get_view_order_url() ); ?>">
-				<div class="gpm-invoice-card__button gpm-invoice-card__button--view">View Invoice</div>
-			</a>
-		</div>
+		<?php foreach ( $invoice_orders as $invoice_order ) : ?>
+			<?php $invoice_date = $invoice_order->get_date_created(); ?>
+			<article class="gpm-invoice-card__item" aria-label="Invoice for order #<?php echo esc_attr( $invoice_order->get_order_number() ); ?>">
+				<div class="gpm-invoice-card__identity">
+					<strong>Order #<?php echo esc_html( $invoice_order->get_order_number() ); ?></strong>
+					<?php if ( $invoice_date ) : ?>
+						<time datetime="<?php echo esc_attr( $invoice_date->date( 'c' ) ); ?>"><?php echo esc_html( wc_format_datetime( $invoice_date ) ); ?></time>
+					<?php else : ?>
+						<span>&mdash;</span>
+					<?php endif; ?>
+				</div>
+				<a class="gpm-invoice-card__button gpm-invoice-card__button--view"
+					href="<?php echo esc_url( $invoice_order->get_view_order_url() ); ?>"
+					aria-label="View invoice for order #<?php echo esc_attr( $invoice_order->get_order_number() ); ?>">View</a>
+			</article>
+		<?php endforeach; ?>
 	</section>
 <?php endif; ?>
 
@@ -452,7 +427,6 @@ $guest_post_order = $guest_post_orders[0] ?? false;
 <?php if ( $guest_post_order ) : ?>
 	<?php
 	$published_url = $guest_post_order->get_meta( '_gpm_published_url' );
-	$anchor_text = $guest_post_order->get_meta( '_gpm_anchor_text' );
 	$published_at = $guest_post_order->get_meta( '_gpm_published_at' );
 	$link_status = $guest_post_order->get_meta( '_gpm_link_status' );
 
@@ -470,7 +444,7 @@ $guest_post_order = $guest_post_orders[0] ?? false;
 	?>
 
 	<section class="gpm-guest-result gpm-guest-result--<?php echo esc_attr( $link_status ); ?>"
-		data-status="<?php echo esc_attr( $link_status ); ?>" aria-labelledby="gpm-guest-result-title">
+		data-status="<?php echo esc_attr( $link_status ); ?>" aria-labelledby="gpm-guest-result-title" hidden>
 		<header class="gpm-panel-header">
 			<div>
 				<span class="gpm-panel-header__eyebrow">
@@ -492,13 +466,6 @@ $guest_post_order = $guest_post_orders[0] ?? false;
 				<span>Publisher</span>
 				<strong>
 					<?php echo esc_html( $publisher_domain ?: '—' ); ?>
-				</strong>
-			</div>
-
-			<div class="gpm-guest-result__field">
-				<span>Anchor Text</span>
-				<strong>
-					<?php echo esc_html( $anchor_text ?: '—' ); ?>
 				</strong>
 			</div>
 
@@ -738,6 +705,8 @@ $latest_notifications = function_exists(
 
 	<?php gpm_render_notification_list( $latest_notifications ); ?>
 </section>
+</div>
+</div>
 
 <p>
 	<?php

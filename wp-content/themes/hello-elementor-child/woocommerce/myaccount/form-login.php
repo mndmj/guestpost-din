@@ -34,6 +34,11 @@ if ( ! $gpm_registration_enabled ) {
 	$gpm_auth_view = 'login';
 }
 $gpm_account_url = wc_get_page_permalink( 'myaccount' );
+// The query carries only intent; the return URL always comes from WooCommerce.
+$gpm_checkout_redirect = '1' === ( $_GET['gpm_checkout'] ?? '' ) ? wc_get_checkout_url() : '';
+if ( '' !== $gpm_checkout_redirect ) {
+	$gpm_account_url = add_query_arg( 'gpm_checkout', '1', $gpm_account_url );
+}
 $gpm_login_url = add_query_arg( 'gpm_auth', 'login', $gpm_account_url );
 $gpm_register_url = add_query_arg( 'gpm_auth', 'register', $gpm_account_url );
 
@@ -91,6 +96,9 @@ do_action( 'woocommerce_before_customer_login_form' ); ?>
 					<span><?php esc_html_e( 'Remember me', 'woocommerce' ); ?></span>
 				</label>
 				<?php wp_nonce_field( 'woocommerce-login', 'woocommerce-login-nonce' ); ?>
+				<?php if ( '' !== $gpm_checkout_redirect ) : ?>
+					<input type="hidden" name="redirect" value="<?php echo esc_url( $gpm_checkout_redirect ); ?>" />
+				<?php endif; ?>
 				<button type="submit"
 					class="woocommerce-button button woocommerce-form-login__submit<?php echo esc_attr( wc_wp_theme_get_element_class_name( 'button' ) ? ' ' . wc_wp_theme_get_element_class_name( 'button' ) : '' ); ?>"
 					name="login"
@@ -148,6 +156,9 @@ do_action( 'woocommerce_before_customer_login_form' ); ?>
 
 			<p class="woocommerce-form-row form-row">
 				<?php wp_nonce_field( 'woocommerce-register', 'woocommerce-register-nonce' ); ?>
+				<?php if ( '' !== $gpm_checkout_redirect ) : ?>
+					<input type="hidden" name="redirect" value="<?php echo esc_url( $gpm_checkout_redirect ); ?>" />
+				<?php endif; ?>
 				<button type="submit"
 					class="woocommerce-Button woocommerce-button button<?php echo esc_attr( wc_wp_theme_get_element_class_name( 'button' ) ? ' ' . wc_wp_theme_get_element_class_name( 'button' ) : '' ); ?> woocommerce-form-register__submit"
 					name="register"

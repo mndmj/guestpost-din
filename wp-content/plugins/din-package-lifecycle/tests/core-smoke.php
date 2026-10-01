@@ -30,6 +30,7 @@ class Memory_DB {
 	public function prepare( $sql, ...$args ) { foreach ( $args as $v ) { $sql = preg_replace_callback( '/%[ds]/', function ( $m ) use ( $v ) { return '%d' === $m[0] ? (string) (int) $v : $this->pdo->quote( $v ); }, $sql, 1 ); } return $sql; }
 	public function get_row( $sql, $format ) { return $this->pdo->query( $sql )->fetch( PDO::FETCH_ASSOC ); }
 	public function get_results( $sql, $format ) { return $this->pdo->query( $sql )->fetchAll( PDO::FETCH_ASSOC ); }
+	public function get_var( $sql ) { return $this->pdo->query( $sql )->fetchColumn(); }
 	public function query( $sql ) { return $this->pdo->exec( str_replace( 'INSERT IGNORE', 'INSERT OR IGNORE', $sql ) ); }
 	public function update( $table, $data, $where, ...$formats ) {
 		if ( $this->contend ) { $call = $this->contend; $this->contend = null; $call(); }
@@ -97,6 +98,9 @@ $order = new Test_Order( 10, $items ); $orders = array( 10=>$order );
 DIN_Packages::capture_order( $order ); DIN_Packages::capture_order( $order );
 check( count( DIN_Packages::for_order( 10 ) ) === 3, 'Quantity/mixed order capture must produce 3 units exactly once.' );
 check( count( DIN_Packages::for_customer( 8 ) ) === 0, 'Owner query leaked packages.' );
+check( method_exists( 'DIN_Packages', 'count_for_customer' ), 'Owner-scoped package count is missing.' );
+check( 3 === DIN_Packages::count_for_customer( 7 ), 'Buyer count must include all three captured units.' );
+check( 0 === DIN_Packages::count_for_customer( 8 ) && 0 === DIN_Packages::count_for_customer( 0 ), 'Foreign buyer and guest cannot count this owner’s packages.' );
 DIN_Packages::approve_order( $order, 9 );
 check( DIN_Packages::get( 1 )['started_at'] === 0, 'Non-Completed activated.' );
 $order->status = 'completed';
@@ -480,4 +484,15 @@ check( DIN_Packages::get( 1 ) === $custom_applied, 'Custom paid approval must re
 $unquoted_custom = new Test_Order( 820, array( new Test_Item( 821, 1, 1, array( '_din_package_purchase' => array( 'package_id' => 1, 'action' => 'renew_custom' ) ) ) ) );
 $unquoted_custom->status = 'pending';
 check( ! DIN_Packages::order_needs_payment( true, $unquoted_custom ), 'An unquoted custom action must never be treated as an ordinary payable order.' );
+$wpdb = new Memory_DB();
+$statement = $wpdb->pdo->prepare( 'INSERT INTO wp_din_packages (customer_id, order_id, order_item_id, unit, data) VALUES (?, ?, ?, 1, ?)' );
+for ( $id = 1; $id <= 123; ++$id ) {
+	$statement->execute( array( $id <= 121 ? 7 : 8, 1000 + $id, 2000 + $id, '{}' ) );
+}
+check( 121 === DIN_Packages::count_for_customer( 7 ), 'Buyer count must cover more than the fetch limit of 100.' );
+check( 2 === DIN_Packages::count_for_customer( 8 ) && 0 === DIN_Packages::count_for_customer( 0 ), 'Count must be owner-scoped and guests must stay empty.' );
+$first_page = array_column( DIN_Packages::for_customer( 7, 1, 10 ), 'id' );
+$second_page = array_column( DIN_Packages::for_customer( 7, 2, 10 ), 'id' );
+check( $first_page === range( 121, 112 ) && $second_page === range( 111, 102 ), 'SQL pages must be ID descending, ten per page and disjoint.' );
+check( array_column( DIN_Packages::for_customer( 7, 13, 10 ), 'id' ) === array( 1 ) && DIN_Packages::for_customer( 8, 1, 10 )[0]['customer_id'] === 8, 'Final SQL page and foreign buyer query remain owner-scoped.' );
 echo "DIN Package Lifecycle core smoke: OK (in-memory only, including paid admin expiry requests)\n";

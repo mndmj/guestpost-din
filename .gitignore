@@ -1,31 +1,47 @@
-# Konfigurasi lokal
+# Konfigurasi lokal — pertahankan konfigurasi hosting
 /wp-config.php
-/package.json
-/package-lock.json
-/docs
-/node_modules
+/wp-config-default.php
+/.htaccess
 
-# Database dan integrasi khusus WordPress Studio
+# Database dan integrasi WordPress Studio
 /wp-content/database/
 /wp-content/db.php
 /wp-content/mu-plugins/99-studio-loader.php
 /wp-content/mu-plugins/sqlite-database-integration/
 
-# Data runtime dan dependensi development
+# Media, log, dan berkas sementara lokal
 /wp-content/uploads/
 /wp-content/debug.log
-/node_modules/
+/wp-content/upgrade/
+/wp-content/upgrade-temp-backup/
 
-# Hasil pengujian dan pengaturan editor lokal
+# Pengujian tema dan plugin
+/wp-content/themes/hello-elementor-child/tests/
+/wp-content/plugins/din-package-lifecycle/tests/
+/wp-content/plugins/din-order-attach/tests/
+/wp-content/plugins/gpm-guest-post-results/tests/
 /.playwright-mcp/
-/.vscode/
 
-# Panduan pengembangan
+# Salinan cadangan tema
+/wp-content/themes/hello-elementor-child/functions-backup.php
+/wp-content/themes/hello-elementor-child/style copy.css
+
+# Dependensi dan pengaturan development lokal
+/node_modules/
+/package.json
+/package-lock.json
+/.vscode/
+/.idea/
+/.agents/
+/.codex/
+
+# Dokumentasi dan panduan pengembangan
+/docs/
 /AGENTS.md
 /CLAUDE.md
 /STUDIO.md
 
-# File kosong yang bukan bagian dari aplikasi
-/get_builder_content_for_display(11)
-/get_status())
-/posts}
+# Berkas sistem operasi
+.DS_Store
+Thumbs.db
+Desktop.ini

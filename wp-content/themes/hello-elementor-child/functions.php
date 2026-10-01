@@ -161,6 +161,24 @@ function gpm_enqueue_auth_styles() {
 add_action( 'wp_enqueue_scripts', 'gpm_enqueue_auth_styles', 30 );
 add_action( 'login_enqueue_scripts', 'gpm_enqueue_auth_styles', 30 );
 
+/** Send guests through the existing account form before starting checkout. */
+function gpm_require_checkout_login() {
+	if ( is_admin() || wp_doing_ajax() || ( defined( 'REST_REQUEST' ) && REST_REQUEST )
+		|| ! in_array( $_SERVER['REQUEST_METHOD'] ?? '', array( 'GET', 'HEAD' ), true )
+		|| is_user_logged_in() || ! function_exists( 'is_checkout' ) || ! is_checkout()
+		|| is_wc_endpoint_url() || ! WC()->cart || WC()->cart->is_empty() ) {
+		return;
+	}
+
+	wp_safe_redirect( add_query_arg(
+		array( 'gpm_auth' => 'login', 'gpm_checkout' => '1' ),
+		wc_get_page_permalink( 'myaccount' )
+	) );
+	exit;
+}
+// ponytail: WooCommerce handles empty carts first and owns the cart/auth session.
+add_action( 'template_redirect', 'gpm_require_checkout_login', 20 );
+
 /**
  * Use the buyer's password for My Account only; keep checkout settings unchanged.
  */

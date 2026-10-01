@@ -2,7 +2,7 @@
 /**
  * Plugin Name: GPM Guest Post Results
  * Description: Menyimpan hasil guest post pada order WooCommerce.
- * Version: 1.2.0
+ * Version: 1.2.1
  * Requires Plugins: woocommerce
  * Requires PHP: 7.4
  * Text Domain: gpm-guest-post-results
@@ -45,14 +45,6 @@ function gpm_render_guest_post_result_fields( $order ) {
         "value" => $order->get_meta( "_gpm_published_url" ),
         "wrapper_class" => "form-field-wide",
         "placeholder" => "https://publisher.com/article",
-    ] );
-
-    woocommerce_wp_text_input( [
-        "id" => "_gpm_anchor_text",
-        "label" => __( "Anchor Text", "gpm-guest-post-results" ),
-        "type" => "text",
-        "value" => $order->get_meta( "_gpm_anchor_text" ),
-        "wrapper_class" => "form-field-wide",
     ] );
 
     woocommerce_wp_text_input( [
@@ -113,10 +105,6 @@ function gpm_save_guest_post_result_fields( $order_id, $order ) {
         ] )
         : "";
 
-    $anchor_text = isset( $_POST["_gpm_anchor_text"] )
-        ? sanitize_text_field( wp_unslash( $_POST["_gpm_anchor_text"] ) )
-        : "";
-
     $published_at = isset( $_POST["_gpm_published_at"] )
         ? sanitize_text_field( wp_unslash( $_POST["_gpm_published_at"] ) )
         : "";
@@ -138,7 +126,6 @@ function gpm_save_guest_post_result_fields( $order_id, $order ) {
     }
 
     $order->update_meta_data( "_gpm_published_url", $published_url );
-    $order->update_meta_data( "_gpm_anchor_text", $anchor_text );
     $order->update_meta_data( "_gpm_published_at", $published_at );
     $order->update_meta_data( "_gpm_link_status", $link_status );
     $order->save();
@@ -149,6 +136,47 @@ add_action(
     60,
     2,
 );
+
+/** Add this order's publication link to its buyer's attachment table. */
+function gpm_buyer_order_publication_rows( $rows, $order ) {
+    $buyer_id = get_current_user_id();
+    if ( is_admin() || ! $buyer_id || ! is_wc_endpoint_url( 'view-order' ) ) {
+        return $rows;
+    }
+
+    if ( ! ( $order instanceof WC_Order ) || (int) $order->get_customer_id() !== (int) $buyer_id || ! $order->has_status( 'completed' ) ) {
+        return $rows;
+    }
+
+    $url = $order->get_meta( '_gpm_published_url' );
+    $parts = is_string( $url ) ? wp_parse_url( $url ) : false;
+    if ( ! is_array( $parts ) || empty( $parts['host'] ) || ! in_array( strtolower( $parts['scheme'] ?? '' ), array( 'http', 'https' ), true ) ) {
+        return $rows;
+    }
+    $url = esc_url( $url, array( 'http', 'https' ) );
+    if ( '' === $url ) {
+        return $rows;
+    }
+
+    $removed = 'removed' === $order->get_meta( '_gpm_link_status' );
+    ob_start();
+    ?>
+    <tr class="gpm-order-publication">
+        <td><strong><?php echo esc_html__( 'Published Post', 'gpm-guest-post-results' ); ?></strong><?php if ( ! $removed ) : ?><br><?php echo esc_html( $parts['host'] ); ?><?php endif; ?></td>
+        <td>—</td>
+        <td>—</td>
+        <td>
+            <?php if ( $removed ) : ?>
+                <span class="gpm-guest-result__status gpm-order-publication__removed"><?php echo esc_html__( 'Removed', 'gpm-guest-post-results' ); ?></span>
+            <?php else : ?>
+                <a class="woocommerce-button button" href="<?php echo $url; ?>" target="_blank" rel="noopener noreferrer external"><?php echo esc_html__( 'View Published Post', 'gpm-guest-post-results' ); ?></a>
+            <?php endif; ?>
+        </td>
+    </tr>
+    <?php
+    return $rows . ob_get_clean();
+}
+add_filter( 'din_order_attach_extra_rows', 'gpm_buyer_order_publication_rows', 10, 2 );
 
 /**
  * Menambahkan kolom Post sebelum kolom Order.

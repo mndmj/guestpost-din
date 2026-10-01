@@ -102,14 +102,21 @@ final class DIN_Packages_Customer {
 	}
 
 	public static function account() {
-		$page = isset( $_GET['package-page'] ) && is_scalar( $_GET['package-page'] ) ? max( 1, absint( $_GET['package-page'] ) ) : 1; // Read-only pagination.
-		self::render_packages( $page, 20, false );
+		$requested_page = $_GET['package-page'] ?? ''; // Read-only pagination.
+		$page = is_scalar( $requested_page ) && preg_match( '/^[1-9][0-9]*$/D', (string) $requested_page ) ? (int) $requested_page : 1;
+		self::render_packages( $page, 10, false );
 	}
 
 	public static function render_packages( $page, $limit, $summary, $packages = null ) {
 		$user_id = get_current_user_id();
 		if ( ! $user_id ) {
 			return;
+		}
+		$account_list = ! $summary && null === $packages && is_wc_endpoint_url( 'din-packages' );
+		$total_pages = 1;
+		if ( $account_list ) {
+			$total_pages = max( 1, (int) ceil( DIN_Packages::count_for_customer( $user_id ) / $limit ) );
+			$page = max( 1, min( $page, $total_pages ) );
 		}
 		$packages = $packages ?? DIN_Packages::for_customer( $user_id, $page, $limit );
 		$url = wc_get_account_endpoint_url( 'din-packages' );
@@ -141,12 +148,25 @@ final class DIN_Packages_Customer {
 					$days = $expiry ? max( 0, (int) ceil( ( $expiry - time() ) / DAY_IN_SECONDS ) ) : 0;
 					?>
 					<article class="din-packages__card" aria-labelledby="din-package-<?php echo esc_attr( $package['id'] ); ?>">
+						<?php if ( $account_list ) : ?>
+							<details class="din-packages__details">
+								<summary class="din-packages__summary">
+									<span class="din-packages__summary-text">
+										<strong class="din-packages__summary-name" id="din-package-<?php echo esc_attr( $package['id'] ); ?>"><?php echo esc_html( $package['product_name'] ); ?></strong>
+										<span class="din-packages__summary-meta">Start: <?php if ( $package['started_at'] ) { self::date_html( $package['started_at'], false ); } else { echo 'Awaiting Activation'; } ?></span>
+										<span class="din-packages__preview"><strong>Heading Post:</strong> <?php echo esc_html( $package['heading'] ?: '—' ); ?></span>
+									</span>
+									<span class="din-packages__status din-packages__status--<?php echo esc_attr( $status ); ?>"><?php echo esc_html( $labels[ $status ] ?? $labels['review'] ); ?></span>
+								</summary>
+								<div class="din-packages__body">
+						<?php else : ?>
 						<div class="din-packages__identity">
 							<h3 id="din-package-<?php echo esc_attr( $package['id'] ); ?>">
 								<?php echo esc_html( $package['product_name'] ); ?>
 							</h3><span
 								class="din-packages__status din-packages__status--<?php echo esc_attr( $status ); ?>"><?php echo esc_html( $labels[ $status ] ?? $labels['review'] ); ?></span>
 						</div>
+						<?php endif; ?>
 						<?php if ( ! empty( $package['upgrade_badges'] ) ) : ?>
 							<div class="din-order-package-badges"><?php echo wp_kses_post( $package['upgrade_badges'] ); ?></div>
 						<?php endif; ?>
@@ -154,8 +174,8 @@ final class DIN_Packages_Customer {
 							<?php echo esc_html( $package['heading'] ?: '—' ); ?></p>
 						<dl class="din-packages__dates">
 							<div>
-								<dt>Package / Period</dt>
-								<dd>#<?php echo esc_html( $package['id'] ); ?> ·
+								<dt>Period</dt>
+								<dd>
 									<?php echo 'lifetime' === $package['period'] ? 'Lifetime' : 'Annual'; ?>
 								</dd>
 							</div>
@@ -198,21 +218,34 @@ final class DIN_Packages_Customer {
 										<input type="hidden" name="din_package_id" value="<?php echo esc_attr( $package['id'] ); ?>">
 										<button class="din-packages__button" type="submit" name="din_package_action"
 											value="<?php echo esc_attr( $action ); ?>"
-											aria-label="<?php echo esc_attr( $option['label'] . ' — Package #' . $package['id'] ); ?>"><?php echo esc_html( $option['label'] ); ?></button>
+											aria-label="<?php echo esc_attr( $option['label'] . ' — ' . $package['product_name'] . ( $package['heading'] ? ' — ' . $package['heading'] : '' ) ); ?>"><?php echo esc_html( $option['label'] ); ?></button>
 									</form>
 								<?php endif; ?>
 							<?php endforeach; ?>
 						</div>
+						<?php if ( $account_list ) : ?>
+								</div>
+							</details>
+						<?php endif; ?>
 					</article>
 				<?php endforeach; ?>
 			</div>
-			<?php if ( ! $summary && ( $page > 1 || count( $packages ) === $limit ) ) : ?>
-				<nav class="din-packages__pagination" aria-label="My Package Page">
-					<?php if ( $page > 1 ) : ?><a
+			<?php if ( $account_list && $total_pages > 1 ) : ?>
+				<nav class="din-packages__pagination woocommerce-pagination" aria-label="My Package Page">
+					<?php if ( $page > 1 ) : ?><a class="woocommerce-button"
 							href="<?php echo esc_url( add_query_arg( 'package-page', $page - 1, $url ) ); ?>">←
 							Previous</a><?php endif; ?>
-					<span aria-current="page">Page <?php echo esc_html( $page ); ?></span>
-					<?php if ( count( $packages ) === $limit ) : ?><a
+					<?php echo wp_kses_post( paginate_links( array(
+						'base'      => str_replace( '999999999', '%#%', add_query_arg( 'package-page', 999999999, $url ) ),
+						'format'    => '',
+						'current'   => $page,
+						'total'     => $total_pages,
+						'type'      => 'list',
+						'prev_next' => false,
+						'end_size'  => 1,
+						'mid_size'  => 1,
+					) ) ); ?>
+					<?php if ( $page < $total_pages ) : ?><a class="woocommerce-button"
 							href="<?php echo esc_url( add_query_arg( 'package-page', $page + 1, $url ) ); ?>">Next
 							→</a><?php endif; ?>
 				</nav>
@@ -221,12 +254,13 @@ final class DIN_Packages_Customer {
 		<?php
 	}
 
-	private static function date_html( $timestamp ) {
+	private static function date_html( $timestamp, $with_time = true ) {
 		if ( ! $timestamp ) {
 			echo '—';
 			return;
 		}
-		echo '<time datetime="' . esc_attr( gmdate( 'c', (int) $timestamp ) ) . '">' . esc_html( wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), (int) $timestamp ) ) . '</time>';
+		$format = get_option( 'date_format' ) . ( $with_time ? ' ' . get_option( 'time_format' ) : '' );
+		echo '<time datetime="' . esc_attr( gmdate( 'c', (int) $timestamp ) ) . '">' . esc_html( wp_date( $format, (int) $timestamp ) ) . '</time>';
 	}
 
 	public static function purchase() {
@@ -453,7 +487,7 @@ final class DIN_Packages_Customer {
 		if ( array_key_exists( '_din_package_purchase', $item ) ) {
 			$option = self::option_for_item( $item );
 			if ( ! is_wp_error( $option ) ) {
-				$data[] = array( 'key' => 'Destination package', 'value' => '#' . $option['package']['id'] . ' — ' . $option['label'] );
+				$data[] = array( 'key' => 'Destination package', 'value' => $option['label'] );
 				$data[] = array( 'key' => 'Original Post Heading', 'value' => $option['package']['heading'] );
 				$data[] = array( 'key' => 'Activation of changes', 'value' => 'After payment and approval have been completed by the admin.' );
 			}
@@ -497,7 +531,7 @@ final class DIN_Packages_Customer {
 				continue;
 			}
 			echo '<p class="form-row form-row-wide din-packages-checkout-heading"><strong>';
-			echo esc_html( sprintf( __( 'Heading Post — Package #%d', 'din-package-lifecycle' ), $option['package']['id'] ) );
+			echo esc_html( __( 'Heading Post', 'din-package-lifecycle' ) );
 			echo '</strong><br>' . nl2br( esc_html( $option['package']['heading'] ?: '—' ) ) . '</p>';
 		}
 	}

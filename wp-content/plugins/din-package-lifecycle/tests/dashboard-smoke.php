@@ -22,10 +22,12 @@ function wp_kses( $value, $allowed ) { return $value; }
 function wc_logout_url() { return '/logout/'; }
 function wc_get_account_endpoint_url( $endpoint ) { return '/my-account/' . $endpoint . '/'; }
 function wc_get_endpoint_url( $endpoint ) { return wc_get_account_endpoint_url( $endpoint ); }
+function is_wc_endpoint_url( $endpoint = '' ) { return false; } // Dashboard fixtures, not the dedicated package-list endpoint.
 function wc_shipping_enabled() { return false; }
 function wc_get_order_status_name( $status ) { return ucfirst( $status ); }
 function get_option( $key ) { return array( 'date_format' => 'Y-m-d', 'time_format' => 'H:i' )[ $key ] ?? false; }
 function wp_date( $format, $timestamp ) { return gmdate( $format, $timestamp ); }
+function wp_parse_url( $url, $component = -1 ) { return parse_url( $url, $component ); }
 function wc_format_datetime( $date ) { return $date->date( 'Y-m-d' ); }
 function gpm_render_notification_list( $notifications ) {}
 class WP_Error {}
@@ -50,7 +52,9 @@ class Dashboard_Test_Date extends DateTimeImmutable {
 	public function date( $format ) { return $this->format( $format ); }
 }
 class WC_Order {
+	public $meta = array();
 	public function __construct( public $id, public $status, public $customer = 7 ) {}
+	public function get_meta( $key ) { return $this->meta[ $key ] ?? ''; }
 	public function get_id() { return $this->id; }
 	public function get_customer_id() { return $this->customer; }
 	public function get_status() { return $this->status; }
@@ -65,8 +69,10 @@ class WC_Order {
 }
 function wc_get_order( $id ) { return $GLOBALS['orders'][ $id ] ?? false; }
 function wc_get_orders( $args ) {
-	// Publication metadata is absent from these dashboard fixtures.
-	$orders = empty( $args['meta_query'] ) ? array_values( $GLOBALS['orders'] ) : array();
+	$orders = array_values( $GLOBALS['orders'] );
+	if ( ! empty( $args['meta_query'] ) ) {
+		$orders = array_filter( $orders, static fn( $order ) => '' !== $order->get_meta( '_gpm_published_url' ) );
+	}
 	$orders = array_values( array_filter( $orders, static function ( $order ) use ( $args ) {
 		return ( ! isset( $args['customer_id'] ) || $order->get_customer_id() === $args['customer_id'] )
 			&& ( ! isset( $args['status'] ) || $order->has_status( $args['status'] ) );
@@ -114,11 +120,48 @@ function dashboard_section( $html, $class ) {
 	return $matches[0] ?? '';
 }
 
+// Retired Anchor Text stays hidden even when historical metadata still exists.
+foreach ( array( '', 'Historical anchor' ) as $anchor ) {
+	foreach ( array( 'live', 'removed' ) as $link_status ) {
+		$publication = new WC_Order( 30, 'completed' );
+		$publication->meta = array( '_gpm_published_url' => 'https://publisher.test/article', '_gpm_anchor_text' => $anchor, '_gpm_published_at' => '2026-09-25', '_gpm_link_status' => $link_status );
+		$html = dashboard_render( array( $publication ), array(), false );
+		$result = dashboard_section( $html, 'gpm-guest-result gpm-guest-result--' . $link_status );
+		if ( '--render-publication' === ( $argv[1] ?? '' ) && 'live' === $link_status ) { echo $result; exit; }
+		dashboard_expect( '' !== $result && ! str_contains( $result, 'Anchor Text' ) && ! str_contains( $result, 'Historical anchor' ), 'Publication results hide Anchor Text for new and historical orders.' );
+		dashboard_expect( 3 === substr_count( $result, 'class="gpm-guest-result__field"' ) && str_contains( $result, 'publisher.test' ) && str_contains( $result, '2026-09-25' ) && str_contains( $result, '#30' ), 'Publisher, Publication Date and Order remain visible.' );
+		dashboard_expect( ( 'live' === $link_status ) === str_contains( $result, 'data-published-link' ), 'Published-post button still follows link status.' );
+		dashboard_expect( $anchor === $publication->get_meta( '_gpm_anchor_text' ), 'Rendering never changes historical Anchor Text.' );
+	}
+}
+
 // Removing unfinished-status filtering would select order 20 and fail the progress assertion.
 $html = dashboard_render( array( new WC_Order( 10, 'processing' ), new WC_Order( 20, 'completed' ) ), array( dashboard_package() ), false );
 $progress = dashboard_section( $html, 'gpm-order-progress' );
 dashboard_expect( str_contains( $progress, 'Order #10' ) && ! str_contains( $progress, 'Order #20' ), 'Older processing order takes priority over a newer completed order and a running package.' );
-dashboard_expect( str_contains( dashboard_section( $html, 'gpm-invoice-card' ), '<dd>#20</dd>' ), 'Invoice retains the latest eligible order independently of progress.' );
+dashboard_expect( str_contains( dashboard_section( $html, 'gpm-invoice-card' ), '<strong>Order #20</strong>' ), 'Invoice retains the latest eligible order independently of progress.' );
+
+$invoice_candidates = array( new WC_Order( 10, 'pending' ), new WC_Order( 20, 'on-hold' ), new WC_Order( 30, 'processing' ), new WC_Order( 40, 'completed' ) );
+$excluded_invoices = array( new WC_Order( 50, 'cancelled' ), new WC_Order( 60, 'failed' ), new WC_Order( 70, 'refunded' ), new WC_Order( 80, 'completed', 99 ) );
+foreach ( array( array(), array( 10 ), array( 20, 10 ), array( 30, 20, 10 ), array( 40, 30, 20 ) ) as $count => $expected_ids ) {
+	$html = dashboard_render( array_merge( array_slice( $invoice_candidates, 0, $count ), $excluded_invoices ), array(), false );
+	$invoice = dashboard_section( $html, 'gpm-invoice-card' );
+	preg_match_all( '/<strong>Order #(\d+)<\/strong>/', $invoice, $matches );
+	dashboard_expect( array_map( 'intval', $matches[1] ) === $expected_ids, 'Invoice shows up to three latest eligible orders belonging to this buyer.' );
+	dashboard_expect( (int) ( $count > 0 ) === substr_count( $html, '<section class="gpm-invoice-card"' ), 'Invoices share one bento panel, hidden when none qualify.' );
+	dashboard_expect( count( $expected_ids ) === substr_count( $invoice, '>View<' ), 'Each invoice keeps its own compact View action.' );
+	dashboard_expect( count( $expected_ids ) === substr_count( $invoice, '<time datetime=' ), 'Each invoice displays its order date.' );
+	foreach ( $expected_ids as $id ) {
+		dashboard_expect( str_contains( $invoice, 'href="/my-account/view-order/' . $id . '/"' ), 'Invoice action links to its own order.' );
+	}
+	dashboard_expect( ! str_contains( $invoice, 'order-pay/' ) && ! str_contains( $invoice, 'Payment Method' ) && ! str_contains( $invoice, 'gpm-history-status' ), 'Billing summary contains only order identity, date and View.' );
+	if ( $count > 0 ) {
+		dashboard_expect( str_contains( $html, 'href="/my-account/order-pay/10/"' ), 'Unpaid order payment remains available outside the compact billing summary.' );
+	}
+	if ( 4 === $count ) {
+		dashboard_expect( str_contains( dashboard_section( $html, 'gpm-order-progress' ), 'Order #30' ), 'Three invoices do not change the latest unfinished progress order.' );
+	}
+}
 
 foreach ( array( 'pending', 'on-hold', 'processing' ) as $status ) {
 	$html = dashboard_render( array( new WC_Order( 10, $status ) ), array(), false );
@@ -127,7 +170,7 @@ foreach ( array( 'pending', 'on-hold', 'processing' ) as $status ) {
 foreach ( array( 'active', 'expiring', 'lifetime' ) as $status ) {
 	$html = dashboard_render( array( new WC_Order( 20, 'completed' ) ), array( dashboard_package( $status ) ), true );
 	dashboard_expect( str_contains( $html, 'Service Validity Period' ) && str_contains( $html, 'Running publication' ), 'Running service is rendered: ' . $status );
-	dashboard_expect( str_contains( dashboard_section( $html, 'gpm-invoice-card' ), '<dd>#20</dd>' ), 'Completed invoice survives the package branch.' );
+	dashboard_expect( str_contains( dashboard_section( $html, 'gpm-invoice-card' ), '<strong>Order #20</strong>' ), 'Completed invoice survives the package branch.' );
 }
 $html = dashboard_render( array(), array(), false );
 dashboard_expect( str_contains( dashboard_section( $html, 'gpm-order-progress' ), 'No active orders yet.' ), 'Neither order nor running package retains the progress empty state.' );
@@ -150,4 +193,4 @@ ob_start(); DIN_Packages_Customer::account(); $stopped_html = ob_get_clean();
 dashboard_expect( str_contains( $stopped_html, 'din-packages__status--stopped' ) && str_contains( $stopped_html, 'Stopped on' ), 'My Package retains stopped services with their stop date.' );
 dashboard_expect( str_contains( $stopped_html, 'Buyer &lt;request&gt;' ) && ! str_contains( $stopped_html, 'No expiration date' ), 'Stopped Lifetime shows escaped reason instead of an ongoing entitlement.' );
 dashboard_expect( ! str_contains( $stopped_html, 'din_package_action' ) && str_contains( $stopped_html, '/view-order/20/' ), 'Stopped packages retain evidence links without renewal controls.' );
-echo "PASS: Dashboard branches, ownership, older running packages, and stopped package history rendering.\n";
+echo "PASS: Three latest buyer invoices (0-4 orders), invoice actions, publication results without Anchor Text, dashboard branches, ownership, older running packages, and stopped package history rendering.\n";

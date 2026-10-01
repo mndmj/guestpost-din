@@ -1,6 +1,12 @@
-# DIN Package Lifecycle 1.0.7
+# DIN Package Lifecycle 1.0.8
 
 Plugin pendamping DIN Order Attach untuk masa aktif guest post. Memakai hook WooCommerce, tabel `{$wpdb->prefix}din_packages`, dan Action Scheduler bawaan WooCommerce. Tidak mengubah core WooCommerce atau DIN Order Attach. Dashboard terintegrasi dengan template pada child theme Guest Post Monitoring.
+
+## Buyer order detail layout (1.0.8)
+
+- **My Account → Orders → View** shows Order details (including Order Again and Order attachments) before My Package, Transaction history, and Service history. Billing/Shipping Address remains last; the native order status stays above the cards.
+- Only the buyer view-order layout changes. Checkout/order received, order data, package dates, payments, attachment permissions, and styles are unchanged.
+- Run `php tests/orders-smoke.php` to check the order with native WordPress hooks, WooCommerce templates, and the DIN attachment renderer using in-memory fixtures; no site/database writes.
 
 ## Cart upgrade dan perpanjangan (1.0.7)
 

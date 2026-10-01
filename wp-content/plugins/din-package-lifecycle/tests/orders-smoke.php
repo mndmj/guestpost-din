@@ -1,18 +1,17 @@
 <?php
 defined( 'STDIN' ) || exit;
-define( 'ABSPATH', __DIR__ );
+define( 'ABSPATH', dirname( __DIR__, 4 ) . '/' );
 define( 'DIN_PACKAGES_VERSION', 'test' );
+require ABSPATH . 'wp-includes/plugin.php';
 $buyer = 7;
 $admin = false;
 $account = true;
 $endpoint = 'orders';
-$hooks = $queries = $orders = $packages = array();
+$queries = $orders = $packages = array();
 function get_current_user_id() { return $GLOBALS['buyer']; }
 function is_admin() { return $GLOBALS['admin']; }
 function is_account_page() { return $GLOBALS['account']; }
 function is_wc_endpoint_url( $endpoint ) { return $GLOBALS['endpoint'] === $endpoint; }
-function add_action( $hook, $callback, $priority = 10, $args = 1 ) { $GLOBALS['hooks'][ $hook ] = $callback; }
-function add_filter( $hook, $callback, $priority = 10, $args = 1 ) { add_action( $hook, $callback ); }
 function absint( $value ) { return abs( (int) $value ); }
 function __( $text, $domain = '' ) { return $text; }
 function _n( $single, $plural, $count, $domain = '' ) { return 1 === $count ? $single : $plural; }
@@ -44,7 +43,9 @@ class Orders_Test_Item {
 	public function __construct( public $id, public $purchase = '', public $product = 200, public $quantity = 1 ) {}
 	public function get_id() { return $this->id; }
 	public function get_meta( $key ) { return '_din_package_purchase' === $key ? $this->purchase : ''; }
+	public function meta_exists( $key ) { return '_din_package_purchase' === $key && '' !== $this->purchase; }
 	public function get_product_id() { return $this->product; }
+	public function get_product() { return false; }
 	public function get_variation_id() { return 0; }
 	public function get_quantity() { return $this->quantity; }
 }
@@ -53,6 +54,10 @@ class WC_Order {
 	public function __construct( public $id, public $items = array(), public $status = 'completed', public $customer = 7 ) {}
 	public function get_id() { return $this->id; }
 	public function get_customer_id() { return $this->customer; }
+	public function get_user_id() { return $this->customer; }
+	public function get_downloadable_items() { return array(); }
+	public function get_customer_order_notes() { return array(); }
+	public function get_order_item_totals() { return array( 'order_total' => array( 'label' => 'Total:', 'value' => '$100.00' ) ); }
 	public function get_customer_note() { return $this->note; }
 	public function get_items() { return $this->items; }
 	public function get_order_number() { return $this->id; }
@@ -81,12 +86,14 @@ class DIN_Packages {
 }
 class DIN_Packages_Customer {
 	public static function render_packages( $page, $limit, $summary, $packages = null ) {
+		echo '<section class="din-packages"><h2>My Package</h2>';
 		foreach ( $packages as $package ) { echo '<article>' . esc_html( $package['product_name'] . ' ' . $package['heading'] . ' ' . DIN_Packages::status( $package ) ) . '</article>'; }
+		echo '</section>';
 	}
 }
 function orders_expect( $condition, $message ) { if ( ! $condition ) { fwrite( STDERR, "FAIL: $message\n" ); exit( 1 ); } }
 function orders_package( $id, $source, $period = 'annual' ) {
-	return array( 'id' => $id, 'customer_id' => 7, 'order_id' => $source, 'period' => $period, 'product_name' => 'Guestpost Annual', 'heading' => '<Post> & original', 'annual_product_id' => 100, 'lifetime_product_id' => 200, 'started_at' => 1704067200, 'expires_at' => 1800000000, 'history' => array() );
+	return array( 'id' => $id, 'customer_id' => 7, 'order_id' => $source, 'period' => $period, 'product_name' => 'Guestpost Annual', 'heading' => '<Post> & original #27', 'annual_product_id' => 100, 'lifetime_product_id' => 200, 'started_at' => 1704067200, 'expires_at' => 1800000000, 'history' => array() );
 }
 function orders_purchase( $item, $package, $action = 'lifetime' ) { return new Orders_Test_Item( $item, array( 'package_id' => $package, 'action' => $action ), 'lifetime' === $action ? 200 : 100 ); }
 $orders[10] = new WC_Order( 10, array( new Orders_Test_Item( 101 ) ) );
@@ -134,7 +141,7 @@ $source = dirname( __DIR__ ) . '/includes/class-din-packages-orders.php';
 orders_expect( is_file( $source ), 'Unified account-order implementation is missing.' );
 require $source;
 DIN_Packages_Orders::boot();
-orders_expect( isset( $hooks['woocommerce_my_account_my_orders_query'], $hooks['woocommerce_view_order'] ), 'Unified order hooks must be registered.' );
+orders_expect( has_filter( 'woocommerce_my_account_my_orders_query' ), 'Unified order query hook must be registered.' );
 $snapshot = serialize( array( $orders, $packages ) );
 $query = DIN_Packages_Orders::orders_query( array( 'customer' => 7, 'page' => 1, 'limit' => 10, 'paginate' => true, 'exclude' => array( 9000 ) ) );
 foreach ( array( 11, 12, 15, 16, 17, 23, 24, 28, 31, 32, 9000 ) as $hidden ) { orders_expect( in_array( $hidden, $query['exclude'], true ), 'Pure linked purchase must be excluded before pagination: ' . $hidden ); }
@@ -156,14 +163,18 @@ orders_expect( str_contains( $html, 'order-pay/12/' ) && ! str_contains( $html, 
 orders_expect( str_contains( $html, 'order-pay/31/' ) && str_contains( $html, 'Renewal: 3 years' ), 'Custom pending renewal must show its real term and retain native payment access.' );
 orders_expect( str_contains( $html, 'Renewed for 4 years' ) && str_contains( $html, '&lt;Custom paid term&gt;' ), 'Custom renewal history must show the stored number of years and escaped buyer reason.' );
 orders_expect( str_contains( $html, 'view-order/11/' ) && str_contains( $html, 'Transaction history' ) && str_contains( $html, 'Service history' ), 'Native transaction details and lifecycle timeline remain available.' );
-orders_expect( (bool) preg_match( '~<li><strong>Package #2[^<]*manually[^<]*</strong>.*?Expires: 2027-01-01 00:00 → 2028-01-01 00:00.*?</li>~s', $html ), 'Manual expiry changes must show the package and old-to-new expiry dates in service history.' );
+orders_expect( ! preg_match( '/Package\s*#\d+/', $html ) && str_contains( $html, '<th scope="row">#10' ) && str_contains( $html, '<th scope="row">#11' ), 'Buyer history hides generated package labels while retaining native order numbers.' );
+preg_match( '~<table class="din-order-transactions">(.*?)</table>~s', $html, $transaction_table );
+orders_expect( str_contains( $transaction_table[1] ?? '', 'Guestpost Annual' ) && str_contains( $transaction_table[1] ?? '', '&lt;Post&gt; &amp; original #27' ), 'Transactions identify their package by escaped product name and buyer heading, preserving literal #27.' );
+orders_expect( (bool) preg_match( '~<li><strong>Guestpost Annual[^<]*&lt;Post&gt; &amp; original #27[^<]*manually[^<]*</strong>.*?Expires: 2027-01-01 00:00 → 2028-01-01 00:00.*?</li>~s', $html ), 'Manual expiry changes show product, heading, and old-to-new expiry dates in service history.' );
 orders_expect( str_contains( $html, '&lt;Manual extension&gt; &amp; approved<br />' ) && str_contains( $html, 'No additional charge' ) && ! str_contains( $html, '<Manual extension>' ), 'Manual expiry reasons are public, escaped, and preserve line breaks.' );
 orders_expect( strpos( $html, '&lt;Manual extension&gt;' ) < strpos( $html, '&lt;Buyer request&gt;' ), 'Manual expiry adjustments retain chronological service history ordering.' );
-orders_expect( (bool) preg_match( '~<li><strong>Package #2[^<]*Renewed for 2 years</strong>.*?Expires: 2027-01-01 00:00 → 2028-01-01 00:00.*?&lt;Paid renewal&gt; &amp; agreed date.*?</li>~s', $html ), 'Paid admin renewal history must display the agreed expiry and escaped public reason.' );
-orders_expect( (bool) preg_match( '~<li><strong>Package #1[^<]*Lifetime</strong>.*?Expires: 2027-01-01 00:00 → No expiration date.*?&lt;Paid lifetime&gt;.*?</li>~s', $html ), 'Paid Lifetime history must display no expiration date and its public reason.' );
+orders_expect( (bool) preg_match( '~<li><strong>Guestpost Annual[^<]*&lt;Post&gt; &amp; original #27[^<]*Renewed for 2 years</strong>.*?Expires: 2027-01-01 00:00 → 2028-01-01 00:00.*?&lt;Paid renewal&gt; &amp; agreed date.*?</li>~s', $html ), 'Paid admin renewal history must display its package name, buyer heading, agreed expiry and escaped public reason.' );
+orders_expect( (bool) preg_match( '~<li><strong>Guestpost (?:Annual|Lifetime)[^<]*&lt;Post&gt; &amp; original #27[^<]*Lifetime</strong>.*?Expires: 2027-01-01 00:00 → No expiration date.*?&lt;Paid lifetime&gt;.*?</li>~s', $html ), 'Paid Lifetime history must display its package name, buyer heading, no expiration date and public reason.' );
 orders_expect( ! str_contains( $html, '/777/' ) && ! str_contains( $html, 'private' ), 'Only the buyer-owned group is visible.' );
 ob_start(); DIN_Packages_Orders::detail( 11 ); $child_html = ob_get_clean();
 orders_expect( str_contains( $child_html, 'view-order/10/' ) && ! str_contains( $child_html, 'Transaction history' ), 'Existing child links remain transaction details with a link back to the main order.' );
+require __DIR__ . '/order-layout-fixture.php';
 orders_expect( $snapshot === serialize( array( $orders, $packages ) ), 'Grouping and current-name projection must never mutate transactions or packages.' );
 $admin = true;
 $original_query = array( 'customer' => 7 );
@@ -175,14 +186,14 @@ $buyer = 8;
 orders_expect( null === DIN_Packages_Orders::group( 10 ), 'Changing buyers cannot reuse another buyer cache.' );
 $buyer = 7;
 $endpoint = 'orders';
-orders_expect( isset( $hooks['woocommerce_account_orders_columns'], $hooks['woocommerce_my_account_my_orders_column_heading-post'] ), 'Account Orders must register a Heading Post column and renderer.' );
+orders_expect( has_filter( 'woocommerce_account_orders_columns' ) && has_action( 'woocommerce_my_account_my_orders_column_heading-post' ), 'Account Orders must register a Heading Post column and renderer.' );
 $columns = array( 'order-number' => 'Order', 'order-date' => 'Date', 'order-status' => 'Status', 'order-total' => 'Total', 'order-actions' => 'Actions' );
 $expected_columns = array( 'order-number' => 'Order', 'heading-post' => 'Heading Post', 'order-date' => 'Date', 'order-status' => 'Status', 'order-total' => 'Total', 'order-actions' => 'Actions' );
-orders_expect( call_user_func( $hooks['woocommerce_account_orders_columns'], $columns ) === $expected_columns, 'Heading Post belongs after Order and must preserve native columns.' );
-orders_expect( call_user_func( $hooks['woocommerce_account_orders_columns'], $expected_columns ) === $expected_columns, 'Column registration must not duplicate Heading Post.' );
-orders_expect( call_user_func( $hooks['woocommerce_account_orders_columns'], array( 'order-date' => 'Date' ) ) === array( 'order-date' => 'Date', 'heading-post' => 'Heading Post' ), 'Heading Post remains available if another extension removes Order.' );
+orders_expect( apply_filters( 'woocommerce_account_orders_columns', $columns ) === $expected_columns, 'Heading Post belongs after Order and must preserve native columns.' );
+orders_expect( apply_filters( 'woocommerce_account_orders_columns', $expected_columns ) === $expected_columns, 'Column registration must not duplicate Heading Post.' );
+orders_expect( apply_filters( 'woocommerce_account_orders_columns', array( 'order-date' => 'Date' ) ) === array( 'order-date' => 'Date', 'heading-post' => 'Heading Post' ), 'Heading Post remains available if another extension removes Order.' );
 $render_heading = static function ( $order ) {
-	ob_start(); call_user_func( $GLOBALS['hooks']['woocommerce_my_account_my_orders_column_heading-post'], $order ); return ob_get_clean();
+	ob_start(); do_action( 'woocommerce_my_account_my_orders_column_heading-post', $order ); return ob_get_clean();
 };
 $heading_query_count = count( $queries );
 foreach ( array( '<Post> & "original"', "#1: First heading\n#2: Second heading", '0', str_repeat( 'LongHeading', 40 ) ) as $heading ) {
