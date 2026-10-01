@@ -96,7 +96,8 @@ final class DIN_Order_Attach_Download {
 		}
 
 		$records = $service->storage->get_order_files( $order );
-		if ( ! $records ) {
+		$extra_rows = wp_kses_post( apply_filters( 'din_order_attach_extra_rows', '', $order ) );
+		if ( ! $records && '' === trim( $extra_rows ) ) {
 			return;
 		}
 		?>
@@ -104,7 +105,7 @@ final class DIN_Order_Attach_Download {
 			<h2 class="woocommerce-order-details__title"><?php esc_html_e( 'Order attachments', 'din-order-attach' ); ?></h2>
 			<table class="woocommerce-table shop_table">
 				<thead><tr>
-					<th><?php esc_html_e( 'File', 'din-order-attach' ); ?></th>
+					<th><?php esc_html_e( $extra_rows ? 'File / Link' : 'File', 'din-order-attach' ); ?></th>
 					<th><?php esc_html_e( 'Size', 'din-order-attach' ); ?></th>
 					<th><?php esc_html_e( 'Uploaded at', 'din-order-attach' ); ?></th>
 					<th><?php esc_html_e( 'Action', 'din-order-attach' ); ?></th>
@@ -128,6 +129,7 @@ final class DIN_Order_Attach_Download {
 						</td>
 					</tr>
 				<?php endforeach; ?>
+				<?php echo $extra_rows; // Sanitized above; extension rows share this order's access check. ?>
 				</tbody>
 			</table>
 		</section>

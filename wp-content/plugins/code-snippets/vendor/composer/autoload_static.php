@@ -4,8 +4,13 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc322fb32f6db8844392d9f78341fcefb
+class ComposerStaticInit118984772f6b448937a6130f407c8a8b
 {
+    public static $files = array (
+        'b1ada0eb618777c05225569c0c6d0f01' => __DIR__ . '/../..' . '/php/Admin/Menus/Manage/Manage_Menu.php',
+        '0c65a72b0cd567f18036e10348c996c7' => __DIR__ . '/../..' . '/php/Utils/requests.php',
+    );
+
     public static $prefixLengthsPsr4 = array (
         'T' =>
         array (
@@ -15,6 +20,7 @@ class ComposerStaticInitc322fb32f6db8844392d9f78341fcefb
         'C' =>
         array (
             'Composer\\Installers\\' => 20,
+            'Code_Snippets\\' => 14,
         ),
     );
 
@@ -31,53 +37,84 @@ class ComposerStaticInitc322fb32f6db8844392d9f78341fcefb
         array (
             0 => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers',
         ),
+        'Code_Snippets\\' =>
+        array (
+            0 => __DIR__ . '/../..' . '/php',
+        ),
     );
 
     public static $classMap = array (
-        'Code_Snippets\\Admin' => __DIR__ . '/../..' . '/php/class-admin.php',
-        'Code_Snippets\\Admin_Menu' => __DIR__ . '/../..' . '/php/admin-menus/class-admin-menu.php',
-        'Code_Snippets\\Cloud\\Cloud_API' => __DIR__ . '/../..' . '/php/cloud/class-cloud-api.php',
-        'Code_Snippets\\Cloud\\Cloud_Link' => __DIR__ . '/../..' . '/php/cloud/class-cloud-link.php',
-        'Code_Snippets\\Cloud\\Cloud_Search_List_Table' => __DIR__ . '/../..' . '/php/cloud/class-cloud-search-list-table.php',
-        'Code_Snippets\\Cloud\\Cloud_Snippet' => __DIR__ . '/../..' . '/php/cloud/class-cloud-snippet.php',
-        'Code_Snippets\\Cloud\\Cloud_Snippets' => __DIR__ . '/../..' . '/php/cloud/class-cloud-snippets.php',
-        'Code_Snippets\\Contextual_Help' => __DIR__ . '/../..' . '/php/class-contextual-help.php',
-        'Code_Snippets\\DB' => __DIR__ . '/../..' . '/php/class-db.php',
-        'Code_Snippets\\Data_Item' => __DIR__ . '/../..' . '/php/class-data-item.php',
-        'Code_Snippets\\Edit_Menu' => __DIR__ . '/../..' . '/php/admin-menus/class-edit-menu.php',
-        'Code_Snippets\\Export' => __DIR__ . '/../..' . '/php/export/class-export.php',
-        'Code_Snippets\\Export_Attachment' => __DIR__ . '/../..' . '/php/export/class-export-attachment.php',
-        'Code_Snippets\\File_System_Interface' => __DIR__ . '/../..' . '/php/flat-files/interfaces/interface-file-system.php',
-        'Code_Snippets\\Files_Import_Manager' => __DIR__ . '/../..' . '/php/migration/importers/files/file-upload-importer.php',
-        'Code_Snippets\\Front_End' => __DIR__ . '/../..' . '/php/front-end/class-front-end.php',
-        'Code_Snippets\\Header_Footer_Code_Manager_Importer' => __DIR__ . '/../..' . '/php/migration/importers/plugins/header-footer-code-manager.php',
-        'Code_Snippets\\Html_Snippet_Handler' => __DIR__ . '/../..' . '/php/flat-files/handlers/html-snippet-handler.php',
-        'Code_Snippets\\Import' => __DIR__ . '/../..' . '/php/export/class-import.php',
-        'Code_Snippets\\Import_Menu' => __DIR__ . '/../..' . '/php/admin-menus/class-import-menu.php',
-        'Code_Snippets\\Importer_Base' => __DIR__ . '/../..' . '/php/migration/importers/plugins/importer-base.php',
-        'Code_Snippets\\Insert_Headers_And_Footers_Importer' => __DIR__ . '/../..' . '/php/migration/importers/plugins/insert-headers-and-footers.php',
-        'Code_Snippets\\Insert_PHP_Code_Snippet_Importer' => __DIR__ . '/../..' . '/php/migration/importers/plugins/insert-php-code-snippet.php',
-        'Code_Snippets\\Licensing' => __DIR__ . '/../..' . '/php/class-licensing.php',
-        'Code_Snippets\\List_Table' => __DIR__ . '/../..' . '/php/class-list-table.php',
-        'Code_Snippets\\Manage_Menu' => __DIR__ . '/../..' . '/php/admin-menus/class-manage-menu.php',
-        'Code_Snippets\\Php_Snippet_Handler' => __DIR__ . '/../..' . '/php/flat-files/handlers/php-snippet-handler.php',
-        'Code_Snippets\\Plugin' => __DIR__ . '/../..' . '/php/class-plugin.php',
-        'Code_Snippets\\Plugins_Import_Manager' => __DIR__ . '/../..' . '/php/migration/importers/plugins/manager.php',
-        'Code_Snippets\\REST_API\\Snippets_REST_Controller' => __DIR__ . '/../..' . '/php/rest-api/class-snippets-rest-controller.php',
-        'Code_Snippets\\Settings\\Setting_Field' => __DIR__ . '/../..' . '/php/settings/class-setting-field.php',
-        'Code_Snippets\\Settings\\Version_Switch' => __DIR__ . '/../..' . '/php/settings/class-version-switch.php',
-        'Code_Snippets\\Settings_Menu' => __DIR__ . '/../..' . '/php/admin-menus/class-settings-menu.php',
-        'Code_Snippets\\Snippet' => __DIR__ . '/../..' . '/php/class-snippet.php',
-        'Code_Snippets\\Snippet_Config_Repository' => __DIR__ . '/../..' . '/php/flat-files/classes/class-config-repository.php',
-        'Code_Snippets\\Snippet_Config_Repository_Interface' => __DIR__ . '/../..' . '/php/flat-files/interfaces/interface-config-repository.php',
-        'Code_Snippets\\Snippet_Files' => __DIR__ . '/../..' . '/php/flat-files/classes/class-snippet-files.php',
-        'Code_Snippets\\Snippet_Handler_Registry' => __DIR__ . '/../..' . '/php/flat-files/registry.php',
-        'Code_Snippets\\Snippet_Type_Handler_Interface' => __DIR__ . '/../..' . '/php/flat-files/interfaces/interface-snippet-handler.php',
-        'Code_Snippets\\Upgrade' => __DIR__ . '/../..' . '/php/class-upgrade.php',
-        'Code_Snippets\\Validator' => __DIR__ . '/../..' . '/php/class-validator.php',
-        'Code_Snippets\\Welcome_API' => __DIR__ . '/../..' . '/php/class-welcome-api.php',
-        'Code_Snippets\\Welcome_Menu' => __DIR__ . '/../..' . '/php/admin-menus/class-welcome-menu.php',
-        'Code_Snippets\\WordPress_File_System_Adapter' => __DIR__ . '/../..' . '/php/flat-files/classes/class-file-system-adapter.php',
+        'Code_Snippets\\Admin\\Bootstrap_Admin' => __DIR__ . '/../..' . '/php/Admin/Bootstrap_Admin.php',
+        'Code_Snippets\\Admin\\Contextual_Help' => __DIR__ . '/../..' . '/php/Admin/Contextual_Help.php',
+        'Code_Snippets\\Admin\\Menus\\Admin_Menu' => __DIR__ . '/../..' . '/php/Admin/Menus/Admin_Menu.php',
+        'Code_Snippets\\Admin\\Menus\\Edit_Menu' => __DIR__ . '/../..' . '/php/Admin/Menus/Edit_Menu.php',
+        'Code_Snippets\\Admin\\Menus\\Import_Menu' => __DIR__ . '/../..' . '/php/Admin/Menus/Import_Menu.php',
+        'Code_Snippets\\Admin\\Menus\\Manage\\Manage_Menu' => __DIR__ . '/../..' . '/php/Admin/Menus/Manage/Manage_Menu.php',
+        'Code_Snippets\\Admin\\Menus\\Manage\\Manage_Menu_Assets' => __DIR__ . '/../..' . '/php/Admin/Menus/Manage/Manage_Menu_Assets.php',
+        'Code_Snippets\\Admin\\Menus\\Manage\\Manage_Menu_Bulk_Download' => __DIR__ . '/../..' . '/php/Admin/Menus/Manage/Manage_Menu_Bulk_Download.php',
+        'Code_Snippets\\Admin\\Menus\\Manage\\Manage_Menu_Screen_Options' => __DIR__ . '/../..' . '/php/Admin/Menus/Manage/Manage_Menu_Screen_Options.php',
+        'Code_Snippets\\Admin\\Menus\\Settings_Menu' => __DIR__ . '/../..' . '/php/Admin/Menus/Settings_Menu.php',
+        'Code_Snippets\\Admin\\Menus\\Welcome_Menu' => __DIR__ . '/../..' . '/php/Admin/Menus/Welcome_Menu.php',
+        'Code_Snippets\\Admin\\Notice_Filter' => __DIR__ . '/../..' . '/php/Admin/Notice_Filter.php',
+        'Code_Snippets\\Client\\Cloud_Public_Client' => __DIR__ . '/../..' . '/php/Client/Cloud_Public_Client.php',
+        'Code_Snippets\\Client\\Welcome_Client' => __DIR__ . '/../..' . '/php/Client/Welcome_Client.php',
+        'Code_Snippets\\Controller\\Cloud_Search_Controller' => __DIR__ . '/../..' . '/php/Controller/Cloud_Search_Controller.php',
+        'Code_Snippets\\Core\\DB' => __DIR__ . '/../..' . '/php/Core/DB.php',
+        'Code_Snippets\\Core\\Licensing' => __DIR__ . '/../..' . '/php/Core/Licensing.php',
+        'Code_Snippets\\Core\\Uninstaller' => __DIR__ . '/../..' . '/php/Core/Uninstaller.php',
+        'Code_Snippets\\Core\\Upgrader' => __DIR__ . '/../..' . '/php/Core/Upgrader.php',
+        'Code_Snippets\\Flat_Files\\Flat_File_Config_Repository' => __DIR__ . '/../..' . '/php/Flat_Files/Flat_File_Config_Repository.php',
+        'Code_Snippets\\Flat_Files\\Handler_Registry' => __DIR__ . '/../..' . '/php/Flat_Files/Handler_Registry.php',
+        'Code_Snippets\\Flat_Files\\Handlers\\Content_Snippet_Handler' => __DIR__ . '/../..' . '/php/Flat_Files/Handlers/Content_Snippet_Handler.php',
+        'Code_Snippets\\Flat_Files\\Handlers\\Functions_Snippet_Handler' => __DIR__ . '/../..' . '/php/Flat_Files/Handlers/Functions_Snippet_Handler.php',
+        'Code_Snippets\\Flat_Files\\Interfaces\\Filesystem_Adapter' => __DIR__ . '/../..' . '/php/Flat_Files/Interfaces/Filesystem_Adapter.php',
+        'Code_Snippets\\Flat_Files\\Interfaces\\Snippet_Config_Repository' => __DIR__ . '/../..' . '/php/Flat_Files/Interfaces/Snippet_Config_Repository.php',
+        'Code_Snippets\\Flat_Files\\Interfaces\\Snippet_Type_Handler' => __DIR__ . '/../..' . '/php/Flat_Files/Interfaces/Snippet_Type_Handler.php',
+        'Code_Snippets\\Flat_Files\\Snippet_Files' => __DIR__ . '/../..' . '/php/Flat_Files/Snippet_Files.php',
+        'Code_Snippets\\Flat_Files\\WP_Filesystem_Adapter' => __DIR__ . '/../..' . '/php/Flat_Files/WP_Filesystem_Adapter.php',
+        'Code_Snippets\\Integration\\Admin_Bar' => __DIR__ . '/../..' . '/php/Integration/Admin_Bar.php',
+        'Code_Snippets\\Integration\\Classic_Editor\\MCE_Plugin' => __DIR__ . '/../..' . '/php/Integration/Classic_Editor/MCE_Plugin.php',
+        'Code_Snippets\\Integration\\Evaluate_Content' => __DIR__ . '/../..' . '/php/Integration/Evaluate_Content.php',
+        'Code_Snippets\\Integration\\Evaluate_Functions' => __DIR__ . '/../..' . '/php/Integration/Evaluate_Functions.php',
+        'Code_Snippets\\Integration\\Promotions\\Notices\\Elementor' => __DIR__ . '/../..' . '/php/Integration/Promotions/Notices/Elementor.php',
+        'Code_Snippets\\Integration\\Promotions\\Notices\\Header_Footer_Code' => __DIR__ . '/../..' . '/php/Integration/Promotions/Notices/Header_Footer_Code.php',
+        'Code_Snippets\\Integration\\Promotions\\Notices\\Header_Footer_Code_Manager' => __DIR__ . '/../..' . '/php/Integration/Promotions/Notices/Header_Footer_Code_Manager.php',
+        'Code_Snippets\\Integration\\Promotions\\Notices\\Insert_HTML_Snippet' => __DIR__ . '/../..' . '/php/Integration/Promotions/Notices/Insert_HTML_Snippet.php',
+        'Code_Snippets\\Integration\\Promotions\\Notices\\Insert_PHP' => __DIR__ . '/../..' . '/php/Integration/Promotions/Notices/Insert_PHP.php',
+        'Code_Snippets\\Integration\\Promotions\\Notices\\Insert_PHP_Code_Snippet' => __DIR__ . '/../..' . '/php/Integration/Promotions/Notices/Insert_PHP_Code_Snippet.php',
+        'Code_Snippets\\Integration\\Promotions\\Notices\\Promotion_Base' => __DIR__ . '/../..' . '/php/Integration/Promotions/Notices/Promotion_Base.php',
+        'Code_Snippets\\Integration\\Promotions\\Notices\\WP_Headers_And_Footers' => __DIR__ . '/../..' . '/php/Integration/Promotions/Notices/WP_Headers_And_Footers.php',
+        'Code_Snippets\\Integration\\Promotions\\Other\\Elementor_Editor' => __DIR__ . '/../..' . '/php/Integration/Promotions/Other/Elementor_Editor.php',
+        'Code_Snippets\\Integration\\Promotions\\Promotion_Manager' => __DIR__ . '/../..' . '/php/Integration/Promotions/Promotion_Manager.php',
+        'Code_Snippets\\Integration\\Shortcodes' => __DIR__ . '/../..' . '/php/Integration/Shortcodes.php',
+        'Code_Snippets\\Migration\\Export\\Download_Code' => __DIR__ . '/../..' . '/php/Migration/Export/Download_Code.php',
+        'Code_Snippets\\Migration\\Export\\Export' => __DIR__ . '/../..' . '/php/Migration/Export/Export.php',
+        'Code_Snippets\\Migration\\Export\\Export_Code' => __DIR__ . '/../..' . '/php/Migration/Export/Export_Code.php',
+        'Code_Snippets\\Migration\\Export\\Export_JSON' => __DIR__ . '/../..' . '/php/Migration/Export/Export_JSON.php',
+        'Code_Snippets\\Model\\Basic_Cloud_Connection' => __DIR__ . '/../..' . '/php/Model/Basic_Cloud_Connection.php',
+        'Code_Snippets\\Model\\Cloud_Snippet' => __DIR__ . '/../..' . '/php/Model/Cloud_Snippet.php',
+        'Code_Snippets\\Model\\Cloud_Snippets' => __DIR__ . '/../..' . '/php/Model/Cloud_Snippets.php',
+        'Code_Snippets\\Model\\Model' => __DIR__ . '/../..' . '/php/Model/Model.php',
+        'Code_Snippets\\Model\\Snippet' => __DIR__ . '/../..' . '/php/Model/Snippet.php',
+        'Code_Snippets\\Plugin' => __DIR__ . '/../..' . '/php/Plugin.php',
+        'Code_Snippets\\REST_API\\Cloud\\Cloud_Snippets_REST_Controller' => __DIR__ . '/../..' . '/php/REST_API/Cloud/Cloud_Snippets_REST_Controller.php',
+        'Code_Snippets\\REST_API\\Import\\File_Import_REST_Controller' => __DIR__ . '/../..' . '/php/REST_API/Import/File_Import_REST_Controller.php',
+        'Code_Snippets\\REST_API\\Import\\Plugins\\Header_Footer_Code_Manager_Plugin_Importer' => __DIR__ . '/../..' . '/php/REST_API/Import/Plugins/Header_Footer_Code_Manager_Plugin_Importer.php',
+        'Code_Snippets\\REST_API\\Import\\Plugins\\Insert_Headers_And_Footers_Plugin_Importer' => __DIR__ . '/../..' . '/php/REST_API/Import/Plugins/Insert_Headers_And_Footers_Plugin_Importer.php',
+        'Code_Snippets\\REST_API\\Import\\Plugins\\Insert_PHP_Code_Snippet_Plugin_Importer' => __DIR__ . '/../..' . '/php/REST_API/Import/Plugins/Insert_PHP_Code_Snippet_Plugin_Importer.php',
+        'Code_Snippets\\REST_API\\Import\\Plugins\\Plugin_Importer' => __DIR__ . '/../..' . '/php/REST_API/Import/Plugins/Plugin_Importer.php',
+        'Code_Snippets\\REST_API\\Import\\Plugins_Import_REST_Controller' => __DIR__ . '/../..' . '/php/REST_API/Import/Plugins_Import_REST_Controller.php',
+        'Code_Snippets\\REST_API\\REST_Collection_Controller' => __DIR__ . '/../..' . '/php/REST_API/REST_Collection_Controller.php',
+        'Code_Snippets\\REST_API\\REST_Controller' => __DIR__ . '/../..' . '/php/REST_API/REST_Controller.php',
+        'Code_Snippets\\REST_API\\Snippets\\Preferences_REST_Controller' => __DIR__ . '/../..' . '/php/REST_API/Snippets/Preferences_REST_Controller.php',
+        'Code_Snippets\\REST_API\\Snippets\\Recently_Active_REST_Controller' => __DIR__ . '/../..' . '/php/REST_API/Snippets/Recently_Active_REST_Controller.php',
+        'Code_Snippets\\REST_API\\Snippets\\Snippets_REST_Controller' => __DIR__ . '/../..' . '/php/REST_API/Snippets/Snippets_REST_Controller.php',
+        'Code_Snippets\\Settings\\Editor_Preview' => __DIR__ . '/../..' . '/php/Settings/Editor_Preview.php',
+        'Code_Snippets\\Settings\\Setting_Field' => __DIR__ . '/../..' . '/php/Settings/Setting_Field.php',
+        'Code_Snippets\\Settings\\Settings_Fields' => __DIR__ . '/../..' . '/php/Settings/Settings_Fields.php',
+        'Code_Snippets\\Settings\\Version_Switch' => __DIR__ . '/../..' . '/php/Settings/Version_Switch.php',
+        'Code_Snippets\\Utils\\Code_Highlighter' => __DIR__ . '/../..' . '/php/Utils/Code_Highlighter.php',
+        'Code_Snippets\\Utils\\Validator' => __DIR__ . '/../..' . '/php/Utils/Validator.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Composer\\Installers\\AglInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/AglInstaller.php',
         'Composer\\Installers\\AkauntingInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/AkauntingInstaller.php',
@@ -178,8 +215,6 @@ class ComposerStaticInitc322fb32f6db8844392d9f78341fcefb
         'Composer\\Installers\\YawikInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/YawikInstaller.php',
         'Composer\\Installers\\ZendInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/ZendInstaller.php',
         'Composer\\Installers\\ZikulaInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/ZikulaInstaller.php',
-        'Evaluation\\Evaluate_Content' => __DIR__ . '/../..' . '/php/evaluation/class-evaluate-content.php',
-        'Evaluation\\Evaluate_Functions' => __DIR__ . '/../..' . '/php/evaluation/class-evaluate-functions.php',
         'TypistTech\\Imposter\\ArrayUtil' => __DIR__ . '/..' . '/typisttech/imposter/src/ArrayUtil.php',
         'TypistTech\\Imposter\\Config' => __DIR__ . '/..' . '/typisttech/imposter/src/Config.php',
         'TypistTech\\Imposter\\ConfigCollection' => __DIR__ . '/..' . '/typisttech/imposter/src/ConfigCollection.php',
@@ -205,9 +240,9 @@ class ComposerStaticInitc322fb32f6db8844392d9f78341fcefb
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitc322fb32f6db8844392d9f78341fcefb::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitc322fb32f6db8844392d9f78341fcefb::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitc322fb32f6db8844392d9f78341fcefb::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit118984772f6b448937a6130f407c8a8b::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit118984772f6b448937a6130f407c8a8b::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit118984772f6b448937a6130f407c8a8b::$classMap;
 
         }, null, ClassLoader::class);
     }

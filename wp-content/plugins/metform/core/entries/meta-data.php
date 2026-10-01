@@ -2,6 +2,8 @@
 
 namespace MetForm\Core\Entries;
 
+use MetForm\Base\Assets_Enqueue;
+
 defined('ABSPATH') || exit;
 
 #[\AllowDynamicProperties]
@@ -28,7 +30,7 @@ class Meta_Data
         add_action('add_meta_boxes', [$this, 'add_browser_data_cmb']);
         add_action('add_meta_boxes', [$this, 'add_file_upload_cmb']);
         add_action('admin_init', [$this, 'show_hide_payment_woo_meta_box']);
-        
+
         // Register layout engine scripts & styles injection
         add_action('admin_enqueue_scripts', [$this, 'enqueue_entries_view_assets']);
         // Inside your class where you register hooks
@@ -37,32 +39,32 @@ class Meta_Data
 
     public function add_metform_admin_body_class($classes) {
         $screen = get_current_screen();
-        
+
         // Replace 'your_cpt_name' with the actual value of $this->cpt->get_name()
         if ($screen && $screen->post_type === $this->cpt->get_name()) {
             $classes .= ' mf-admin-context';
         }
-        
+
         return $classes;
     }
     public function enqueue_entries_view_assets($hook) {
-        if (get_current_screen()->post_type === $this->cpt->get_name()) {            
+        if (get_current_screen()->post_type === $this->cpt->get_name()) {
             // Injects styling layouts and actions overrides
-            wp_enqueue_style('metform-admin-entries-view-css', \MetForm\Plugin::instance()->plugin_url() . 'public/assets/css/admin-entries-view.css', array(), '1.2.0');
-            wp_enqueue_script('metform-admin-entries-view-js', \MetForm\Plugin::instance()->plugin_url() . 'public/assets/js/admin-entries-view.js', array('jquery'), '1.2.0', true);
+            Assets_Enqueue::get_style('metform-admin-entries-view-css');
+            Assets_Enqueue::get_script('metform-admin-entries-view-js');
         }
     }
 
-    function show_hide_payment_woo_meta_box() 
+    function show_hide_payment_woo_meta_box()
     {
-        $post_id = isset($_GET['post']) ? sanitize_text_field(wp_unslash($_GET['post'])) : ''; 
+        $post_id = isset($_GET['post']) ? sanitize_text_field(wp_unslash($_GET['post'])) : '';
 
         $getPaymentStatus = get_post_meta($post_id, 'metform_entries__payment_status', true);
         $getPaymentInvoiceStatus = get_post_meta($post_id, 'metform_entries__payment_invoice', true);
-        
+
         if($getPaymentStatus || $getPaymentInvoiceStatus){
             add_action('add_meta_boxes', [$this, 'add_form_payment_status_cmb']);
-        } 
+        }
 
         $getWooCheckoutStatus = get_post_meta($post_id, 'mf_woo_order_id', true);
         if($getWooCheckoutStatus){
@@ -109,7 +111,7 @@ class Meta_Data
                        $logged_user_id = get_post_meta($post->ID, 'metform_entries__user_id', true);
                        if($logged_user_id){
                            $author_obj = get_user_by('id', $logged_user_id);
-                           $profile_link = "<a href='". wp_nonce_url(admin_url()."/user-edit.php?user_id={$logged_user_id}")."'>{$author_obj->data->user_login}</a>"; 
+                           $profile_link = "<a href='". wp_nonce_url(admin_url()."/user-edit.php?user_id={$logged_user_id}")."'>{$author_obj->data->user_login}</a>";
                            echo wp_kses($profile_link, array('a' => ['href'=>[]]));
                        }else{
                            echo esc_html__("Visitor", "metform");

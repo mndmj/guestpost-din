@@ -6,7 +6,7 @@ Class MetForm_Input_Time extends Widget_Base{
 	use \MetForm\Traits\Common_Controls;
 	use \MetForm\Traits\Conditional_Controls;
 	use \MetForm\Widgets\Widget_Notice;
-	
+
 	public function __construct( $data = [], $args = null ) {
 		parent::__construct( $data, $args );
 		$this->add_style_depends('flatpickr');
@@ -19,7 +19,7 @@ Class MetForm_Input_Time extends Widget_Base{
 	public function get_icon() {
 		return 'mf-widget-icon icon-metform_time';
 	}
-    
+
 	public function get_title() {
 		return esc_html__( 'Time', 'metform' );
 	}
@@ -27,7 +27,7 @@ Class MetForm_Input_Time extends Widget_Base{
 	public function has_widget_inner_wrapper(): bool {
 		return ! Plugin::$instance->experiments->is_feature_active('e_optimized_markup');
 	}
-	
+
 	public function show_in_panel() {
         return 'metform-form' == get_post_type();
 	}
@@ -35,7 +35,7 @@ Class MetForm_Input_Time extends Widget_Base{
 	public function get_categories() {
 		return [ 'metform' ];
 	}
-	    
+
 	public function get_keywords() {
         return ['metform', 'input', 'time', 'clock'];
     }
@@ -43,9 +43,9 @@ Class MetForm_Input_Time extends Widget_Base{
 	public function get_help_url() {
         return 'https://wpmet.com/doc/form-widgets/#time';
     }
-	
+
     protected function register_controls() {
-        
+
         $this->start_controls_section(
 			'content_section',
 			[
@@ -142,11 +142,11 @@ Class MetForm_Input_Time extends Widget_Base{
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
-		
+
 		$this->input_place_holder_controls();
 
 		$this->end_controls_section();
-		
+
 		$this->start_controls_section(
 			'help_text_section',
 			[
@@ -157,11 +157,11 @@ Class MetForm_Input_Time extends Widget_Base{
 				]
 			]
 		);
-		
+
 		$this->input_help_text_controls();
 
         $this->end_controls_section();
-		
+
 		$this->insert_pro_message();
 	}
 
@@ -169,7 +169,7 @@ Class MetForm_Input_Time extends Widget_Base{
 		$settings = $this->get_settings_for_display();
 		$inputWrapStart = $inputWrapEnd = '';
 		extract($settings);
-		
+
 		$render_on_editor = true;
 		$is_edit_mode = 'metform-form' === get_post_type() && \Elementor\Plugin::$instance->editor->is_edit_mode();
 
@@ -180,14 +180,14 @@ Class MetForm_Input_Time extends Widget_Base{
 			$inputWrapStart = '<div class="mf-form-wrapper"></div><script type="text" class="mf-template">return html`';
 			$inputWrapEnd = '`</script>';
 		endif;
-		
+
 		$class = (isset($settings['mf_conditional_logic_form_list']) ? 'mf-conditional-input' : '');
-		
+
 		$configData = [
 			'message' 		=> $errorMessage 	= isset($mf_input_validation_warning_message) ? !empty($mf_input_validation_warning_message) ? $mf_input_validation_warning_message : esc_html__('This field is required.', 'metform') : esc_html__('This field is required.', 'metform'),
 			'required'		=> isset($mf_input_required) && $mf_input_required == 'yes' ? true : false,
 		];
-		
+
 		$timeConfig = [
 			'enableTime' 	=> true,
 			'dateFormat'	=> 'h:i K',
@@ -195,14 +195,14 @@ Class MetForm_Input_Time extends Widget_Base{
 			'time_24hr'		=> false,
 			'static'		=> true
 		];
-		
+
 		if(isset($mf_input_time_24h) && $mf_input_time_24h === 'yes'){
 			$timeConfig['time_24hr']	= true;
 			$timeConfig['dateFormat']	= 'H:i';
 		}
-		
+
 		?>
-		
+
 		<?php \MetForm\Utils\Util::metform_content_renderer($inputWrapStart); ?>
 
 		<div className="mf-input-wrapper">
@@ -212,7 +212,7 @@ Class MetForm_Input_Time extends Widget_Base{
 					<span className="mf-input-required-indicator"><?php echo esc_html( ($mf_input_required === 'yes') ? '*' : '' );?></span>
 				</label>
 			<?php endif; ?>
-			
+
 			<${props.Flatpickr}
 					name="<?php echo esc_attr( $mf_input_name ); ?>"
 					className="mf-input mf-date-input mf-time-input mf-left-parent <?php echo esc_attr( $class ); ?>"
@@ -221,18 +221,30 @@ Class MetForm_Input_Time extends Widget_Base{
 					value=${parent.getValue('<?php echo esc_attr( $mf_input_name ); ?>')}
 					onInput=${parent.handleDateTime}
 					aria-invalid=${validation.errors['<?php echo esc_attr( $mf_input_name ); ?>'] ? 'true' : 'false'}
-					ref=${
-						el => {
-							if( el && el.node.nextSibling ) {
-								if( el.props.value.trim().length ) {
-									el.node.nextSibling.classList.add('value-found');
-								}else {
-									el.node.nextSibling.classList.remove('value-found');
-								}
-							}
-							register({ name: "<?php echo esc_attr($mf_input_name); ?>" }, parent.activateValidation(<?php echo json_encode($configData); ?>))
-						}
-					}
+					onReady=${
+    ( dates, dateStr, instance ) => {
+        if( instance.input.nextSibling ) {
+            if( instance.input.value.trim().length ) {
+                instance.input.nextSibling.classList.add('value-found');
+            }else {
+                instance.input.nextSibling.classList.remove('value-found');
+            }
+        }
+        parent.activateValidation(<?php echo json_encode($configData); ?>, instance.input);
+    }
+}
+onChange=${
+    ( selectedDates, dateStr, instance ) => {
+        if( instance.input.nextSibling ) {
+            if( dateStr.trim().length ) {
+                instance.input.nextSibling.classList.add('value-found');
+            }else {
+                instance.input.nextSibling.classList.remove('value-found');
+            }
+        }
+    }
+}
+
 					/>
 
 			<?php if ( !$is_edit_mode ) : ?>
@@ -244,7 +256,7 @@ Class MetForm_Input_Time extends Widget_Base{
 			<?php endif; ?>
 			<?php echo ('' !== trim($mf_input_help_text) ? sprintf('<span className="mf-input-help"> %s </span>', esc_html( \MetForm\Utils\Util::react_entity_support(trim($mf_input_help_text), $render_on_editor))) : ''); ?>
 		</div>
-		
+
 		<?php \MetForm\Utils\Util::metform_content_renderer($inputWrapEnd); ?>
 
 		<?php

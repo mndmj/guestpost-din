@@ -8,7 +8,7 @@ Class MetForm_Input_Radio extends Widget_Base{
 	use \MetForm\Traits\Conditional_Controls;
 	use \MetForm\Widgets\Widget_Notice;
 	use \MetForm\Traits\Quiz_Control;
-    
+
     public function __construct( $data = [], $args = null ) {
 		parent::__construct( $data, $args );
 
@@ -24,7 +24,7 @@ Class MetForm_Input_Radio extends Widget_Base{
 	public function get_icon() {
 		return 'mf-widget-icon icon-metform_radio_button';
 	}
-    
+
 	public function get_title() {
 		return esc_html__( 'Radio', 'metform' );
 	}
@@ -41,7 +41,7 @@ Class MetForm_Input_Radio extends Widget_Base{
 		return [ 'metform' ];
 	}
 
-	
+
 	public function get_keywords() {
         return ['metform', 'input', 'radio', 'check'];
     }
@@ -51,7 +51,7 @@ Class MetForm_Input_Radio extends Widget_Base{
     }
 
     protected function register_controls() {
-        
+
         if ( $this->get_form_type() == 'quiz-form' && class_exists('\MetForm_Pro\Base\Package') ) {
 
 			$this->start_controls_section(
@@ -73,10 +73,10 @@ Class MetForm_Input_Radio extends Widget_Base{
 					'tab' => Controls_Manager::TAB_CONTENT,
 				]
 			);
-	
-			$this->input_content_controls(['NO_PLACEHOLDER']); 
-	
-	
+
+			$this->input_content_controls(['NO_PLACEHOLDER']);
+
+
 			$this->add_control(
 				'mf_input_display_option',
 				[
@@ -94,7 +94,7 @@ Class MetForm_Input_Radio extends Widget_Base{
 					'description' => esc_html__('Radio option display style.', 'metform'),
 				]
 			);
-	
+
 			$this->add_control(
 				'mf_input_option_text_position',
 				[
@@ -108,9 +108,9 @@ Class MetForm_Input_Radio extends Widget_Base{
 					'description' => esc_html__('Where do you want to label?', 'metform'),
 				]
 			);
-	
+
 			$input_fields = new Repeater();
-	
+
 			$input_fields->add_control(
 				'mf_input_option_text', [
 					'label' => esc_html__( 'Radio Option Text', 'metform' ),
@@ -144,7 +144,7 @@ Class MetForm_Input_Radio extends Widget_Base{
 					'description' => esc_html__('Want to make a option? which user can see the option but can\'t select it. make it disable.', 'metform'),
 				]
 			);
-			
+
 			$input_fields->add_control(
 				'mf_input_option_selected', [
 					'label' => esc_html__( 'Select it default ? ', 'metform' ),
@@ -157,7 +157,7 @@ Class MetForm_Input_Radio extends Widget_Base{
 					'description' => esc_html__('Make this option default selected', 'metform'),
 				]
 			);
-	
+
 			$this->add_control(
 				'mf_input_list',
 				[
@@ -187,7 +187,7 @@ Class MetForm_Input_Radio extends Widget_Base{
 				]
 			);
 		}
-		
+
         $this->end_controls_section();
 
         $this->start_controls_section(
@@ -272,17 +272,21 @@ Class MetForm_Input_Radio extends Widget_Base{
 				'label' => esc_html_x( 'Input Type', 'Radio Control', 'metform' ),
 				'type' => Controls_Manager::SELECT,
 				'options' => [
-					'"\f192"' => esc_html_x( 'Radio', 'Radio Control', 'metform' ),
-					'"\f058"' => esc_html_x( 'Checked', 'Radio Control', 'metform' ),
+					'radio' => esc_html_x( 'Radio', 'Radio Control', 'metform' ),
+					'checked' => esc_html_x( 'Checked', 'Radio Control', 'metform' ),
 				],
-				'default'	=> '"\f192"',
+				'default'	=> 'radio',
+				'selectors_dictionary' => [
+					'radio' => '"' . "\u{f192}" . '"',
+					'checked' => '"' . "\u{f058}" . '"',
+				],
 				'selectors' => [
 					'{{WRAPPER}} .mf-radio-option input[type="radio"]:checked + span:before' => 'content: {{VALUE}}'
 				],
-				
+
 			]
 		);
-        
+
         $this->add_responsive_control(
 			'mf_input_option_padding',
 			[
@@ -424,7 +428,7 @@ Class MetForm_Input_Radio extends Widget_Base{
 				'selector' => '{{WRAPPER}} .mf-radio, {{WRAPPER}} .mf-radio-option input[type="radio"] + span:before',
 			]
 		);
-		
+
 		$this->add_group_control(
 			Group_Control_Typography::get_type(),
 			[
@@ -438,7 +442,7 @@ Class MetForm_Input_Radio extends Widget_Base{
         );
 
 		$this->end_controls_section();
-		
+
 
 		$this->start_controls_section(
 			'mf_input_help_text_section',
@@ -466,7 +470,7 @@ Class MetForm_Input_Radio extends Widget_Base{
 		$is_edit_mode = 'metform-form' === get_post_type() && \Elementor\Plugin::$instance->editor->is_edit_mode();
 
 		$class = (isset($settings['mf_conditional_logic_form_list']) ? 'mf-conditional-input' : '');
-		
+
 		$configData = [
 			'message' 		=> $errorMessage = isset($mf_input_validation_warning_message) ? !empty($mf_input_validation_warning_message) ? $mf_input_validation_warning_message : esc_html__('This field is required.', 'metform') : esc_html__('This field is required.', 'metform'),
 			'required'		=> isset($mf_input_required) && $mf_input_required == 'yes' ? true : false,
@@ -486,7 +490,7 @@ Class MetForm_Input_Radio extends Widget_Base{
 
  		}
 
-		?>	
+		?>
 
 		<div class="mf-input-wrapper">
 			<?php if ( 'yes' == $mf_input_label_status ): ?>
@@ -556,5 +560,5 @@ Class MetForm_Input_Radio extends Widget_Base{
 
 		<?php
     }
-    
+
 }

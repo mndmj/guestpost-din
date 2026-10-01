@@ -1,5 +1,8 @@
 <?php
 namespace MetForm\Core\Forms;
+
+use MetForm\Base\Assets_Enqueue;
+
 defined( 'ABSPATH' ) || exit;
 
 Class Base extends \MetForm\Base\Common{
@@ -46,66 +49,35 @@ Class Base extends \MetForm\Base\Common{
         // Only enqueue on metform-form post type edit page
         if($screen->id == 'edit-metform-form'){
             $plugin = \MetForm\Plugin::instance();
-            $asset_file = $plugin->plugin_dir() . 'build/add-new-form-modal.asset.php';
+            Assets_Enqueue::get('metform-add-new-form-modal');
 
-            if (file_exists($asset_file)) {
-                $asset = include $asset_file;
-                
-                wp_enqueue_script(
-                    'metform-add-new-form-modal',
-                    $plugin->plugin_url() . 'build/add-new-form-modal.js',
-                    $asset['dependencies'],
-                    $asset['version'],
-                    true
-                );
+            wp_set_script_translations('metform-add-new-form-modal', 'metform');
 
-                wp_set_script_translations('metform-add-new-form-modal', 'metform');
-
-                wp_enqueue_style(
-                    'metform-add-new-form-modal',
-                    $plugin->plugin_url() . 'build/style-add-new-form-modal.css',
-                    array('wp-components'),
-                    $asset['version']
-                );
-
-                // Pass data to JavaScript
-                wp_localize_script('metform-add-new-form-modal', 'metformData', [
-                    'pluginUrl' => $plugin->plugin_url(),
-                    'hasPro' => class_exists('\MetForm_Pro\Base\Package'),
-                    'hasQuiz' => class_exists('\MetForm_Pro\Core\Features\Quiz\Integration'),
-                    'templates' => $this->get_templates_for_js(),
-                    'wpVersion' => get_bloginfo('version'),
-                ]);
-            }
+            // Pass data to JavaScript
+            wp_localize_script('metform-add-new-form-modal', 'metformData', [
+                'pluginUrl' => $plugin->plugin_url(),
+                'hasPro' => class_exists('\MetForm_Pro\Base\Package'),
+                'hasQuiz' => class_exists('\MetForm_Pro\Core\Features\Quiz\Integration'),
+                'templates' => $this->get_templates_for_js(),
+                'wpVersion' => get_bloginfo('version'),
+            ]);
         }
         if ($screen->id == 'metform_page_metform-analytics') {
             $plugin = \MetForm\Plugin::instance();
-            $asset_file = $plugin->plugin_dir() . 'build/form-analytics.asset.php';
+            $asset_file = $plugin->plugin_dir() . 'build/admin/form-analytics/index.asset.php';
             $is_analytics_enable = !empty($settings['mf_enable_form_analytics']);
             // analytics base class check as a pro activation
-            $is_metform_pro_active = class_exists(\MetForm_Pro\Core\Analytics\Base::class);            
+            $is_metform_pro_active = class_exists(\MetForm_Pro\Core\Analytics\Base::class);
             $is_mid_tier =  \MetForm\Utils\Util::is_mid_tier();
             $is_top_tier =  \MetForm\Utils\Util::is_top_tier();
             if (file_exists($asset_file)) {
                 $asset = include $asset_file;
-                
-                wp_enqueue_script(
-                    'metform-form-analytics',
-                    $plugin->plugin_url() . 'build/form-analytics.js',
-                    $asset['dependencies'],
-                    $asset['version'],
-                    true
-                );
+                Assets_Enqueue::get('metform-form-analytics');
 
                 // Register script translations so strings inside the analytics JS are translated
                 wp_set_script_translations( 'metform-form-analytics', 'metform' );
 
-                wp_enqueue_style(
-                    'metform-form-analytics',
-                    $plugin->plugin_url() . 'build/style-form-analytics.css',
-                    array('wp-components'),
-                    $asset['version']
-                );
+
                 wp_localize_script('metform-form-analytics', 'metformAnalytics', [
                     'apiUrl' => rest_url('metform-pro/v1/analytics'),
                     'nonce' => wp_create_nonce('wp_rest'),
@@ -121,7 +93,7 @@ Class Base extends \MetForm\Base\Common{
 
     private function get_templates_for_js(){
         $templates = [];
-        
+
         if(class_exists('\MetForm\Templates\Base')){
             $template_data = \MetForm\Templates\Base::instance()->get_templates();
 
@@ -130,7 +102,7 @@ Class Base extends \MetForm\Base\Common{
             foreach($template_data as $template){
                 if(isset($template['form_type'])){
                     $title = isset($template['title']) ? $template['title'] : '';
-                    
+
                     $templates[] = [
                         'id' => isset($template['id']) ? $template['id'] : '',
                         'title' => $title,
@@ -146,13 +118,13 @@ Class Base extends \MetForm\Base\Common{
                 }
             }
         }
-        
+
         return $templates;
     }
 
     private function detect_category($title){
         $title_lower = strtolower($title);
-        
+
         // Map titles to categories
         if(strpos($title_lower, 'contact') !== false){
             return 'contact-form';
@@ -179,7 +151,7 @@ Class Base extends \MetForm\Base\Common{
         } elseif(strpos($title_lower, 'support') !== false || strpos($title_lower, 'bug') !== false){
             return 'support-form';
         }
-        
+
         return 'contact-form'; // Default category
     }
 }

@@ -18,13 +18,13 @@
     </div>
 
     <div class="mf-onboard-shapes">
-        <img src="<?php echo esc_url(self::get_url()); ?>assets/images/shape-01.png" alt="" class="shape-01">
-        <img src="<?php echo esc_url(self::get_url()); ?>assets/images/shape-02.png" alt="" class="shape-02">
-        <img src="<?php echo esc_url(self::get_url()); ?>assets/images/shape-03.png" alt="" class="shape-03">
-        <img src="<?php echo esc_url(self::get_url()); ?>assets/images/shape-04.png" alt="" class="shape-04">
-        <img src="<?php echo esc_url(self::get_url()); ?>assets/images/shape-05.png" alt="" class="shape-05">
-        <img src="<?php echo esc_url(self::get_url()); ?>assets/images/shape-06.png" alt="" class="shape-06">
-        <img src="<?php echo esc_url(self::get_url()); ?>assets/images/shape-07.png" alt="" class="shape-07">
-        <img src="<?php echo esc_url(self::get_url()); ?>assets/images/shape-09.png" alt="" class="shape-09">
+        <img src="<?php echo self::image_url('onboard/shape-01.png'); ?>" alt="" class="shape-01">
+        <img src="<?php echo self::image_url('onboard/shape-02.png'); ?>" alt="" class="shape-02">
+        <img src="<?php echo self::image_url('onboard/shape-03.png'); ?>" alt="" class="shape-03">
+        <img src="<?php echo self::image_url('onboard/shape-04.png'); ?>" alt="" class="shape-04">
+        <img src="<?php echo self::image_url('onboard/shape-05.png'); ?>" alt="" class="shape-05">
+        <img src="<?php echo self::image_url('onboard/shape-06.png'); ?>" alt="" class="shape-06">
+        <img src="<?php echo self::image_url('onboard/shape-07.png'); ?>" alt="" class="shape-07">
+        <img src="<?php echo self::image_url('onboard/shape-09.png'); ?>" alt="" class="shape-09">
     </div>
 </div>

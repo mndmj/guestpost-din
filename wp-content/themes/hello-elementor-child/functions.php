@@ -70,6 +70,14 @@ function gpm_enqueue_child_styles() {
 				filemtime( $file )
 			);
 		}
+
+		wp_enqueue_script(
+			'gpm-cart',
+			$theme_uri . '/assets/js/cart.js',
+			array(),
+			filemtime( $theme_dir . '/assets/js/cart.js' ),
+			true
+		);
 	}
 
 	if ( function_exists( 'is_shop' ) && is_shop() ) {
@@ -153,6 +161,24 @@ function gpm_enqueue_auth_styles() {
 add_action( 'wp_enqueue_scripts', 'gpm_enqueue_auth_styles', 30 );
 add_action( 'login_enqueue_scripts', 'gpm_enqueue_auth_styles', 30 );
 
+/** Send guests through the existing account form before starting checkout. */
+function gpm_require_checkout_login() {
+	if ( is_admin() || wp_doing_ajax() || ( defined( 'REST_REQUEST' ) && REST_REQUEST )
+		|| ! in_array( $_SERVER['REQUEST_METHOD'] ?? '', array( 'GET', 'HEAD' ), true )
+		|| is_user_logged_in() || ! function_exists( 'is_checkout' ) || ! is_checkout()
+		|| is_wc_endpoint_url() || ! WC()->cart || WC()->cart->is_empty() ) {
+		return;
+	}
+
+	wp_safe_redirect( add_query_arg(
+		array( 'gpm_auth' => 'login', 'gpm_checkout' => '1' ),
+		wc_get_page_permalink( 'myaccount' )
+	) );
+	exit;
+}
+// ponytail: WooCommerce handles empty carts first and owns the cart/auth session.
+add_action( 'template_redirect', 'gpm_require_checkout_login', 20 );
+
 /**
  * Use the buyer's password for My Account only; keep checkout settings unchanged.
  */
@@ -227,6 +253,11 @@ function gpm_render_pricing_cards_shortcode( $attributes ) {
 				$button_url = add_query_arg(
 					array( 'add-to-cart' => $product_id, 'gpm_shop_cart' => '1' ),
 					wc_get_page_permalink( 'shop' )
+				);
+			} elseif ( is_front_page() && $is_available && $product->is_type( 'simple' ) ) {
+				$button_url = add_query_arg(
+					array( 'add-to-cart' => $product_id, 'gpm_shop_cart' => '1' ),
+					wc_get_cart_url()
 				);
 			}
 
@@ -350,6 +381,28 @@ function gpm_render_shop_cart_modal() {
 	<?php
 }
 add_action( 'wp_footer', 'gpm_render_shop_cart_modal', 10 );
+
+function gpm_render_cart_remove_dialog() {
+	if ( ! function_exists( 'is_cart' ) || ! is_cart() ) {
+		return;
+	}
+	?>
+	<dialog id="gpm-cart-remove-dialog" class="gpm-cart-remove-dialog" aria-labelledby="gpm-cart-remove-title"
+		aria-describedby="gpm-cart-remove-description">
+		<h2 id="gpm-cart-remove-title"><?php esc_html_e( 'Remove this item?', 'guest-post-child' ); ?></h2>
+		<p id="gpm-cart-remove-description">
+			<strong id="gpm-cart-remove-product"></strong><br>
+			<?php esc_html_e( 'This will remove the item from your cart. You can add it again later.', 'guest-post-child' ); ?>
+		</p>
+		<form method="dialog" class="gpm-cart-remove-dialog__actions">
+			<button type="submit" value="cancel" autofocus><?php esc_html_e( 'Cancel', 'guest-post-child' ); ?></button>
+			<button type="button"
+				data-gpm-cart-remove-confirm><?php esc_html_e( 'Yes, remove', 'guest-post-child' ); ?></button>
+		</form>
+	</dialog>
+	<?php
+}
+add_action( 'wp_footer', 'gpm_render_cart_remove_dialog', 10 );
 
 /**
  * Gunakan pricing card yang ada, dengan AJAX Add to Cart
@@ -815,4 +868,34 @@ add_filter( 'gettext_woocommerce', function ( $translated, $text ) {
 
 	return $translated;
 }, 20, 2 );
+
+/**
+ * Keep WooCommerce's download permissions intact; change only the email order.
+ */
+function gpm_email_downloads_after_order_summary( $mailer ) {
+	$callback = array( $mailer, 'order_downloads' );
+
+	if ( remove_action( 'woocommerce_email_order_details', $callback, 10 ) ) {
+		add_action( 'woocommerce_email_order_details', $callback, 20, 4 );
+	}
+}
+add_action( 'woocommerce_email', 'gpm_email_downloads_after_order_summary' );
+
+function gpm_register_metform_style_dependencies( $css_file ) {
+	if ( ! ( $css_file instanceof \Elementor\Core\Files\CSS\Post ) ) {
+		return;
+	}
+
+	if ( 'metform-form' !== get_post_type( $css_file->get_post_id() ) ) {
+		return;
+	}
+
+	if ( ! wp_style_is( 'elementor-frontend', 'registered' ) ) {
+		\Elementor\Plugin::instance()->frontend->register_styles();
+	}
+}
+add_action(
+	'elementor/css-file/before_enqueue',
+	'gpm_register_metform_style_dependencies'
+);
 ?>

@@ -333,7 +333,7 @@ Class MetForm_Input_Multi_Select extends Widget_Base{
 					!parent.state.answers["<?php echo esc_attr($mf_input_name); ?>"] && (
 					parent.state.answers["<?php echo esc_attr($mf_input_name); ?>"] = <?php echo json_encode($quizData); ?>)
 				<?php } ?>
-                    register({ name: "<?php echo esc_attr($mf_input_name); ?>" }, parent.activateValidation(<?php echo json_encode($configData); ?>));
+                    register("<?php echo esc_attr($mf_input_name); ?>", parent.activateValidation(<?php echo json_encode($configData); ?>));
                     if(parent.state?.submitted !== true){
                         if ( parent.getValue("<?php echo esc_attr($mf_input_name); ?>") === '' && <?php echo (count($mf_default_input_list) > 0) ? 'true' : 'false'; ?> ) {
                             parent.setValue( '<?php echo esc_attr($mf_input_name); ?>', '<?php echo json_encode($default_value); ?>');
