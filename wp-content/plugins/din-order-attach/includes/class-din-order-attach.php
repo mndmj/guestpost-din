@@ -20,6 +20,8 @@ final class DIN_Order_Attach {
 	}
 
 	public function boot() {
+		// The attachment customer note is the buyer's completion message.
+		add_filter( 'woocommerce_email_enabled_customer_completed_order', '__return_false' );
 		add_action( 'add_meta_boxes', array( $this, 'register_order_meta_box' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_assets' ) );
 		add_action( 'post_edit_form_tag', array( $this, 'render_form_enctype' ) );
