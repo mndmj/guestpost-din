@@ -27,7 +27,7 @@ defined( 'ABSPATH' ) || exit;
 
 			<h3><?php esc_html_e( 'Required Information', 'woocommerce' ); ?></h3>
 			<p class="gpm-required-information-description">
-				Enter the heading for your guest post or link for your link insertion.
+				Order Title / Link URL
 			</p>
 
 		<?php endif; ?>
