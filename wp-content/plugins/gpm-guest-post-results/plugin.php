@@ -24,8 +24,32 @@ add_action(
     "gpm_guest_post_declare_hpos_compatibility",
 );
 
-function gpm_render_guest_post_result_fields( $order ) {
+/** The site's verified service catalog. Names/headings may change; product IDs do not. */
+function gpm_package_service( $product_id ) {
+    $services = [ 91 => 'guestpost', 90 => 'guestpost', 83 => 'link_insertion', 51 => 'link_insertion' ];
+    return is_scalar( $product_id ) ? ( $services[ (int) $product_id ] ?? '' ) : '';
+}
+
+function gpm_order_needs_guest_post_result( $order ) {
     if ( ! ( $order instanceof WC_Order ) ) {
+        return false;
+    }
+    foreach ( $order->get_items() as $item ) {
+        // Renewal/upgrade payment orders use the original publication and proof.
+        $purchase = $item->get_meta( '_din_package_purchase' );
+        $id = is_array( $purchase ) ? ( $purchase['package_id'] ?? null ) : null;
+        if ( ( is_int( $id ) || is_string( $id ) ) && ctype_digit( (string) $id ) && (int) $id > 0 && in_array( $purchase['action'] ?? '', [ 'lifetime', 'renew_1', 'renew_2', 'renew_custom' ], true ) && 1.0 === (float) $item->get_quantity() ) {
+            continue;
+        }
+        if ( 'guestpost' === gpm_package_service( $item->get_product_id() ) ) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function gpm_render_guest_post_result_fields( $order ) {
+    if ( ! gpm_order_needs_guest_post_result( $order ) ) {
         return;
     }
 
@@ -36,7 +60,9 @@ function gpm_render_guest_post_result_fields( $order ) {
         esc_html__( "Guest Post Result", "gpm-guest-post-results" ) .
         "</h4>";
 
+    echo '<p>' . esc_html__( 'Published URL and Publication Date are required when completing this Guestpost order. Drafts may remain empty.', 'gpm-guest-post-results' ) . '</p>';
     wp_nonce_field( "gpm_save_guest_post_result", "gpm_guest_post_result_nonce" );
+    $required = $order->has_status( 'completed' ) ? [ 'required' => 'required' ] : [];
 
     woocommerce_wp_text_input( [
         "id" => "_gpm_published_url",
@@ -45,6 +71,8 @@ function gpm_render_guest_post_result_fields( $order ) {
         "value" => $order->get_meta( "_gpm_published_url" ),
         "wrapper_class" => "form-field-wide",
         "placeholder" => "https://publisher.com/article",
+        "custom_attributes" => $required + [ 'maxlength' => 2048 ],
+        "description" => __( 'Use a full HTTP/HTTPS URL with a publisher domain, without login credentials, IP addresses or spaces.', 'gpm-guest-post-results' ),
     ] );
 
     woocommerce_wp_text_input( [
@@ -53,6 +81,8 @@ function gpm_render_guest_post_result_fields( $order ) {
         "type" => "date",
         "value" => $order->get_meta( "_gpm_published_at" ),
         "wrapper_class" => "form-field-wide",
+        "custom_attributes" => $required + [ 'max' => current_datetime()->format( 'Y-m-d' ) ],
+        "description" => __( 'Use the actual publication date, today or earlier in the site timezone.', 'gpm-guest-post-results' ),
     ] );
 
     woocommerce_wp_select( [
@@ -67,73 +97,100 @@ function gpm_render_guest_post_result_fields( $order ) {
     ] );
 
     echo "</div>";
+    ?>
+    <script>
+        jQuery(function ($) {
+            const fields = $('#_gpm_published_url, #_gpm_published_at');
+            function syncRequired() {
+                fields.prop('required', $('#order_status').val() === 'wc-completed');
+            }
+            $('#order_status').on('change.gpmGuestPostResult', syncRequired);
+            syncRequired();
+        });
+    </script>
+    <?php
 }
 add_action(
     "woocommerce_admin_order_data_after_order_details",
     "gpm_render_guest_post_result_fields",
 );
 
-function gpm_save_guest_post_result_fields( $order_id, $order ) {
-    if (
-        ! isset( $_POST["gpm_guest_post_result_nonce"] ) ||
-        ! wp_verify_nonce(
-            sanitize_text_field(
-                wp_unslash( $_POST["gpm_guest_post_result_nonce"] ),
-            ),
-            "gpm_save_guest_post_result",
-        )
-    ) {
-        return;
-    }
-
-    if ( ! current_user_can( "edit_shop_orders" ) ) {
-        return;
-    }
-
-    if ( ! ( $order instanceof WC_Order ) ) {
-        $order = wc_get_order( $order_id );
-    }
-
-    if ( ! $order ) {
-        return;
-    }
-
-    $published_url = isset( $_POST["_gpm_published_url"] )
-        ? esc_url_raw( wp_unslash( $_POST["_gpm_published_url"] ), [
-            "http",
-            "https",
-        ] )
-        : "";
-
-    $published_at = isset( $_POST["_gpm_published_at"] )
-        ? sanitize_text_field( wp_unslash( $_POST["_gpm_published_at"] ) )
-        : "";
-
-    if ( "" !== $published_at ) {
-        $date = DateTime::createFromFormat( "!Y-m-d", $published_at );
-
-        if ( ! $date || $date->format( "Y-m-d" ) !== $published_at ) {
-            $published_at = "";
+function gpm_validate_guest_post_result( $input, $required ) {
+    foreach ( [ '_gpm_published_url', '_gpm_published_at', '_gpm_link_status' ] as $field ) {
+        if ( ! isset( $input[ $field ] ) || ! is_string( $input[ $field ] ) ) {
+            return new WP_Error( 'gpm_result_input', __( 'Guest Post Result: invalid or missing form fields. Reload the order and try again.', 'gpm-guest-post-results' ) );
         }
     }
-
-    $link_status = isset( $_POST["_gpm_link_status"] )
-        ? sanitize_key( wp_unslash( $_POST["_gpm_link_status"] ) )
-        : "live";
-
-    if ( ! in_array( $link_status, [ "live", "removed" ], true ) ) {
-        $link_status = "live";
+    $url = trim( $input['_gpm_published_url'] );
+    $day = $input['_gpm_published_at'];
+    $status = $input['_gpm_link_status'];
+    if ( $required && ( '' === $url || '' === $day ) ) {
+        return new WP_Error( 'gpm_result_required', __( 'Guest Post Result: Published URL and Publication Date are required before completing the order.', 'gpm-guest-post-results' ) );
     }
+    if ( '' !== $url ) {
+        $parts = wp_parse_url( $url );
+        $host = is_array( $parts ) ? ( $parts['host'] ?? '' ) : '';
+        // Publisher domains only: raw/numeric IP aliases are not publication URLs.
+        $public_host = filter_var( $host, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME ) && preg_match( '/\.[a-z][a-z0-9-]+$/iD', $host );
+        if ( strlen( $url ) > 2048 || preg_match( '/[\x00-\x1f\x7f]/', $input['_gpm_published_url'] ) || preg_match( '/\s|%(?:0[0-9a-f]|1[0-9a-f]|7f)/i', $url ) || ! filter_var( $url, FILTER_VALIDATE_URL ) || ! $public_host || ! in_array( strtolower( $parts['scheme'] ?? '' ), [ 'http', 'https' ], true ) || isset( $parts['user'] ) || isset( $parts['pass'] ) ) {
+            return new WP_Error( 'gpm_result_url', __( 'Guest Post Result: enter a full HTTP/HTTPS Published URL with a publisher domain, without credentials, IP addresses, spaces or control characters.', 'gpm-guest-post-results' ) );
+        }
+    }
+    if ( '' !== $day ) {
+        $date = preg_match( '/^\d{4}-\d{2}-\d{2}$/D', $day ) ? DateTimeImmutable::createFromFormat( '!Y-m-d', $day, wp_timezone() ) : false;
+        if ( ! $date || $date->format( 'Y-m-d' ) !== $day || $date->getTimestamp() <= 0 || $day > current_datetime()->format( 'Y-m-d' ) ) {
+            return new WP_Error( 'gpm_result_date', __( 'Guest Post Result: enter a real Publication Date, today or earlier in the site timezone.', 'gpm-guest-post-results' ) );
+        }
+    }
+    if ( ! in_array( $status, [ 'live', 'removed' ], true ) ) {
+        return new WP_Error( 'gpm_result_status', __( 'Guest Post Result: Link Status must be Live or Removed.', 'gpm-guest-post-results' ) );
+    }
+    return [ '_gpm_published_url' => esc_url_raw( $url, [ 'http', 'https' ] ), '_gpm_published_at' => $day, '_gpm_link_status' => $status ];
+}
 
-    $order->update_meta_data( "_gpm_published_url", $published_url );
-    $order->update_meta_data( "_gpm_published_at", $published_at );
-    $order->update_meta_data( "_gpm_link_status", $link_status );
-    $order->save();
+/** Request-local state: invalid publication input must also stop package approval at 80. */
+function gpm_guest_post_result_save_blocked( $order_id ) {
+    return ! empty( $GLOBALS['gpm_guest_post_result_blocked'][ (int) $order_id ] );
+}
+
+function gpm_save_guest_post_result_fields( $order_id, $unused_order ) {
+    // Resolve WooCommerce's order model; never trust POST's original status or the hook argument.
+    $order = wc_get_order( $order_id );
+    $GLOBALS['gpm_guest_post_result_blocked'][ (int) $order_id ] = false;
+    if ( ! gpm_order_needs_guest_post_result( $order ) ) {
+        return;
+    }
+    $nonce = $_POST['gpm_guest_post_result_nonce'] ?? '';
+    if ( ! current_user_can( 'manage_woocommerce' ) || ! current_user_can( 'edit_shop_order', $order->get_id() ) || ! is_string( $nonce ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $nonce ) ), 'gpm_save_guest_post_result' ) ) {
+        $result = new WP_Error( 'gpm_result_permission', __( 'Guest Post Result was not saved. Check your permissions and reload the order before trying again.', 'gpm-guest-post-results' ) );
+    } elseif ( isset( $_POST['order_status'] ) && ! is_string( $_POST['order_status'] ) ) {
+        $result = new WP_Error( 'gpm_result_order_status', __( 'Guest Post Result: invalid order status. Reload the order and try again.', 'gpm-guest-post-results' ) );
+    } else {
+        // Match native WooCommerce normalization so whitespace/HTML cannot bypass completion requirements.
+        $target = wc_clean( wp_unslash( $_POST['order_status'] ?? '' ) );
+        $required = '' !== $target ? in_array( $target, [ 'wc-completed', 'completed' ], true ) : $order->has_status( 'completed' );
+        $result = gpm_validate_guest_post_result( wp_unslash( $_POST ), $required );
+    }
+    if ( ! is_wp_error( $result ) ) {
+        try {
+            foreach ( $result as $key => $value ) {
+                $order->update_meta_data( $key, $value );
+            }
+            // Save metadata before WooCommerce's status save40 so its Completed email uses these values.
+            $order->save_meta_data();
+            return;
+        } catch (Exception $error) {
+            $result = new WP_Error( 'gpm_result_save', __( 'Guest Post Result could not be saved. Reload the order and try again.', 'gpm-guest-post-results' ) );
+        }
+    }
+    $GLOBALS['gpm_guest_post_result_blocked'][ (int) $order_id ] = true;
+    $_POST['order_status'] = 'wc-' . $order->get_status();
+    WC_Admin_Meta_Boxes::add_error( $result->get_error_message() );
 }
 add_action(
     "woocommerce_process_shop_order_meta",
     "gpm_save_guest_post_result_fields",
-    60,
+    35,
     2,
 );
 
@@ -162,14 +219,17 @@ function gpm_buyer_order_publication_rows( $rows, $order ) {
     ob_start();
     ?>
     <tr class="gpm-order-publication">
-        <td><strong><?php echo esc_html__( 'Published Post', 'gpm-guest-post-results' ); ?></strong><?php if ( ! $removed ) : ?><br><?php echo esc_html( $parts['host'] ); ?><?php endif; ?></td>
+        <td><strong><?php echo esc_html__( 'Published Post', 'gpm-guest-post-results' ); ?></strong><?php if ( ! $removed ) : ?><br><?php echo esc_html( $parts['host'] ); ?><?php endif; ?>
+        </td>
         <td>—</td>
         <td>—</td>
         <td>
             <?php if ( $removed ) : ?>
-                <span class="gpm-guest-result__status gpm-order-publication__removed"><?php echo esc_html__( 'Removed', 'gpm-guest-post-results' ); ?></span>
+                <span
+                    class="gpm-guest-result__status gpm-order-publication__removed"><?php echo esc_html__( 'Removed', 'gpm-guest-post-results' ); ?></span>
             <?php else : ?>
-                <a class="woocommerce-button button" href="<?php echo $url; ?>" target="_blank" rel="noopener noreferrer external"><?php echo esc_html__( 'View Published Post', 'gpm-guest-post-results' ); ?></a>
+                <a class="woocommerce-button button" href="<?php echo $url; ?>" target="_blank"
+                    rel="noopener noreferrer external"><?php echo esc_html__( 'View Published Post', 'gpm-guest-post-results' ); ?></a>
             <?php endif; ?>
         </td>
     </tr>
@@ -288,6 +348,11 @@ function gpm_render_heading_post_admin_styles() {
         return;
     } ?>
     <style id="gpm-heading-post-admin-styles">
+        #order_data .gpm-order-result-fields {
+            clear: both;
+            padding-top: 24px;
+        }
+
         /* Tampilan Heading Post saat order tidak sedang diedit. */
         #order_data .order_data_column .address p.order_note {
             margin: 16px 0 0;

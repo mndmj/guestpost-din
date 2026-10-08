@@ -530,6 +530,7 @@ final class DIN_Packages {
 		if ( ! $order->has_status( 'completed' ) ) {
 			return array();
 		}
+		$now = time();
 		self::capture_order( $order );
 		$messages = array();
 		$proofs = self::valid_proofs( $order );
@@ -545,8 +546,10 @@ final class DIN_Packages {
 				$messages[] = 'Package #' . $p['id'] . ': requires owner review/proof.';
 				continue;
 			}
-			$result = self::mutate( $p['id'], static function ( $current ) use ( $proofs, $admin_id, $order ) {
-				return self::activate( $current, $proofs, $admin_id, time(), $order->get_meta( '_gpm_published_at' ) );
+			$result = self::mutate( $p['id'], static function ( $current ) use ( $proofs, $admin_id, $order, $now ) {
+				$start_date = function_exists( 'gpm_package_service' ) && 'link_insertion' === gpm_package_service( $current['product_id'] )
+					? ( new DateTimeImmutable( '@' . $now ) )->setTimezone( wp_timezone() )->format( 'Y-m-d' ) : $order->get_meta( '_gpm_published_at' );
+				return self::activate( $current, $proofs, $admin_id, $now, $start_date );
 			} );
 			if ( is_wp_error( $result ) ) {
 				$messages[] = 'Package #' . $p['id'] . ': ' . $result->get_error_message();

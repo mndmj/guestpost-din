@@ -4,7 +4,9 @@
 define( 'ABSPATH', __DIR__ );
 define( 'ARRAY_A', 'ARRAY_A' );
 define( 'DAY_IN_SECONDS', 86400 );
-function wp_timezone() { return new DateTimeZone( 'Asia/Jakarta' ); }
+function wp_timezone() { return new DateTimeZone( $GLOBALS['test_timezone'] ?? 'Asia/Jakarta' ); }
+if ( ! function_exists( 'add_action' ) ) { function add_action( ...$args ) {} }
+if ( ! function_exists( 'add_filter' ) ) { function add_filter( ...$args ) {} }
 function absint( $v ) { return abs( (int) $v ); }
 function wp_json_encode( $v ) { return json_encode( $v ); }
 function user_can( $id, ...$args ) { return 9 === $id && ! in_array( $args[0], $GLOBALS['denied_caps'] ?? array(), true ); }
@@ -89,6 +91,7 @@ class DIN_Packages_Mail {
 	public static function schedule( $p ) { self::$scheduled[] = $p['id']; }
 	public static function has_sending( $package ) { return self::$sending; }
 }
+require dirname( __DIR__, 2 ) . '/gpm-guest-post-results/plugin.php';
 require dirname( __DIR__ ) . '/includes/class-din-packages.php';
 $wpdb = new Memory_DB();
 $products = array( 1=>new Test_Product( 1, 'annual' ), 2=>new Test_Product( 2, 'lifetime' ) );
@@ -484,6 +487,67 @@ check( DIN_Packages::get( 1 ) === $custom_applied, 'Custom paid approval must re
 $unquoted_custom = new Test_Order( 820, array( new Test_Item( 821, 1, 1, array( '_din_package_purchase' => array( 'package_id' => 1, 'action' => 'renew_custom' ) ) ) ) );
 $unquoted_custom->status = 'pending';
 check( ! DIN_Packages::order_needs_payment( true, $unquoted_custom ), 'An unquoted custom action must never be treated as an ordinary payable order.' );
+// Link Insertion approval dates must not depend on hidden Guest Post Result metadata.
+foreach ( array( 83 => array( 'annual', 'Pacific/Kiritimati' ), 51 => array( 'lifetime', 'Etc/GMT+12' ) ) as $product_id => $fixture ) {
+	$GLOBALS['test_timezone'] = $fixture[1];
+	$wpdb = new Memory_DB();
+	$link_config = array( 'period' => $fixture[0], 'annual_product_id' => 83, 'lifetime_product_id' => 51 );
+	$link_order = new Test_Order( 900, array( new Test_Item( 901, $product_id, 1, array( '_din_package_config' => $link_config ) ) ) );
+	$link_order->meta['_gpm_published_at'] = '';
+	$orders[900] = $link_order;
+	DIN_Packages::capture_order( $link_order );
+	DIN_Packages::approve_order( $link_order, 9 );
+	check( 0 === DIN_Packages::get( 1 )['started_at'], 'Link Insertion must still require Completed before activation.' );
+	$link_order->status = 'completed';
+	foreach ( array( array(), array( array( 'id' => 'missing', 'path' => 'invalid' ) ) ) as $proofs ) {
+		$link_order->proofs = $proofs;
+		DIN_Packages::approve_order( $link_order, 9 );
+		check( 0 === DIN_Packages::get( 1 )['started_at'], 'Missing or invalid Link Insertion proof must still block activation.' );
+	}
+	$link_order->proofs = array( array( 'id' => 'link-proof', 'path' => 'valid' ) );
+	DIN_Packages::approve_order( $link_order, 8 );
+	check( 0 === DIN_Packages::get( 1 )['started_at'], 'Buyer must not activate Link Insertion.' );
+	$before_link_approval = time();
+	$messages = DIN_Packages::approve_order( $link_order, 9 );
+	$link_package = DIN_Packages::get( 1 );
+	check( ! $messages && $link_package['started_at'] > 0, 'Link Insertion must activate without a Publication Date.' );
+	$event = $link_package['history'][0];
+	$link_start = ( new DateTimeImmutable( '@' . $event['at'] ) )->setTimezone( wp_timezone() )->setTime( 0, 0 );
+	check( $event['at'] >= $before_link_approval && $event['at'] <= time() && $link_package['started_at'] === $link_start->getTimestamp(), 'Link Insertion must start at approval-date midnight in the site timezone, keeping actual approval time in history.' );
+	$year = (int) $link_start->format( 'Y' ) + 1;
+	$month = (int) $link_start->format( 'n' );
+	$day = (int) $link_start->format( 'j' );
+	$expiry = $link_start->setDate( $year, $month, checkdate( $month, $day, $year ) ? $day : 28 )->getTimestamp();
+	check( $link_package['expires_at'] === ( 'annual' === $fixture[0] ? $expiry : 0 ), 'Link Insertion Annual must expire one calendar year later; Lifetime must have no expiry.' );
+	$link_order->meta['_gpm_published_at'] = '2001-01-01';
+	DIN_Packages::approve_order( $link_order, 9 );
+	check( DIN_Packages::get( 1 ) === $link_package, 'Re-saving Link Insertion must not reset its start, expiry or history.' );
+	$historical = DIN_Packages::mutate( 1, static function ( $p ) use ( $fixture ) {
+		$p['started_at'] = 1577836800;
+		$p['expires_at'] = 'annual' === $fixture[0] ? 1609459200 : 0;
+		return $p;
+	} );
+	DIN_Packages::approve_order( $link_order, 9 );
+	check( DIN_Packages::get( 1 ) === $historical, 'Existing active Link Insertion dates must not be migrated to the approval date.' );
+}
+unset( $GLOBALS['test_timezone'] );
+$wpdb = new Memory_DB();
+$mixed_order = new Test_Order( 910, array(
+	new Test_Item( 911, 91, 1, array( '_din_package_config' => array( 'period' => 'annual', 'annual_product_id' => 91, 'lifetime_product_id' => 90 ) ) ),
+	new Test_Item( 912, 90, 1, array( '_din_package_config' => array( 'period' => 'lifetime', 'annual_product_id' => 91, 'lifetime_product_id' => 90 ) ) ),
+	new Test_Item( 913, 83, 1, array( '_din_package_config' => array( 'period' => 'annual', 'annual_product_id' => 83, 'lifetime_product_id' => 51 ) ) ),
+) );
+$orders[910] = $mixed_order;
+$mixed_order->status = 'completed';
+$mixed_order->proofs = array( array( 'id' => 'mixed-proof', 'path' => 'valid' ) );
+$mixed_order->meta['_gpm_published_at'] = '';
+DIN_Packages::approve_order( $mixed_order, 9 );
+check( 0 === DIN_Packages::get( 1 )['started_at'] && 0 === DIN_Packages::get( 2 )['started_at'] && DIN_Packages::get( 3 )['started_at'] > 0, 'Mixed order must require Publication Date for both Guestpost periods, not for Link Insertion.' );
+$mixed_link_package = DIN_Packages::get( 3 );
+$mixed_order->meta['_gpm_published_at'] = '2024-02-29';
+DIN_Packages::approve_order( $mixed_order, 9 );
+$guestpost_start = ( new DateTimeImmutable( '2024-02-29 00:00:00', wp_timezone() ) )->getTimestamp();
+check( DIN_Packages::get( 1 )['started_at'] === $guestpost_start && DIN_Packages::get( 2 )['started_at'] === $guestpost_start && DIN_Packages::get( 3 ) === $mixed_link_package, 'Mixed order must retain Guestpost publication dates without resetting an activated Link Insertion.' );
 $wpdb = new Memory_DB();
 $statement = $wpdb->pdo->prepare( 'INSERT INTO wp_din_packages (customer_id, order_id, order_item_id, unit, data) VALUES (?, ?, ?, 1, ?)' );
 for ( $id = 1; $id <= 123; ++$id ) {

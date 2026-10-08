@@ -45,6 +45,14 @@ function wc_get_page_screen_id( $type ) { return 'woocommerce_page_wc-orders'; }
 function add_meta_box( $id, $title, $callback, $screen, ...$args ) { $GLOBALS['test_boxes'][ $screen ] = $callback; }
 function wc_get_order( $id ) { $GLOBALS['test_order_lookups'] = ( $GLOBALS['test_order_lookups'] ?? 0 ) + 1; return 99 === (int) $id ? $GLOBALS['test_order'] : ( $GLOBALS['test_orders'][ (int) $id ] ?? false ); }
 function wc_get_product( $id ) { return $GLOBALS['test_products'][ (int) $id ] ?? false; }
+function gpm_guest_post_result_save_blocked( $order_id ) { return ! empty( $GLOBALS['test_gpm_blocked'][ $order_id ] ); }
+function gpm_order_needs_guest_post_result( $order ) { return $GLOBALS['test_guest_post_required'] ?? true; }
+function gpm_package_service( $product_id ) { return array( 91 => 'guestpost', 90 => 'guestpost', 83 => 'link_insertion', 51 => 'link_insertion' )[ $product_id ] ?? ''; }
+class Admin_Service_Item {
+	public function __construct( private $product_id, private $purchase = '' ) {}
+	public function get_product_id() { return $this->product_id; }
+	public function get_meta( $key, $single = true ) { return '_din_package_purchase' === $key ? $this->purchase : ''; }
+}
 define( 'MINUTE_IN_SECONDS', 60 );
 define( 'DAY_IN_SECONDS', 86400 );
 class WC_Order {
@@ -136,9 +144,20 @@ DIN_Packages_Admin::approve_order( 99, new WC_Order() );
 admin_expect( DIN_Packages::$approved[0] === array( $GLOBALS['test_order'], 7, true ), 'Must reload the saved order and pass explicit payment confirmation.' );
 admin_expect( $GLOBALS['test_order']->refreshed, 'A cached WC_Order must be reread from its WooCommerce data store before approval.' );
 admin_expect( $GLOBALS['test_order']->meta_refreshed, 'Attachment metadata must be forcibly reread before approval.' );
+$before_blocked = serialize( array( DIN_Packages::$approved, DIN_Packages_Requests::$created, DIN_Packages::$adjusted, $GLOBALS['test_transients'], WC_Admin_Meta_Boxes::$errors ) );
+$lookups_before_blocked = $GLOBALS['test_order_lookups'];
+$GLOBALS['test_gpm_blocked'][99] = true;
+$_POST['din_packages_expiry'] = array( 1 => array( 'apply' => '1', 'extension' => '1', 'date' => '2031-11-05', 'reason' => 'Extend after approval', 'revision' => '12' ) );
+foreach ( array( new WC_Order(), (object) array( 'ID' => 99 ) ) as $hook_order ) {
+	DIN_Packages_Admin::approve_order( 99, $hook_order );
+	admin_expect( $before_blocked === serialize( array( DIN_Packages::$approved, DIN_Packages_Requests::$created, DIN_Packages::$adjusted, $GLOBALS['test_transients'], WC_Admin_Meta_Boxes::$errors ) ) && $lookups_before_blocked === $GLOBALS['test_order_lookups'], 'A rejected GPM request must block approval, expiry requests and notices even when the saved order is already Completed, on HPOS and legacy.' );
+}
+unset( $GLOBALS['test_gpm_blocked'][99], $_POST['din_packages_expiry'] );
+$GLOBALS['test_gpm_blocked'][100] = true;
 $_POST['din_packages_payment_confirmed'] = array( '1' );
 DIN_Packages_Admin::approve_order( 99 );
 admin_expect( false === DIN_Packages::$approved[1][2], 'Malformed payment confirmation must not count as verified.' );
+unset( $GLOBALS['test_gpm_blocked'][100] );
 unset( $_POST['din_packages_payment_confirmed'] );
 DIN_Packages_Admin::approve_order( 99 );
 admin_expect( false === DIN_Packages::$approved[2][2], 'Payment confirmation must not leak between saves.' );
@@ -177,9 +196,19 @@ admin_expect( false === strpos( $html, '<script>' ) && false !== strpos( $html, 
 admin_expect( false !== strpos( $html, 'Bukti hilang' ) && false !== strpos( $html, '2026-09-07' ), 'Summary must show review reason and initial activation date.' );
 admin_expect( false !== strpos( $html, 'Menunggu verifikasi pembayaran' ), 'Persistent order review reasons must remain visible after a redirect notice is consumed.' );
 admin_expect( preg_match( '/<h3\b[^>]*>Initial activation<\/h3>/', $html ) && preg_match( '/<ol\b[^>]*>(.*?)<\/ol>/s', $html, $steps ) && 3 === substr_count( $steps[1], '<li>' ), 'Activation instructions need a heading and three ordered steps.' );
-foreach ( array( 'Publication Date', 'Guest Post Result', 'DIN Order Attach', 'Completed', 'midnight', 'site timezone', 'Missing, invalid or future dates prevent activation.', 'Re-saving an active package does not change its dates.' ) as $instruction ) {
+foreach ( array( 'Published URL', 'Publication Date', 'Guest Post Result', 'DIN Order Attach', 'Completed', 'midnight', 'site timezone', 'Missing or invalid publication details prevent activation.', 'Re-saving an active package does not change its dates.' ) as $instruction ) {
 	admin_expect( str_contains( $html, $instruction ), 'Activation guidance must retain: ' . $instruction );
 }
+foreach ( array( 'guestpost', 'link_insertion', 'mixed', 'unknown', 'renewal' ) as $service_case ) {
+	$GLOBALS['test_guest_post_required'] = in_array( $service_case, array( 'guestpost', 'mixed' ), true );
+	$GLOBALS['test_order']->items = 'mixed' === $service_case ? array( new Admin_Service_Item( 91 ), new Admin_Service_Item( 83 ) ) : array( new Admin_Service_Item( 'guestpost' === $service_case ? 91 : ( 'unknown' === $service_case ? 999 : 83 ), 'renewal' === $service_case ? array( 'package_id' => 1, 'action' => 'renew_1' ) : '' ) );
+	ob_start(); DIN_Packages_Admin::render_meta_box( $GLOBALS['test_order'] ); $service_html = ob_get_clean();
+	admin_expect( str_contains( $service_html, 'DIN Order Attach' ) && str_contains( $service_html, 'Completed' ) && str_contains( $service_html, 'site timezone' ), 'All service activation guidance must retain proof, Completed and timezone requirements: ' . $service_case );
+	admin_expect( str_contains( $service_html, 'Published URL' ) === in_array( $service_case, array( 'guestpost', 'mixed' ), true ), 'Published URL guidance applies only to orders containing a new Guest Post: ' . $service_case );
+	admin_expect( str_contains( $service_html, 'admin approval date' ) === in_array( $service_case, array( 'link_insertion', 'mixed' ), true ), 'Only known new Link Insertion items may advertise automatic approval-date activation: ' . $service_case );
+}
+unset( $GLOBALS['test_guest_post_required'] );
+$GLOBALS['test_order']->items = array();
 admin_expect( preg_match( '/<div\b[^>]*class="[^"]*notice-warning[^"]*"[^>]*>.*?<p>Menunggu verifikasi pembayaran<\/p>.*?<\/div>/s', $html ), 'Stored warning must use a notice container with a paragraph.' );
 $GLOBALS['test_order']->meta['_din_packages_admin_notice'] = '<script>warning</script>';
 ob_start(); DIN_Packages_Admin::render_meta_box( $GLOBALS['test_order'] ); $warning_html = ob_get_clean();

@@ -309,11 +309,28 @@ final class DIN_Packages_Admin {
 		if ( ! $order->get_meta( '_din_packages_version', true ) ) {
 			echo '<div class="notice notice-warning inline din-package-notice"><h3>' . esc_html__( 'Manual review required', 'din-package-lifecycle' ) . '</h3><p>' . esc_html__( 'Old orders are not automatically activated. Migration requires a separate review of dates and supporting evidence.', 'din-package-lifecycle' ) . '</p></div>';
 		} else {
+			$guest_post = function_exists( 'gpm_order_needs_guest_post_result' ) && gpm_order_needs_guest_post_result( $order );
+			$link_insertion = false;
+			if ( function_exists( 'gpm_package_service' ) ) {
+				foreach ( $order->get_items() as $item ) {
+					if ( is_callable( array( $item, 'get_product_id' ) ) && ! $item->get_meta( '_din_package_purchase', true ) && 'link_insertion' === gpm_package_service( $item->get_product_id() ) ) {
+						$link_insertion = true;
+						break;
+					}
+				}
+			}
 			echo '<div class="notice notice-info inline din-package-notice"><h3>' . esc_html__( 'Initial activation', 'din-package-lifecycle' ) . '</h3><ol>';
-			echo '<li>' . esc_html__( 'Enter Publication Date in Guest Post Result.', 'din-package-lifecycle' ) . '</li>';
+			$publication_step = $guest_post ? __( 'For Guest Post, enter a valid Published URL and Publication Date in Guest Post Result.', 'din-package-lifecycle' ) : ( $link_insertion ? __( 'Link Insertion does not require Guest Post Result fields.', 'din-package-lifecycle' ) : __( 'Enter Publication Date in Guest Post Result.', 'din-package-lifecycle' ) );
+			echo '<li>' . esc_html( $publication_step ) . '</li>';
 			echo '<li>' . esc_html__( 'Upload valid proof via DIN Order Attach.', 'din-package-lifecycle' ) . '</li>';
 			echo '<li>' . esc_html__( 'Select "Completed," then save the order using Update.', 'din-package-lifecycle' ) . '</li></ol>';
-			echo '<p>' . esc_html__( 'The service starts at midnight on Publication Date in the site timezone. Missing, invalid or future dates prevent activation. Re-saving an active package does not change its dates.', 'din-package-lifecycle' ) . '</p></div>';
+			if ( $guest_post || ! $link_insertion ) {
+				echo '<p>' . esc_html__( 'Guest Post service starts at midnight on Publication Date in the site timezone. Missing or invalid publication details prevent activation. Publication Date cannot be in the future.', 'din-package-lifecycle' ) . '</p>';
+			}
+			if ( $link_insertion ) {
+				echo '<p>' . esc_html__( 'Link Insertion service starts automatically at midnight on the admin approval date in the site timezone.', 'din-package-lifecycle' ) . '</p>';
+			}
+			echo '<p>' . esc_html__( 'Re-saving an active package does not change its dates.', 'din-package-lifecycle' ) . '</p></div>';
 		}
 		$has_purchase = false;
 		$action_labels = array(
@@ -448,6 +465,9 @@ final class DIN_Packages_Admin {
 		$order_id = is_scalar( $order_id ) ? absint( $order_id ) : 0;
 		$nonce = $_POST['din_packages_nonce'] ?? '';
 		if ( ! $order_id || ! current_user_can( 'manage_woocommerce' ) || ! current_user_can( 'edit_shop_order', $order_id ) || ! is_string( $nonce ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $nonce ) ), 'din_packages_approve_' . $order_id ) ) {
+			return;
+		}
+		if ( function_exists( 'gpm_guest_post_result_save_blocked' ) && gpm_guest_post_result_save_blocked( $order_id ) ) {
 			return;
 		}
 		// Do not reuse the HPOS hook object: status and attachments were saved at 40/50.

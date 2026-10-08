@@ -25,7 +25,7 @@ function esc_attr( $value ) { return esc_html( $value ); }
 function esc_url( $value ) { return esc_html( $value ); }
 function wp_kses_post( $value ) { return $value; }
 function wc_get_account_endpoint_url( $endpoint ) { return '/my-account/' . $endpoint . '/'; }
-function is_wc_endpoint_url( $endpoint ) { return 'din-packages' === $endpoint && ( $GLOBALS['package_endpoint'] ?? false ); }
+function is_wc_endpoint_url( $endpoint ) { return ( 'din-packages' === $endpoint && ( $GLOBALS['package_endpoint'] ?? false ) ) || ( 'view-order' === $endpoint && ( $GLOBALS['view_order_endpoint'] ?? false ) ); }
 function add_query_arg( $key, $value, $url ) { return $url . '?' . rawurlencode( $key ) . '=' . $value; }
 function paginate_links( $args ) {
 	$GLOBALS['pagination_args'][] = $args;
@@ -308,12 +308,21 @@ $GLOBALS['package_endpoint'] = false;
 ob_start(); DIN_Packages_Customer::dashboard( array( $GLOBALS['packages'][0] ) ); $dashboard_card = ob_get_clean();
 customer_expect( false !== strpos( $dashboard_card, '<article class="din-packages__card"' ) && false === strpos( $dashboard_card, '<details class="din-packages__details"' ), 'Dashboard cards stay expanded and keep the existing three-card view.' );
 customer_expect( ! preg_match( '/Package\s*#\d+|<dd>\s*#\d+/', $dashboard_card ), 'Expanded dashboard cards do not expose a package number.' );
+customer_expect( str_contains( $dashboard_card, 'class="din-packages__order"' ), 'Dashboard package cards retain their order link.' );
 $GLOBALS['package_endpoint'] = true;
 ob_start(); DIN_Packages_Customer::render_packages( 1, 3, false, array( $GLOBALS['packages'][0] ) ); $preloaded_card = ob_get_clean();
 customer_expect( false !== strpos( $preloaded_card, '<article class="din-packages__card"' ) && false === strpos( $preloaded_card, '<details class="din-packages__details"' ), 'Preloaded order cards stay expanded even on the endpoint URL.' );
 customer_expect( ! preg_match( '/Package\s*#\d+|<dd>\s*#\d+/', $preloaded_card ), 'Preloaded order cards do not expose a package number.' );
+customer_expect( str_contains( $states_html, 'class="din-packages__order"' ), 'The My Package endpoint retains its order links.' );
 unset( $_GET['package-page'] );
 $GLOBALS['package_endpoint'] = false;
+
+customer_fixture( 10 );
+$GLOBALS['view_order_endpoint'] = true;
+ob_start(); DIN_Packages_Customer::render_packages( 1, 3, false, array( $GLOBALS['packages'][0] ) ); $detail_card = ob_get_clean();
+customer_expect( ! str_contains( $detail_card, 'class="din-packages__order"' ), 'Order-detail package cards must omit the redundant order/evidence link.' );
+customer_expect( str_contains( $detail_card, '>My Package</h2>' ) && str_contains( $detail_card, '<strong>Heading Post:</strong>' ) && str_contains( $detail_card, 'class="din-packages__dates"' ) && 3 === substr_count( $detail_card, 'name="din_package_action"' ), 'Hiding the order link must retain package information and renewal/upgrade actions.' );
+$GLOBALS['view_order_endpoint'] = false;
 
 $fields = array( 'order' => array( 'order_comments' => array( 'required' => true, 'label' => 'Heading Post' ), 'other_order_field' => array( 'required' => true ) ), 'billing' => array( 'billing_email' => array( 'required' => true ) ) );
 $posted = array( 'order_comments' => 'New publication heading', 'billing_email' => 'buyer@example.test' );
