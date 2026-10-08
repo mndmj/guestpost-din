@@ -206,9 +206,11 @@ final class DIN_Packages_Customer {
 						<?php endif; ?>
 						<?php if ( 'review' === $status ) : ?>
 							<p>The package requires admin review. Contact the store using the original order details.</p><?php endif; ?>
-						<a class="din-packages__order"
-							href="<?php echo esc_url( $package['evidence_url'] ?? $order->get_view_order_url() ); ?>">View Order
-							#<?php echo esc_html( $order->get_order_number() ); ?> and evidence</a>
+						<?php if ( ! is_wc_endpoint_url( 'view-order' ) ) : ?>
+							<a class="din-packages__order"
+								href="<?php echo esc_url( $package['evidence_url'] ?? $order->get_view_order_url() ); ?>">View Order
+								#<?php echo esc_html( $order->get_order_number() ); ?> and <?php echo $account_list ? 'Attachment' : 'evidence'; ?></a>
+						<?php endif; ?>
 						<div class="din-packages__actions">
 							<?php foreach ( array( 'renew_1', 'renew_2', 'lifetime' ) as $action ) : ?>
 								<?php $option = DIN_Packages::purchase_option( $package['id'], $action, $user_id ); ?>
