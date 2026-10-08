@@ -43,13 +43,6 @@ do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
 <p><?php esc_html_e( 'We’re pleased to let you know that your order has been completed. The order status has now been updated from Processing to Complete.', 'woocommerce' ); ?>
 </p>
 
-<blockquote>
-	<?php
-	$safe_note = wc_wptexturize_order_note( $customer_note );
-	echo wpautop( make_clickable( $safe_note ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-	?>
-</blockquote>
-
 <p><?php esc_html_e( 'Please see the attached file for the proof of your completed order.', 'woocommerce' ); ?></p>
 <p><?php esc_html_e( 'Order Details : ', 'woocommerce' ); ?></p>
 <?php echo $email_improvements_enabled ? '</div>' : ''; ?>

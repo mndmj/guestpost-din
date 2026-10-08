@@ -56,7 +56,7 @@ do_action( 'woocommerce_email_before_order_table', $order, $sent_to_admin, $plai
 		style="width: 100%; margin-bottom: 24px;" border="1" role="presentation">
 		<tr class="order-customer-note">
 			<td class="td text-align-left">
-				<b><?php esc_html_e( 'Heading Post', 'guest-post-child' ); ?></b><br>
+				<b><?php esc_html_e( 'Order Title / Link URL', 'guest-post-child' ); ?></b><br>
 				<?php echo wp_kses( nl2br( wc_wptexturize_order_note( $order->get_customer_note() ) ), array( 'br' => array() ) ); ?>
 			</td>
 		</tr>

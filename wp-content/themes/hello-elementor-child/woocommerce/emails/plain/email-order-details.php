@@ -29,9 +29,9 @@ do_action( 'woocommerce_email_before_order_table', $order, $sent_to_admin, $plai
 
 if ( $order->get_customer_note() ) {
 	if ( $email_improvements_enabled ) {
-		echo "\n" . esc_html__( 'Heading Post:', 'guest-post-child' ) . "\n" . wp_kses( wc_wptexturize_order_note( $order->get_customer_note() ), array() ) . "\n";
+		echo "\n" . esc_html__( 'Order Title / Link URL:', 'guest-post-child' ) . "\n" . wp_kses( wc_wptexturize_order_note( $order->get_customer_note() ), array() ) . "\n";
 	} else {
-		echo esc_html__( 'Heading Post:', 'guest-post-child' ) . "\t " . wp_kses( wc_wptexturize_order_note( $order->get_customer_note() ), array() ) . "\n";
+		echo esc_html__( 'Order Title / Link URL:', 'guest-post-child' ) . "\t " . wp_kses( wc_wptexturize_order_note( $order->get_customer_note() ), array() ) . "\n";
 	}
 }
 
